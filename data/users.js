@@ -1,6 +1,6 @@
 // This data file should export all functions using the ES6 standard as shown in the lecture code
 import {groups} from '../config/mongoCollections.js'
-import {messages} from '../config/mongoCollections.js'
+import {conversations} from '../config/mongoCollections.js'
 import {validate} from 'email-validator';
 import {ObjectId} from 'mongodb';
 import {groupsData} from './index.js';

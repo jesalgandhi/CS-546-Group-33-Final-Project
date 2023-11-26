@@ -1,5 +1,5 @@
 import {groups} from '../config/mongoCollections.js'
-import {messages} from '../config/mongoCollections.js'
+import {conversations} from '../config/mongoCollections.js'
 import {validate} from 'email-validator';
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
