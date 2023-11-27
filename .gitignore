@@ -1,6 +1,3 @@
-# node modules
-node_modules/
-
 # dependencies and environment configurations
 .env
 .env.local
@@ -32,4 +29,7 @@ Thumbs.db
 # personal config files
 .editorconfig
 .eslintrc
-.prettierrc
+.prettierrcnode_modules/
+
+
+node_modules/
