@@ -79,7 +79,16 @@ const exportedMethods = {
   Param: groupId (str: ObjectId of group from which to retrieve all conversations)
   */
   async getAllConversations(groupId) {
+    groupId = helpers.checkId(groupId, 'groupId'); // check groupId
 
+    /* Query that finds all conversations where groupId exists in participants array */
+    const conversationsCollection = await conversations();
+    const allConversations = await conversationsCollection.find(
+      { participants: { $elemMatch: { $eq: new ObjectId(groupId) } } },
+      {_id: 1},
+    ).toArray();
+
+    return allConversations;
   },
 
   /* Returns all messages associated with a conversationId as an array of message objects 
