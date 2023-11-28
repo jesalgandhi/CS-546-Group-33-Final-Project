@@ -7,7 +7,6 @@ import {ObjectId} from 'mongodb';
 import {groupsData} from './index.js';
 import {usersData} from './index.js';
 import {messagesData} from './index.js';
-import { validate } from 'email-validator';
 
 import validation from '../helpers.js';
 
