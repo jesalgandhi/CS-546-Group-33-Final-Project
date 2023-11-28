@@ -3,7 +3,6 @@ import {conversations} from '../config/mongoCollections.js'
 import {validate} from 'email-validator'; // for emails
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
-import { groups } from '../config/mongoCollections.js';
 
 const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 

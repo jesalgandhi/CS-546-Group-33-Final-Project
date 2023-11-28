@@ -8,7 +8,6 @@ import {groupsData} from './index.js';
 import {usersData} from './index.js';
 import {messagesData} from './index.js';
 import validation from '../helpers.js';
-import groupsData from './index.js';
 
 const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 
