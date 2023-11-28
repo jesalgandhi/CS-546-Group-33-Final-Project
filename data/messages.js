@@ -101,14 +101,22 @@ const exportedMethods = {
   }
   */
   async getAllMessages(conversationId) {
-
+    conversationId = helpers.checkId(conversationId); // check conversationId
+    const conversationsCollection = await conversations();
+    const matchedConversation = await conversationsCollection.findOne({_id: new ObjectId(conversationId)});
+    if (!matchedConversation) throw "Error: Conversation with the given id not found";
+    return matchedConversation.messages;
   },
 
-  /* Removes a conversation with given id from the conversations collection; returns true if successful
+  /* Removes a conversation with given id from the conversations collection; returns true if successful, else false
   Param: conversationId (str: ObjectId of conversation to remove)
   */
   async removeConversation(conversationId) {
-    
+    conversationId = helpers.checkId(conversationId); // check conversationId
+    const conversationsCollection = await conversations();
+    const removedConversation = await conversationsCollection.deleteOne({_id: new ObjectId(conversationId)});
+    if (!removedConversation) throw "Error: could not remove attendee";
+    return removedConversation.acknowledged;
   }
 };
 
