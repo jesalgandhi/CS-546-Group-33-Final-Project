@@ -18,7 +18,7 @@ const exportedMethods = {
       const regex = /^\d{10}$/;
       return regex.test(phoneNumber);
     }
-    
+    // test
     if (!groupId) throw 'You must provide an id to search for'; 
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
     { throw 'firstName must be a non-empty string'; } 
@@ -84,18 +84,17 @@ const exportedMethods = {
 
   },
 
-    async getAllUsers(groupId) {
-    if (!groupId) throw 'You must provide an id to search for'; 
-    const groupsCollection = await groups(); 
-    const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 
-    if (!group) { throw 'No group'; }
-  
-    const users = group.users || [];
-    const usersListStringIds = users.map(user => {
-      user._id = user._id.toString();
-      return user;
+    async getAllhelper () {
+    const eventsCollection = await events();
+    const eventsList = await eventsCollection.find({}).toArray();
+    if (!eventsList) {
+      throw 'No events found';
+    }
+    const eventsListStringIds = eventsList.map(event => {
+      event._id = event._id.toString();
+      return event;
     });
-    return usersListStringIds;
+    return eventsListStringIds;
   },
 
   async getUser(UserId) {
@@ -109,7 +108,7 @@ const exportedMethods = {
     const _id = ObjectId.isValid(UserId) ? new ObjectId(UserId) : null;
     if (!_id) throw 'Invalid ObjectId';
   
-    const allUsers = await getAllUsers();
+    const allUsers = await this.getAllhelper();
     let theUser = null;
   
     for (let i = 0; i < allUsers.length; i++) {
