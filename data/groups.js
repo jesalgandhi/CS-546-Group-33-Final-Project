@@ -51,7 +51,7 @@ const exportedMethods = {
   },
   
   async get(groupId) {
-      let id = validation.checkId(groupId, "group ID");
+      groupId = validation.checkId(groupId, "group ID");
 
       const group = await groupsCollection.findOne({_id: new ObjectId(groupId)}); // converting the string groupId into an Object Id before querying database
       if (!group) throw `No group with a groupId of ${groupId} was found`;
