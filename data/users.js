@@ -4,6 +4,7 @@ import {conversations} from '../config/mongoCollections.js'
 import {validate} from 'email-validator'; // for emails
 import {phone} from 'phone'; // for normalizing phone numbers
 import {ObjectId} from 'mongodb';
+import {users} from '../config/mongoCollections.js';
 import {groupsData} from './index.js';
 import {usersData} from './index.js';
 import {messagesData} from './index.js';
@@ -11,18 +12,18 @@ import {messagesData} from './index.js';
 import validation from '../helpers.js';
 
 const groupsCollection = await groups(); // will be used a lot, so making it a global variable
+const usersCollection = await users();
 
 const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
-  async createUser(groupId, firstName, lastName, emailAddress, phoneNumber, biography, age, interests, picture) {
+  async createUser(firstName, lastName, emailAddress, phoneNumber, biography, age, interests, picture) {
     // function isValidPhoneNumber(phoneNumber) {
     //   const regex = /^\d{10}$/;
     //   return regex.test(phoneNumber);
     // }
     
-    if (!groupId) throw 'You must provide an id to search for'; 
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
     { throw 'firstName must be a non-empty string'; } 
     if (typeof lastName !== 'string' || lastName.trim().length === 0) 
@@ -45,10 +46,10 @@ const exportedMethods = {
     if (!Array.isArray(interests)) 
     { throw 'Interests must be a list'; }
 
-    const groupsCollection = await groups();
-    const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 
-    if (!group) { throw 'No group'; } 
-    let users = group.users || [];
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ _id: new ObjectId() }); 
+    if (!user) { throw 'No group'; } 
+    let users = user.users || [];
     const existingUser = users.find((user) => user.emailAddress === emailAddress);
     if (existingUser)
     { throw `An user with email address ${emailAddress} already exists for this group`; } 
@@ -68,16 +69,16 @@ const exportedMethods = {
     };
     users[users.length] = newUser;
 
-    const updatedInfo = await groupsCollection.findOneAndUpdate( 
-      { _id: new ObjectId(groupId) },
+    const updatedInfo = await usersCollection.findOneAndUpdate( 
+      { _id: new ObjectId() },
       { $push: { users: newUser } ,
         $inc: { totalNumberOfUsers: 1 } } ,
         { returnDocument: 'after' });
 
     if (updatedInfo.modifiedCount === 0) 
     { throw 'Could not add user'; } 
-    group.totalNumberOfUsers++;
-    return group; 
+    user.totalNumberOfUsers++;
+    return user; 
     
   }, 
 
@@ -87,24 +88,24 @@ const exportedMethods = {
     const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 
     if (!group) { throw 'No group'; }
 
-    const users = group.users || [];
+    const Theusers = group.Theusers || [];
 
-    return users; 
+    return Theusers;; 
 
 
   },
 
-    async getAllhelper () {
-    const eventsCollection = await events();
-    const eventsList = await eventsCollection.find({}).toArray();
-    if (!eventsList) {
-      throw 'No events found';
+    async getAllhelper() {
+    const groupCollection = await groups();
+    const groupList = await groupCollection.find({}).toArray();
+    if (!groupList) {
+      throw 'No group found';
     }
-    const eventsListStringIds = eventsList.map(event => {
-      event._id = event._id.toString();
-      return event;
+    const groupListStringIds = groupList.map(group => {
+      group._id = group._id.toString();
+      return group;
     });
-    return eventsListStringIds;
+    return groupListStringIds;
   },
 
   async getUser(UserId) {
