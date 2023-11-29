@@ -17,10 +17,10 @@ const exportedMethods = {
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
   async createUser(groupId, firstName, lastName, emailAddress, phoneNumber, biography, age, interests, picture) {
-    function isValidPhoneNumber(phoneNumber) {
-      const regex = /^\d{10}$/;
-      return regex.test(phoneNumber);
-    }
+    // function isValidPhoneNumber(phoneNumber) {
+    //   const regex = /^\d{10}$/;
+    //   return regex.test(phoneNumber);
+    // }
     
     if (!groupId) throw 'You must provide an id to search for'; 
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
@@ -29,8 +29,15 @@ const exportedMethods = {
     { throw 'lastName must be a non-empty string'; }
     if (!validate(emailAddress)) 
     { throw 'You must provide a valid contact email'; }
-    if (!isValidPhoneNumber(phoneNumber)) 
-    { throw 'You must provide a valid phone number'; }
+    // if (!isValidPhoneNumber(phoneNumber)) 
+    // { throw 'You must provide a valid phone number'; }
+
+    phoneNumber = phone(phoneNumber);
+    // checking the what the boolean was set to to determine if phone number is valid
+    if (!phoneNumber.isValid) throw 'Invalid phone number!';
+    // setting the phone number to be the normalized phone number with country code and all
+    phoneNumber = phoneNumber.phoneNumber;
+
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
     { throw 'biography must be a non-empty string over the lentgh of 200'; }
     if (typeof age !== 'number' || age < 18 || age > 121)
