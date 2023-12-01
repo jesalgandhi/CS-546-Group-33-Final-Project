@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-   <head>
-    <meta charset="UTF-8">
-     <title>  </title>
-     <link rel='stylesheet' href='css/homepage.css'>
-    </head>
+
 
 
 <!--1. Plan on implementing banner on top w/ group profile picture (canvas) based off groupID-->
@@ -15,8 +9,15 @@
 
 <!--2. Plan on implementing Welcome message with group name and maybe each of their profile pics lined up? -->
 
+<h1>{{group.groupProfilePicture}}</h1>
+<h1>Welcome {{group.groupName}}</h1>
+
+{{#each groupMember}}
+{{group.user.profilePicture}}
+{{/each}}
 
 <!--3. Plan on implementing edit profile menu which will allow user to update group info, etc. -->
+<a href "editProfile">Edit User/Group Profile</a>
 
 
 <!--4. Plan on drop-down menu with different sorting methods (age, gender, etc.) -->
@@ -28,22 +29,32 @@
     <button type="submit">Check</button>
 -->
 
-<div class="dropdown">
-  <button class="dropbtn">Dropdown</button>
-  <div class="dropdown-content">
-    <a href="#">Link 1</a>
-    <a href="#">Link 2</a>
-    <a href="#">Link 3</a>
-  </div>
-</div>
+
 
 
 <!--5. Plan on adding gear icon on top right corner of menu which will render the view of user to settings.handlebars -->
+<h1>List of All Roomate Groups</h1>
 
-
+<!--Before rendering homepage, pass handlebars parameter with ALL ROOMMATE GROUPS-->
 <!--6. Each roomante group will have a rectangle that shows their group profile page, their bio, and member information -->
+<!-- ^ CSS STUFF (IGNORE)-->
 
+{{#each roommateGroup}}
+  <h1>{{roommateGroup.groupName}} </h1>
+  <h2>{{roommateGroup.groupDescription}}</h2>
+  <h2>{{roommateGroup.groupLocation}}</h2>
 
+  {{#each roommateGroup.users}}
+    <h3>{{firstName}} {{lastName}} {{biography}} {{age}} {{interests}} {{picture}} </h3>
+  {{/each}}
+
+  {{#if roommateGroup.reviews}}
+    {{#each roomateGroup.reviews}}
+      <h3>{{firstName}} {{lastName}}</h3>
+      <h3>{{review}}</h3>
+  {{/each}}
+  {{/if}}
+{{/each}}
 
 <!-- Script that re-renders homepage if certain sorting filter is applied -->
 <script src ='scripts/homeagescript.js'></script>
