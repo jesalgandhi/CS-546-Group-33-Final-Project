@@ -1,4 +1,5 @@
-
+<!--Group: Current Logged-in Group-->
+<!--roommateGroup: List of all OTHER roommate groups with accounts-->
 
 
 <!--1. Plan on implementing banner on top w/ group profile picture (canvas) based off groupID-->
@@ -9,8 +10,8 @@
 <!--2. Plan on implementing Welcome message with group name and maybe each of their profile pics lined up? -->
 <h1>Welcome {{group.groupName}}</h1>
 
-{{#each groupMember}}
-  {{group.user.profilePicture}}
+{{#each group.user}}
+  {{profilePicture}}
 {{/each}}
 
 <!--3. Plan on implementing edit profile menu which will allow user to update group info, etc. -->
