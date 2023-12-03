@@ -16,3 +16,4 @@ const getCollectionFn = (collection) => {
 // make sure to use the correct name
 export const groups = getCollectionFn('groups');
 export const conversations = getCollectionFn('conversations');
+export const users = getCollectionFn('users');

@@ -79,7 +79,16 @@ const exportedMethods = {
   Param: groupId (str: ObjectId of group from which to retrieve all conversations)
   */
   async getAllConversations(groupId) {
+    groupId = helpers.checkId(groupId, 'groupId'); // check groupId
 
+    /* Query that finds all conversations where groupId exists in participants array */
+    const conversationsCollection = await conversations();
+    const allConversations = await conversationsCollection.find(
+      { participants: { $elemMatch: { $eq: new ObjectId(groupId) } } },
+      {_id: 1},
+    ).toArray();
+
+    return allConversations;
   },
 
   /* Returns all messages associated with a conversationId as an array of message objects 
@@ -92,14 +101,22 @@ const exportedMethods = {
   }
   */
   async getAllMessages(conversationId) {
-
+    conversationId = helpers.checkId(conversationId); // check conversationId
+    const conversationsCollection = await conversations();
+    const matchedConversation = await conversationsCollection.findOne({_id: new ObjectId(conversationId)});
+    if (!matchedConversation) throw "Error: Conversation with the given id not found";
+    return matchedConversation.messages;
   },
 
-  /* Removes a conversation with given id from the conversations collection; returns true if successful
+  /* Removes a conversation with given id from the conversations collection; returns true if successful, else false
   Param: conversationId (str: ObjectId of conversation to remove)
   */
   async removeConversation(conversationId) {
-    
+    conversationId = helpers.checkId(conversationId); // check conversationId
+    const conversationsCollection = await conversations();
+    const removedConversation = await conversationsCollection.deleteOne({_id: new ObjectId(conversationId)});
+    if (!removedConversation) throw "Error: could not remove attendee";
+    return removedConversation.acknowledged;
   }
 };
 

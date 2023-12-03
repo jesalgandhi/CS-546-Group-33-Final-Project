@@ -3,7 +3,6 @@ import {conversations} from '../config/mongoCollections.js'
 import {validate} from 'email-validator'; // for emails
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
-import { groups } from '../config/mongoCollections.js';
 
 const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 
@@ -52,7 +51,7 @@ const exportedMethods = {
   },
   
   async get(groupId) {
-      let id = validation.checkId(groupId, "group ID");
+      groupId = validation.checkId(groupId, "group ID");
 
       const group = await groupsCollection.findOne({_id: new ObjectId(groupId)}); // converting the string groupId into an Object Id before querying database
       if (!group) throw `No group with a groupId of ${groupId} was found`;
