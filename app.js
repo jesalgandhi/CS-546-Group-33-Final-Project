@@ -19,12 +19,12 @@ app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 /* Session: We will probably need something similar to this: */
-// app.use(session({
-//   name: 'AuthState',
-//   secret: 'Yeat is the greatest artist of all time',
-//   resave: false,
-//   saveUninitialized: false
-// }))  
+app.use(session({
+  name: 'AuthState',
+  secret: 'Yeat is the greatest artist of all time',
+  resave: false,
+  saveUninitialized: false
+}))
 
 /* Call Middleware here: */
 app.use(express.urlencoded({extended: true}));
@@ -32,7 +32,7 @@ app.use('/public', staticDir);
 app.use(express.json());
 app.use(cookieParser());
 app.use(middleware.rewriteUnsupportedBrowserMethods);
-app.use(middleware.logRequestsAndRedirect); // logs every request; needs to be changed to log if user authenticated or not
+app.use("/", middleware.logRequests); // logs every request
 // ...
 
 

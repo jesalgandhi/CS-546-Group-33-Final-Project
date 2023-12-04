@@ -8,31 +8,23 @@ import {messagesData} from '../data/index.js';
 
 
 router
-  .route('/')
+  .route('/login')
   .get(async (req, res) => {
-  //TODO
+    return res.render('login', {title: 'Login'});
   })
   .post(async (req, res) => {
     //TODO
   });
 
 router
-  .route('/create')
+  .route('/logout')
   .get(async (req, res) => {
-  //TODO
+    /* Expire the cookie + render logout successful page */
+    const anHourAgo = new Date();
+    anHourAgo.setHours(anHourAgo.getHours() - 1);
+    res.cookie('AuthState', '', {expires: anHourAgo});
+    res.clearCookie('AuthState');
+    return res.render('logout', {title: 'Logout Successful'});
   })
-  .post(async (req, res) => {
-    //TODO
-  });
-
-router
-  .route('/:groupId')
-  .get(async (req, res) => {
-  //TODO
-  })
-  .post(async (req, res) => {
-    //TODO
-  });
-
 
 export default router;

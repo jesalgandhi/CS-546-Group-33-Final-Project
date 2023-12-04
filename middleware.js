@@ -11,20 +11,20 @@ const middleware = {
         next();
     },
 
-    logRequestsAndRedirect(req, res, next) {
+    /* This middleware logs every request, with authentication info  */
+    logRequests(req, res, next) {
         const date = new Date().toUTCString();
-        
-        /* TODO: authorization logic to log if user is authenticated or not */
-        // const authorized = false;
-        // if (req.cookies.AuthState) authorized = true;
-        // console.log(`[${date}]: ${req.method} ${req.originalUrl} (${authorized ? 'Authenticated User' : 'Non-Authenticated User'})`);
-        
-        console.log(`[${date}]: ${req.method} ${req.originalUrl}`);
+        let authorized = false;
+        if (req.cookies.AuthState) authorized = true;
+        console.log(`[${date}]: ${req.method} ${req.originalUrl} (${authorized ? 'Authenticated User' : 'Non-Authenticated User'})`);
 
-        // if (authorized && req.session.user.role === 'admin') res.redirect('/admin');
-        // else if (authorized && req.session.user.role === 'user') res.redirect('/protected');
-        // else res.redirect('/login');
-
+        /* We can uncomment the below if we decide not to do a general info page for / */
+        // if (req.path === '/') {
+        //     if (authorized && req.session.user && req.session.user.role === 'admin') return res.redirect('/admin');
+        //     else if (authorized && req.session.user && req.session.user.role === 'user') return res.redirect('/protected');
+        //     else return res.redirect('/login');
+        // }
+        
         next();
     }
 }
