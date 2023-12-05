@@ -10,8 +10,10 @@
 <!--2. Plan on implementing Welcome message with group name and maybe each of their profile pics lined up? -->
 <h1>Welcome {{group.groupName}}</h1>
 
-{{#each group.user}}
-  {{profilePicture}}
+
+<!-- Renders ALL profile pictures together-->
+{{#each group.users}}
+  {{picture}}
 {{/each}}
 
 <!--3. Plan on implementing edit profile menu which will allow user to update group info, etc. -->
@@ -79,22 +81,23 @@ for group members that are less than: (4 - roommateGroup.users.length) -->
 
 <h1>List of All Roommate Groups</h1>
 {{#each roommateGroup}}
-  <h1>{{roommateGroup.groupName}} </h1>
-  <h2>{{roommateGroup.groupDescription}}</h2>
-  <h2>{{roommateGroup.groupLocation}}</h2>
+  <h1>{{groupName}} </h1>
+  <h2>{{groupDescription}}</h2>
+  <h2>{{groupLocation}}</h2>
 
-  {{#each roommateGroup.users}}
-    <h3>{{firstName}} {{lastName}} {{biography}} {{age}} {{interests}} {{picture}} </h3>
+  {{#each users}}
+    <h3>{{firstName}} {{lastName}} {{gender}} {{biography}} {{age}} {{interests}}</h3>
   {{/each}}
 
   {{#if roommateGroup.reviews}}
     {{#each roommateGroup.reviews}}
+      <h3>{{groupID}}</h3>
       <h3>{{firstName}} {{lastName}}</h3>
       <h3>{{review}}</h3>
   {{/each}}
   {{/if}}
 
-<a ref="/groupbyID/{{roommateGroup.groupID}}">View profile page</h1>
+<a ref="/groupbyID/{{groupID}}">View profile page</h1>
 {{/each}}
 
 <!-- Script that re-renders homepage if certain sorting filter is applied -->
