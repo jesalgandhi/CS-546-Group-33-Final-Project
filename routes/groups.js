@@ -27,8 +27,15 @@ router
 
 router
   .route('/:groupId')
-  .get(async (req, res) => {
-    return res.json("groups/:groupId route");
+  .get(async (req, res) => 
+  {
+    let group = groupsData.get(req.params.groupId);
+
+    if (group == null)
+      return res.redirect("/error");
+
+    else
+      return res.render("groupbyID",{group: group, title: group.groupName});
   });
 
 export default router;
