@@ -5,9 +5,8 @@ import {groupsData, usersData, messagesData} from '../data/index.js';
 const db = await dbConnection();
 await db.dropDatabase();
 
-// groupsData.create()
-// groupsData.remove()
-// groupsData.update()
+/* issues with createUser - please fix so we can seed */
+// usersData.createUser("John", "Smith", "johnsmith@example.com", "2015554516", "I am eager to make and meet new roommates", 23, )
 
 console.log('Done seeding database');
 

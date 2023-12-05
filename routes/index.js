@@ -7,6 +7,18 @@ import groupsRoutes from './groups.js';
 import messagesRoutes from './messages.js';
 
 const constructorMethod = (app) => {
+
+  /* THIS ROUTE IS FOR TESTING PURPOSES (TO LOGIN WITHOUT CREDENTIALS) DELETE BEFORE SUBMITTING */
+  app.use('/logintest', async (req, res) => {
+    req.session.user = {
+      firstName: "Test",
+      lastName: "User",
+      emailAddress: "test@example.com",
+      role: "admin"
+    }
+    return res.redirect('/');
+  });
+
   /* ALL ROUTES BELOW ARE NOT YET COMPLETED */
   app.use('/', homepageAndErrorRoutes); // error route is done 
   app.use('/register', registerRoutes);
