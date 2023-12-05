@@ -1,0 +1,29 @@
+<title>{{title}}</title>
+
+<h1>Welcome {{group.groupName}}</h1>
+
+<!-- Renders ALL profile pictures together-->
+{{#each group.users}}
+  {{picture}}
+{{/each}}
+
+{{#each group}}
+  <h1>{{groupName}}</h1>
+  <h2>{{groupDescription}}</h2>
+  <h2>{{groupLocation}}</h2>
+
+  {{#each users}} 
+    <h1>{{picture}}</h1>
+    <h3>{{firstName}} {{lastName}} {{gender}} {{biography}} {{age}} {{interests}} </h3>
+  {{/each}}
+
+  {{#if group.reviews}}
+    {{#each group.reviews}}
+      <h3>{{groupId}}</h3>
+      <h3>{{firstName}} {{lastName}}</h3>
+      <h3>{{review}}</h3>
+    {{/each}}
+  {{/if}}
+{{/each}}
+
+  <a href"homepage">Return to homepage</a>
