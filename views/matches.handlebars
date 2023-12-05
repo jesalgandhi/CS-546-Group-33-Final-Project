@@ -1,0 +1,25 @@
+<h1>{{title}}</h1>
+
+{{#if matchedGroup.length}}
+    {{#each matchedGroup}}
+    <h1>{{groupName}} </h1>
+    <h2>{{groupDescription}}</h2>
+    <h2>{{groupLocation}}</h2>
+
+    {{#each matchedGroup.users}}
+        <h1>{{picture}}</h1>
+        <h3>{{firstName}} {{lastName}} {{gender}} {{email}} {{phoneNumber}} {{biography}} {{age}} {{interests}}</h3>
+    {{/each}}
+
+    {{#if matchedGroup.reviews}}
+        {{#each matchedGroup.reviews}}
+        <h3>{{groupID}}</h3>
+        <h3>{{firstName}} {{lastName}}</h3>
+        <h3>{{review}}</h3>
+        {{/each}}
+    {{/if}}
+
+{{else}}
+    <h1>You currently have no matches</h1>
+    <a href"homepage">Go back to homepage</a>
+{{/if}}
