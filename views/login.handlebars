@@ -1,1 +1,22 @@
 <h1>{{title}}</h1>
+
+<form action="/login" method="POST" class="user-login" id = "login-form">
+<label id = "formLabel"></label>
+<div id="form-wrapper">
+<label for="emailAddressInput"><b>Email</b></label>
+<input type="email" id= "emailAddressInput" name="emailAddressInput" placeholder="Email" value="{{req.body}}" class="full-width-input">
+<label for="passwordInput"><b>Password</b></label>
+<input type="password" id= "passwordInput" name="passwordInput" placeholder="Password" value="{{req.body}}" class="full-width-input">
+</div> 
+
+<button type="submit">Login</button>
+ </form>
+
+{{#if emptyInput}}
+<p class = "error"> {{errorMsg}} </p>
+{{/if}}
+ 
+<div id="error" class="error" hidden> Not Shown as of now (Will Show if error exists in input)</div>
+
+<a href="/register">Click here to register.</a>
+
