@@ -1,29 +1,36 @@
 <title>{{title}}</title>
 
-<h1>Welcome {{group.groupName}}</h1>
+<!--<h1>Welcome {{group.groupName}}</h1>-->
 
 <!-- Renders ALL profile pictures together-->
 {{#each group.users}}
   {{picture}}
 {{/each}}
 
-{{#each group}}
-  <h1>{{groupName}}</h1>
-  <h2>{{groupDescription}}</h2>
-  <h2>{{groupLocation}}</h2>
 
-  {{#each users}} 
-    <h1>{{picture}}</h1>
-    <h3>{{firstName}} {{lastName}} {{gender}} {{biography}} {{age}} {{interests}} </h3>
+  <h1>{{group.groupName}}</h1>
+  <h2>Description: {{group.groupDescription}}</h2>
+  <h2>Coordinates: {{group.groupLocation.coordinates}}</h2>
+  <br>
+  
+
+  {{#each groupMembers}} 
+    <h5>{{picture}}</h2>
+    <h3>Name: {{firstName}} {{lastName}} </h3>
+    <h3>Gender: {{gender}} </h3>
+    <h3>Biography: {{biography}} </h3>
+    <h3>Age: {{age}}</h3>
+    <h3>Interests: {{interests}}  </h3>
+    <br>
   {{/each}}
 
   {{#if group.reviews}}
+    <h1>Reviews:</h1>
     {{#each group.reviews}}
       <h3>{{groupId}}</h3>
       <h3>{{firstName}} {{lastName}}</h3>
       <h3>{{review}}</h3>
     {{/each}}
   {{/if}}
-{{/each}}
 
-  <a href"homepage">Return to homepage</a>
+  <a href="/">Return to homepage</a>
