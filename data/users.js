@@ -11,8 +11,8 @@ import {messagesData} from './index.js';
 
 import validation from '../helpers.js';
 
-const groupsCollection = await groups(); // will be used a lot, so making it a global variable
-const usersCollection = await users();
+// const groupsCollection = await groups(); // will be used a lot, so making it a global variable
+// const usersCollection = await users();
 
 const exportedMethods = {
 
@@ -48,8 +48,11 @@ const exportedMethods = {
 
     const usersCollection = await users();
     const user = await usersCollection.findOne({ _id: new ObjectId() }); 
-    if (!user) { throw 'No group'; } 
-    let users = user.users || [];
+    if (!user) { throw 'No group'; }  // ???
+
+    // what is this for?
+    // let users = user.users || []; 
+
     const existingUser = users.find((user) => user.emailAddress === emailAddress);
     if (existingUser)
     { throw `An user with email address ${emailAddress} already exists for this group`; } 
@@ -64,7 +67,7 @@ const exportedMethods = {
       phoneNumber: phoneNumber.trim(),
       biography: biography.trim(),
       age: age.trim(),
-      interests: interests.trim(),
+      interests: interests.trim(), // you can't trim a list
       picture: picture.trim()
     };
     users[users.length] = newUser;

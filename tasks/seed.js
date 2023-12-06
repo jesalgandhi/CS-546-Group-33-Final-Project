@@ -6,7 +6,11 @@ const db = await dbConnection();
 await db.dropDatabase();
 
 /* issues with createUser - please fix so we can seed */
-// usersData.createUser("John", "Smith", "johnsmith@example.com", "2015554516", "I am eager to make and meet new roommates", 23, )
+// const user1 = await usersData.createUser(
+//     "John", "Smith", "johnsmith@example.com", "2015554516", "I am eager to make and meet new roommates", 23, 
+//     ["Biking", "Movies", "Painting"], "picture url with be here i guess"
+// );
+// console.log(user1);
 
 console.log('Done seeding database');
 

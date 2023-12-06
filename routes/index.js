@@ -11,6 +11,7 @@ const constructorMethod = (app) => {
   /* THIS ROUTE IS FOR TESTING PURPOSES (TO LOGIN WITHOUT CREDENTIALS) DELETE BEFORE SUBMITTING */
   app.use('/logintest', async (req, res) => {
     req.session.user = {
+      /* Feel free to add key/values here if needed */
       firstName: "Test",
       lastName: "User",
       emailAddress: "test@example.com",
