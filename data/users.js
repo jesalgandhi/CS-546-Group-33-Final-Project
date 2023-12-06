@@ -11,32 +11,23 @@ import {messagesData} from './index.js';
 
 import validation from '../helpers.js';
 
-const groupsCollection = await groups(); // will be used a lot, so making it a global variable
-const usersCollection = await users();
+// const groupsCollection = await groups(); // will be used a lot, so making it a global variable
+// const usersCollection = await users();
 
 const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
   async createUser(firstName, lastName, emailAddress, phoneNumber, biography, age, interests, picture) {
-    // function isValidPhoneNumber(phoneNumber) {
-    //   const regex = /^\d{10}$/;
-    //   return regex.test(phoneNumber);
-    // }
-    
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
     { throw 'firstName must be a non-empty string'; } 
     if (typeof lastName !== 'string' || lastName.trim().length === 0) 
     { throw 'lastName must be a non-empty string'; }
     if (!validate(emailAddress)) 
     { throw 'You must provide a valid contact email'; }
-    // if (!isValidPhoneNumber(phoneNumber)) 
-    // { throw 'You must provide a valid phone number'; }
 
     phoneNumber = phone(phoneNumber);
-    // checking the what the boolean was set to to determine if phone number is valid
     if (!phoneNumber.isValid) throw 'Invalid phone number!';
-    // setting the phone number to be the normalized phone number with country code and all
     phoneNumber = phoneNumber.phoneNumber;
 
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
@@ -47,40 +38,26 @@ const exportedMethods = {
     { throw 'Interests must be a list'; }
 
     const usersCollection = await users();
-    const user = await usersCollection.findOne({ _id: new ObjectId() }); 
-    if (!user) { throw 'No group'; } 
-    let users = user.users || [];
-    const existingUser = users.find((user) => user.emailAddress === emailAddress);
-    if (existingUser)
-    { throw `An user with email address ${emailAddress} already exists for this group`; } 
-    if (!Array.isArray(interests)) 
-    { throw 'Interests must be a list'; }
 
     let newUser = { 
       _id: new ObjectId(),
       firstName: firstName.trim(),
       lastName: lastName.trim(), 
       emailAddress: emailAddress.trim(),
-      phoneNumber: phoneNumber.trim(),
+      phoneNumber: phoneNumber,
       biography: biography.trim(),
-      age: age.trim(),
-      interests: interests.trim(),
-      picture: picture.trim()
+      age: age,
+      interests: [],
+      picture: picture
     };
-    users[users.length] = newUser;
 
-    const updatedInfo = await usersCollection.findOneAndUpdate( 
-      { _id: new ObjectId() },
-      { $push: { users: newUser } ,
-        $inc: { totalNumberOfUsers: 1 } } ,
-        { returnDocument: 'after' });
-
-    if (updatedInfo.modifiedCount === 0) 
+    const insertResult = await usersCollection.insertOne(newUser);
+    if (!insertResult.acknowledged || insertResult.insertedCount === 0) 
     { throw 'Could not add user'; } 
-    user.totalNumberOfUsers++;
-    return user; 
-    
-  }, 
+
+    return newUser; 
+},
+
 
   async getAllUsers(groupId) {
     if (!groupId) throw 'You must provide an id to search for'; 
