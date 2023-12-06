@@ -11,6 +11,7 @@ router
   .route('/')
   .get(async (req, res) => {
     return res.json("homepage route");
+    //return res.json("homepage", {group: req.session.user.group, title: "Homepage"})
   })
   .post(async (req, res) => {
     //TODO
