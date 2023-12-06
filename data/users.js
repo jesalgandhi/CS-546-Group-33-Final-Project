@@ -59,18 +59,17 @@ const exportedMethods = {
 },
 
 
-  async getAllUsers(groupId) {
-    if (!groupId) throw 'You must provide an id to search for'; 
-    const groupsCollection = await groups(); 
-    const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 
-    if (!group) { throw 'No group'; }
+async  getAllUsers() {
+  const usersCollection = await users();
+  const usersList = await usersCollection.find({}).toArray();
 
-    const Theusers = group.Theusers || [];
+  if (!usersList || usersList.length === 0) {
+      throw 'No users found';
+  }
 
-    return Theusers;; 
+  return usersList;
+},
 
-
-  },
 
   async getUser(userId) {
     if (!ObjectId.isValid(userId)) {
