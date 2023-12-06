@@ -26,10 +26,6 @@ const exportedMethods = {
     if (!validate(emailAddress)) 
     { throw 'You must provide a valid contact email'; }
 
-    phoneNumber = phone(phoneNumber);
-    if (!phoneNumber.isValid) throw 'Invalid phone number!';
-    phoneNumber = phoneNumber.phoneNumber;
-
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
     { throw 'biography must be a non-empty string over the lentgh of 200'; }
     if (typeof age !== 'number' || age < 18 || age > 121)
@@ -38,6 +34,18 @@ const exportedMethods = {
     { throw 'Interests must be a list'; }
 
     const usersCollection = await users();
+    const existingEmail = await usersCollection.findOne({ emailAddress: emailAddress.trim() });
+    if (existingEmail) {
+        throw `User with email address ${emailAddress} already exists`;
+    }
+    phoneNumber = phone(phoneNumber);
+    if (!phoneNumber.isValid) throw 'Invalid phone number!';
+    phoneNumber = phoneNumber.phoneNumber;
+
+    const existingPhone = await usersCollection.findOne({ phoneNumber: phoneNumber });
+    if (existingPhone) {
+        throw `User with phone number ${phoneNumber} already exists`;
+    }
 
     let newUser = { 
       _id: new ObjectId(),
@@ -59,8 +67,7 @@ const exportedMethods = {
     return newUser; 
   },
 
-
-async  getAllUsers() {
+async getAllUsers() {
   const usersCollection = await users();
   const usersList = await usersCollection.find({}).toArray();
 
