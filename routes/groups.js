@@ -6,6 +6,12 @@ import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { lookUpRaw } = require("geojson-places");
+
+const cities = require('cities');
+
 
 router
   .route('/create')
@@ -34,7 +40,7 @@ router
     if (group == null)
       return res.redirect("/error");
 
-    //console.log(group);
+    console.log(group);
     //console.log(group.users);
 
     let users = {};
@@ -44,11 +50,23 @@ router
       users[i] = await usersData.getUser(group.users[i]);
     }
 
+    /*const result = lookUpRaw(group.groupLocation.coordinates[0],group.groupLocation.coordinates[1] );
+
+    console.log(result.features);*/
+
+    let city = cities.gps_lookup(group.groupLocation.coordinates[0],group.groupLocation.coordinates[1]);
+
+    console.log(city);
+
+    //let city2 = cities.gps_lookup(14.5995, 120.9842);
+
+    //console.log(city2);
+
    // console.log(users);
 
     //let group_members = await
 
-      return res.render("groupbyID",{group: group, groupMembers: users, title: group.groupName});
+      return res.render("groupbyID",{group: group, groupMembers: users, title: group.groupName, location: city});
   });
 
 export default router;
