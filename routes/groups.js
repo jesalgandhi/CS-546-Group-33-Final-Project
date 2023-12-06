@@ -29,13 +29,26 @@ router
   .route('/:groupId')
   .get(async (req, res) => 
   {
-    let group = groupsData.get(req.params.groupId);
+    let group = await groupsData.get(req.params.groupId);
 
     if (group == null)
       return res.redirect("/error");
 
-    else
-      return res.render("groupbyID",{group: group, title: group.groupName});
+    //console.log(group);
+    //console.log(group.users);
+
+    let users = {};
+
+    for (let i = 0; i < Object.keys(group.users).length; i++)
+    {
+      users[i] = await usersData.getUser(group.users[i]);
+    }
+
+   // console.log(users);
+
+    //let group_members = await
+
+      return res.render("groupbyID",{group: group, groupMembers: users, title: group.groupName});
   });
 
 export default router;
