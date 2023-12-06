@@ -38,14 +38,6 @@ const exportedMethods = {
     { throw 'Interests must be a list'; }
 
     const usersCollection = await users();
-    const user = await usersCollection.findOne({ _id: new ObjectId() }); 
-    if (!user) { throw 'No group'; } 
-    let users = user.users || [];
-    const existingUser = users.find((user) => user.emailAddress === emailAddress);
-    if (existingUser)
-    { throw `An user with email address ${emailAddress} already exists for this group`; } 
-    if (!Array.isArray(interests)) 
-    { throw 'Interests must be a list'; }
 
     let newUser = { 
       _id: new ObjectId(),
@@ -64,7 +56,7 @@ const exportedMethods = {
     { throw 'Could not add user'; } 
 
     return newUser; 
-},
+  },
 
 
   async getAllUsers(groupId) {
