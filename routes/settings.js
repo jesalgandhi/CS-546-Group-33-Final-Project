@@ -7,17 +7,27 @@ import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
 
 
-router
-  .route('/')
+router.route('/')
   .get(async (req, res) => {
-  //TODO
-  return res.json("settings route");
+    try {
+      const userId = req.session.user._id;
+      const userSettings = await usersData.getUserById(userId);
+      res.json(userSettings);
+    } catch (e) {
+      res.status(500).json({ error: e.toString() });
+    }
   })
-  .post(async (req, res) => {
-    //TODO
-  })
+  // .post(async (req, res) => {
+  // })
   .put(async (req, res) => {
-    //TODO
+    try {
+      const userId = req.session.user._id;
+      const updatedSettings = req.body;
+      const updatedUser = await usersData.updateUser(userId, updatedSettings);
+      res.json(updatedUser);
+    } catch (e) {
+      res.status(500).json({ error: e.toString() });
+    }
   });
 
 
