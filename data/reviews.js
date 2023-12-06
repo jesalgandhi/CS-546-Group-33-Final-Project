@@ -10,7 +10,7 @@ const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
-  async createReview(groupId, firstName, lastName, review) {    
+  async createReview(groupId, firstName, lastName, review) {
     // groupId is the group ID of the person they're leaving a review on
     if ( (!groupId) || (!firstName) || (!lastName) || (!review) ) throw 'All the required inputs were not given';
     groupId = validation.checkId(groupId, 'group ID');

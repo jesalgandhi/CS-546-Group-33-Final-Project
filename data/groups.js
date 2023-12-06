@@ -14,18 +14,28 @@ const exportedMethods = {
     groupName,
     groupDescription,
     groupLocation,
-    users,
-    reviews,
+    users
   ) {
     // shouldnt reviews NOT be passed as an input? should it not instead be made upon group creation, and are initialized to empty since a new group will have 0 reviews?
 
       // ensuring inputs are there and are strings
-      if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users) || (!reviews) ) throw 'Please provide all of the required inputs.';
-      if ( (typeof groupName !== "string") || (typeof groupDescription !== "string") || (typeof groupLocation !== "string")) throw "All the required inputs must be strings.";
+      if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users) ) throw 'Please provide all of the required inputs.';
+      if (typeof groupName !== "string") throw "groupName must be a string";
+      if (typeof groupDescription !== "string") throw "groupDescription must be a string";
+      if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
+      if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
+
+      //TODO
+      // check that groupLocation is a valid list of exactly 2 coordinates ....
+      // check that users contains a max of 4 valid ObjectIds ....
+      
+      
       // trimming as necessary
       groupName = groupName.trim();
       groupDescription = groupDescription.trim();
-      groupLocation = groupLocation.trim();
+
+      //TODO
+      // ensure groupName/groupDescription is nonempty
 
       // seeing if the groupName already exists in the database, meaning a diff group already has the name
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
@@ -33,15 +43,12 @@ const exportedMethods = {
 
       if (groupDescription.length > 500) throw 'The description exceeds the 500 character limit.';
 
-      // ... the groupLocation, user, and reviews checking ...
-
-      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': groupLocation, 'users': users, 'reviews': reviews};
-      const insertInfo = await eventCollection.insertOne(group);
+      /* Reviews is initialized to an empty list like you suggested */
+      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': groupLocation, 'users': users, 'reviews': []};
+      const insertInfo = await groupsCollection.insertOne(group);
       if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add group.';
 
       return group;
-
-    
   },
   
   async getAll() {
@@ -98,7 +105,7 @@ const exportedMethods = {
 
       // the new updated group object
       let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': groupLocation, 'users': users, 'reviews': reviews};
-      const updateInfo = await eventCollection.findOneAndReplace(
+      const updateInfo = await groupsCollection.findOneAndReplace(
         { _id: new ObjectId(eventId)},
         group,
         {returnDocument: 'after'}

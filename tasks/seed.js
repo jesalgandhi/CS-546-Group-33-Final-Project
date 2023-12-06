@@ -46,7 +46,15 @@ const removedUser = await usersData.removeUser(user1._id);
 console.log("User removed:", removedUser);
 
 
-
+/* GROUPS */
+/* Create group1 with users 2-4 */
+const group1 = await groupsData.create(
+    "The Cool Kids", 
+    "We're the coolest kids on the block!", 
+    [40.743256, -74.027768], 
+    [user2._id, user3._id, user4._id]
+)
+console.log("Group 1: ", group1);
 
 
 
