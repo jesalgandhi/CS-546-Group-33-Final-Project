@@ -56,6 +56,14 @@ const group1 = await groupsData.create(
 )
 console.log("Group 1: ", group1);
 
+/*
+I'm thinking for the locations to have coordinates of random locations scattered around hoboken. 
+Then for each user, it'll show the closest users relative to their location 
+    (e.g. user from 
+    1st st. would see user from 3rd st. then 8th st. and user from 8th st. would see user from
+    3rd st. first then 1st st.)
+*/
+
 
 
 

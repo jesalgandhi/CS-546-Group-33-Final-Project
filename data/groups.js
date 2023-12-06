@@ -44,7 +44,19 @@ const exportedMethods = {
       if (groupDescription.length > 500) throw 'The description exceeds the 500 character limit.';
 
       /* Reviews is initialized to an empty list like you suggested */
-      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': groupLocation, 'users': users, 'reviews': []};
+      let group = {
+        'groupName': groupName, 
+        'groupDescription': groupDescription, 
+
+        // https://www.mongodb.com/docs/manual/geospatial-queries/ 
+        // I'm not sure if mongo is recognizing this as GeoJSON tbh
+        'groupLocation': {
+          type: "Point", 
+          coordinates: groupLocation
+        }, 
+        'users': users, 
+        'reviews': []
+      };
       const insertInfo = await groupsCollection.insertOne(group);
       if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add group.';
 
