@@ -1,5 +1,3 @@
-// Import the express router as shown in the lecture code
-// Note: please do not forget to export the router!
 import express from 'express';
 const router = express.Router();
 import validation from '../helpers.js';
@@ -10,21 +8,11 @@ import {messagesData} from '../data/index.js';
 
 
 router
-  .route('/:userId')
+  .route('/')
   .get(async (req, res) => {
   //TODO
+  return res.json("matches route");
   })
-  .post(async (req, res) => {
-    //TODO
-  });
 
-router
-  .route('/user/:userId')
-  .get(async (req, res) => {
-    //TODO
-  })
-  .delete(async (req, res) => {
-    //TODO
-  });
 
 export default router;

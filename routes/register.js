@@ -10,25 +10,7 @@ import {messagesData} from '../data/index.js';
 router
   .route('/')
   .get(async (req, res) => {
-  //TODO
-  })
-  .post(async (req, res) => {
-    //TODO
-  });
-
-router
-  .route('/create')
-  .get(async (req, res) => {
-  //TODO
-  })
-  .post(async (req, res) => {
-    //TODO
-  });
-
-router
-  .route('/:groupId')
-  .get(async (req, res) => {
-  //TODO
+    return res.render('register', {title: 'Register'});
   })
   .post(async (req, res) => {
     //TODO
