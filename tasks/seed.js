@@ -5,7 +5,8 @@ import {groupsData, usersData, messagesData} from '../data/index.js';
 const db = await dbConnection();
 await db.dropDatabase();
 
-/* issues with createUser - please fix so we can seed */
+/* USERS */
+/* Create 5 users */
 const user1 = await usersData.createUser(
     "John", "Smith", "johnsmith@example.com", "2015554516", "I am eager to make and meet new roommates", 23, 
     ["Biking", "Movies", "Painting"], "picture url with be here i guess"
@@ -31,17 +32,24 @@ const user5 = await usersData.createUser(
     ["Gaming", "Cooking", "Anime"], "URL for the picture here"
 );
 
+/* Update user2's bio and number */
 const updatedFields = {
     biography: "Updated biography text",
     phoneNumber: "2025559876", 
 };
-await usersData.updateUser(user1._id, updatedFields);
-
-const updatedUser = await usersData.getUser(user1._id);
-
+await usersData.updateUser(user2._id, updatedFields);
+const updatedUser = await usersData.getUser(user2._id);
 console.log("User after update:", updatedUser);
+
+/* Remove user1 */
 const removedUser = await usersData.removeUser(user1._id);
 console.log("User removed:", removedUser);
+
+
+
+
+
+
 
 console.log('Done seeding database');
 

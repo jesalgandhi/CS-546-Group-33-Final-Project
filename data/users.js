@@ -48,7 +48,8 @@ const exportedMethods = {
       biography: biography.trim(),
       age: age,
       interests: interests,
-      picture: picture
+      picture: picture, 
+      admin: false
     };
 
     const insertResult = await usersCollection.insertOne(newUser);
