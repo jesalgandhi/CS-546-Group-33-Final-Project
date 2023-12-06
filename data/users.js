@@ -47,7 +47,7 @@ const exportedMethods = {
       phoneNumber: phoneNumber,
       biography: biography.trim(),
       age: age,
-      interests: [],
+      interests: interests,
       picture: picture
     };
 
@@ -72,75 +72,77 @@ const exportedMethods = {
 
   },
 
-    async getAllhelper() {
-    const groupCollection = await groups();
-    const groupList = await groupCollection.find({}).toArray();
-    if (!groupList) {
-      throw 'No group found';
+  async getUser(userId) {
+    if (!ObjectId.isValid(userId)) {
+        throw 'You must provide a valid user ID';
     }
-    const groupListStringIds = groupList.map(group => {
-      group._id = group._id.toString();
-      return group;
-    });
-    return groupListStringIds;
-  },
 
-  async getUser(UserId) {
-    if (!UserId) throw 'You must provide an id to search for';
-    if (typeof UserId !== 'string') {
-      UserId = UserId.toString();
+    const usersCollection = await users();
+    const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+        throw 'User not found';
     }
-    if (UserId.trim().length === 0) {
-      throw 'UserId must be a non-empty string';
-    }
-    const _id = ObjectId.isValid(UserId) ? new ObjectId(UserId) : null;
-    if (!_id) throw 'Invalid ObjectId';
+
+    return user;
+},
+
   
-    const allUsers = await this.getAllhelper();
-    let theUser = null;
-  
-    for (let i = 0; i < allUsers.length; i++) {
-      const currentUser = allUsers[i];
-      const user = currentUser.users.find(user => user._id.toString() === UserId);
-      if (user) {
-        theUser = user;
-        break;
-      }
-    }
-  
-    if (!theUser) {
-      throw `No user with id ${UserId} found in the group`;
-    }
-    return theUser;
-  },
-  
-  async removeUser(UserId) {
-    if (!UserId) {
-        throw 'You must provide a UserId to remove a user';
-    }
-    const groupsCollection = await groups();
-    const group = await groupsCollection.findOne({ "users._id": new ObjectId(UserId) });
-  
-    if (!group) {
-        throw 'No group found for the provided UserId';
-    }
-    const userToRemove = group.users.find(user => user._id.toString() === UserId.toString());
-    if (!userToRemove) {
-        throw 'User not found in the group';
-    }
-    const updatedInfo = await groupsCollection.findOneAndUpdate(
-        { _id: group._id },
-        {
-            $pull: { users: { _id: new ObjectId(UserId) } },
-        },
-        { returnDocument: "after" }
-    );
-  
-    if (updatedInfo.modifiedCount === 0) {
-        throw 'Could not remove user';
-    }  
-    return updatedInfo;
+async removeUser(userId) {
+  if (!ObjectId.isValid(userId)) {
+      throw 'You must provide a valid user ID';
   }
+
+  const usersCollection = await users();
+  const deletionResult = await usersCollection.deleteOne({ _id: new ObjectId(userId) });
+
+  if (deletionResult.deletedCount === 0) {
+      throw 'Could not delete user or user not found';
+  }
+
+  return { deleted: true, userId: userId };
+},
+
+
+  async updateUser(userId, updatedFields) {
+    if (!ObjectId.isValid(userId)) { 
+        throw 'Invalid user ID'; 
+    }
+
+    const usersCollection = await users();
+    const userToUpdate = await usersCollection.findOne({ _id: new ObjectId(userId) });
+    if (!userToUpdate) {
+        throw 'User not found';
+    }
+    if (updatedFields.emailAddress && !validate(updatedFields.emailAddress)) {
+        throw 'You must provide a valid contact email';
+    }
+    if (updatedFields.phoneNumber) {
+        let phoneNumber = phone(updatedFields.phoneNumber);
+        if (!phoneNumber.isValid) throw 'Invalid phone number!';
+        updatedFields.phoneNumber = phoneNumber.phoneNumber;
+    }
+    const updateData = {};
+    for (const [key, value] of Object.entries(updatedFields)) {
+        if (value !== undefined && value !== null) {
+            updateData[key] = value;
+        }
+    }
+
+    const updateResult = await usersCollection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: updateData }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+        throw 'Could not update user';
+    }
+
+    return await usersCollection.findOne({ _id: new ObjectId(userId) });
+}
+
 };
+
+
 
 export default exportedMethods;

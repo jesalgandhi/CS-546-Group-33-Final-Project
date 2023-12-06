@@ -11,6 +11,15 @@ const user1 = await usersData.createUser(
     ["Biking", "Movies", "Painting"], "picture url with be here i guess"
 );
 console.log(user1);
+const updatedFields = {
+    biography: "Updated biography text",
+    phoneNumber: "2025559876", 
+};
+await usersData.updateUser(user1._id, updatedFields);
+const updatedUser = await usersData.getUser(user1._id);
+console.log("User after update:", updatedUser);
+const removedUser = await usersData.removeUser(user1._id);
+console.log("User removed:", removedUser);
 
 console.log('Done seeding database');
 
