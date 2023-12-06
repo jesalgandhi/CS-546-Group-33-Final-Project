@@ -2,9 +2,9 @@
 
 {{#if matchedGroup.length}}
     {{#each matchedGroup}}
-    <h1>{{groupName}} </h1>
-    <h2>{{groupDescription}}</h2>
-    <h2>{{groupLocation}}</h2>
+        <h1>{{groupName}} </h1>
+        <h2>{{groupDescription}}</h2>
+        <h2>{{groupLocation}}</h2>
 
     {{#each matchedGroup.users}}
         <h1>{{picture}}</h1>
@@ -18,6 +18,9 @@
         <h3>{{review}}</h3>
         {{/each}}
     {{/if}}
+
+    <a href"messages/{{matchedGroup,groupID}}">Message this group</a>
+    {{/each}}
 
 {{else}}
     <h1>You currently have no matches</h1>
