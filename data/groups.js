@@ -16,26 +16,45 @@ const exportedMethods = {
     groupLocation,
     users
   ) {
-    // shouldnt reviews NOT be passed as an input? should it not instead be made upon group creation, and are initialized to empty since a new group will have 0 reviews?
 
-      // ensuring inputs are there and are strings
-      if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users) ) throw 'Please provide all of the required inputs.';
-      if (typeof groupName !== "string") throw "groupName must be a string";
-      if (typeof groupDescription !== "string") throw "groupDescription must be a string";
-      if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
-      if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
+        // ensuring inputs are there and are strings
+        if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users) ) throw 'Please provide all of the required inputs.';
+        if (typeof groupName !== "string") throw "groupName must be a string";
+        if (typeof groupDescription !== "string") throw "groupDescription must be a string";
+        if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
+        if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
 
-      //TODO
-      // check that groupLocation is a valid list of exactly 2 coordinates ....
-      // check that users contains a max of 4 valid ObjectIds ....
+        //TODO
+        // check that groupLocation is a valid list of exactly 2 coordinates ....
+        // check that users contains a max of 4 valid ObjectIds ....
+
+      if (groupLocation.length !== 2) throw 'There MUST be only 2 coordinates in the groupLocation array.';
+
+      // the longitude gets stored first, so checking that to start
+      // longitude can be [-180, 180]
+      if (groupLocation[0] < -180 || groupLocation[0] > 180) throw 'The longitude is not between [-180, 180] (inclusive of both ends).';
+      
+      // the latitude gets stored second, so checking that now
+      // longitude can be [-90, 90]
+      if (groupLocation[1] < -90 || groupLocation[1] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
+
+
+      // ensuring there are MAX 4 users in the group
+      if (users.length > 4) throw 'There are more than 4 users in this group. Not allowed.';
+      // checking the userIds of each user in this group
+      for (const user of users) {
+        // console.log('the userId: ' + user._id);
+          if (!ObjectId.isValid(user)) throw `${user} is not a valid ObjectId.`;
+      }
       
       
       // trimming as necessary
       groupName = groupName.trim();
       groupDescription = groupDescription.trim();
 
-      //TODO
       // ensure groupName/groupDescription is nonempty
+      if (groupName.length === 0) throw 'The groupName field is empty.';
+      if (groupDescription.length === 0) throw 'The groupDescription field is empty.';
 
       // seeing if the groupName already exists in the database, meaning a diff group already has the name
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
@@ -76,6 +95,28 @@ const exportedMethods = {
       if (!group) throw `No group with a groupId of ${groupId} was found`;
       return group;
   },
+
+  // returns the groupId of the group that contains a user with userId. throws error if nothing was found
+  async getGroupByUserId(userId) {
+      userId = validation.checkId(userId, "user ID");
+
+      // getting all the groups
+      const allGroups = await groupsCollection.find({}).toArray();
+
+      // iterating over all the groups
+      for (const group of allGroups) {
+          // console.log(group.users);
+          // console.log(group.users[1]);
+          // console.log(new ObjectId(userId));
+
+          // if this group's users array contains a user that matches userId, return that group's groupId as a string
+          let found = group.users.find((user) => user.toString() === userId);
+          // console.log(found);
+          if (found) return group._id.toString();
+      }
+      throw `No group has a user with userId ${userId}`;
+
+  },
   
   async remove(groupId) {
       groupId = validation.checkId(groupId, "group ID");
@@ -96,16 +137,16 @@ const exportedMethods = {
     groupDescription,
     groupLocation,
     users,
-    reviews,
+    reviews
   ) {
       groupId = validation.checkId(groupId, "group ID");
       // ensuring inputs are there and are strings
-      if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users) || (!reviews) ) throw 'Please provide all of the required inputs.';
-      if ( (typeof groupName !== "string") || (typeof groupDescription !== "string") || (typeof groupLocation !== "string")) throw "All the required inputs must be strings.";
+      if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users)) throw 'Please provide all of the required inputs.';
+      if ( (typeof groupName !== "string") || (typeof groupDescription !== "string")) throw "All the required inputs must be strings.";
       // trimming as necessary
       groupName = groupName.trim();
       groupDescription = groupDescription.trim();
-      groupLocation = groupLocation.trim();
+      // groupLocation = groupLocation.trim();
 
       // seeing if the groupName already exists in the database, meaning a diff group already has the name
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
@@ -113,18 +154,39 @@ const exportedMethods = {
 
       if (groupDescription.length > 500) throw 'The description has exceeded the 500 character limit.';
 
-      // ... the groupLocation, user, and reviews checking ...
+      // ... the groupLocation and user checking ...
+
+      if (groupLocation.length !== 2) throw 'There MUST be only 2 coordinates in the groupLocation array.';
+
+      // the longitude gets stored first, so checking that to start
+      // longitude can be [-180, 180]
+      if (groupLocation[0] < -180 || groupLocation[0] > 180) throw 'The longitude is not between [-180, 180] (inclusive of both ends).';
+      
+      // the latitude gets stored second, so checking that now
+      // longitude can be [-90, 90]
+      if (groupLocation[1] < -90 || groupLocation[1] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
+
+
+      // ensuring there are MAX 4 users in the group
+      if (users.length > 4) throw 'There are more than 4 users in this group. Not allowed.';
+      // checking the userIds of each user in this group
+      for (const user of users) {
+          if (!ObjectId.isValid(user)) throw `${user} is not a valid ObjectId.`;
+      }
+
 
       // the new updated group object
-      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': groupLocation, 'users': users, 'reviews': reviews};
+      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': {type: 'Point', coordinates: groupLocation}, 'users': users, 'reviews': reviews};
       const updateInfo = await groupsCollection.findOneAndReplace(
-        { _id: new ObjectId(eventId)},
+        { _id: new ObjectId(groupId)},
         group,
         {returnDocument: 'after'}
       );
+
       // if updating was unsuccessful
       if (!updateInfo) throw `Error: Update failed! Could not update group with group id ${groupId}.`;
       return updateInfo;
+
 
 
 
