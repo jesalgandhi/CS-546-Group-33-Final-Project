@@ -26,7 +26,22 @@ const middleware = {
         // }
         
         next();
-    }
+    },
+
+    /* Redirects if user is not logged in (or page denied if they are not an admin(?)) */
+    messagesRedirect(req, res, next) {
+        let authorized = false;
+        if (req.cookies.AuthState) authorized = true;
+        if (!authorized) return res.redirect('/login');
+
+        /* Uncomment below if we decide that only admins can send messages */
+        // if (authorized && req.session.user && req.session.user.admin !== false) {
+        //     req.session.errorCode = 403;
+        //     req.session.errorMessage = "You do not have permission to view this page";
+        //     return res.redirect('/error');
+        // }
+        next()
+    },
 }
 
 export default middleware;

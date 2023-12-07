@@ -10,7 +10,7 @@ import {messagesData} from '../data/index.js';
 router
   .route('/')
   .get(async (req, res) => {
-  //TODO
+    return res.render('messages');
   })
   .post(async (req, res) => {
     //TODO
