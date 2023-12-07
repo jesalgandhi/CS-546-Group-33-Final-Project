@@ -10,6 +10,7 @@ import {messagesData} from '../data/index.js';
 router
   .route('/')
   .get(async (req, res) => {
+    console.log(req.session.user);
     return res.render('messages');
   })
   .post(async (req, res) => {

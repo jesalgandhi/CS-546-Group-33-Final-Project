@@ -6,16 +6,29 @@ import settingsRoutes from './settings.js';
 import groupsRoutes from './groups.js';
 import messagesRoutes from './messages.js';
 
+
+/* DELETE BEFORE SUBMISSION */
+import {usersData} from '../data/index.js';
+
+
 const constructorMethod = (app) => {
 
+  /* DELETE BEFORE SUBMISSION */
   /* THIS ROUTE IS FOR TESTING PURPOSES (TO LOGIN WITHOUT CREDENTIALS) DELETE BEFORE SUBMITTING */
   app.use('/logintest', async (req, res) => {
+    const users = await usersData.getAllUsers();
     req.session.user = {
       /* Feel free to add key/values here if needed */
-      firstName: "Test",
-      lastName: "User",
+      firstName: "Test", 
+      lastName: "User", 
       emailAddress: "test@example.com",
-      role: "admin"
+      phoneNumber: "2015554516", 
+      biography: "This is for testing purposes", 
+      age: 23, 
+      interests: ["Biking", "Sports", "Movies"],
+      picture: "URL Will be here(?)", 
+      admin: true,
+      id: users[0]._id.toString()
     }
     return res.redirect('/');
   });

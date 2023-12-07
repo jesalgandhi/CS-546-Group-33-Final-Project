@@ -24,6 +24,8 @@ router
    if (email.trim().length == 0 || password.trim().length == 0)
     throw "Email/Password must not be empty";
 
+    email = email.trim();
+
     let users = await users();
 
     const user = await usersCollection.findOne({emailAddress: email}); 
@@ -38,7 +40,18 @@ router
       throw "Invalid username or password";
   
     //Basing this off user being logged in rather than group being logged in
-    req.session.user = {firstName: user.firstName, lastName: user.lastName, emailAddress: user.emailAddress, phoneNumber: user.phoneNumber, biography: user.biography, age: user.age, interests: user.interests, picture: user.picture};
+    req.session.user = {
+      firstName: user.firstName, 
+      lastName: user.lastName, 
+      emailAddress: user.emailAddress,
+      phoneNumber: user.phoneNumber, 
+      biography: user.biography, 
+      age: user.age, 
+      interests: user.interests,
+      picture: user.picture, 
+      admin: user.admin,
+      id: user._id.toString()
+    };
 
     return req.session.user;
   });

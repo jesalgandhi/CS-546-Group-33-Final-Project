@@ -5,7 +5,7 @@ import {validate} from 'email-validator';
 import {ObjectId} from 'mongodb';
 import {groupsData} from './index.js';
 import {usersData} from './index.js';
-import {messagesData} from './index.js';
+// import {messagesData} from './index.js';
 import helpers from '../helpers.js';
 
 const exportedMethods = {
