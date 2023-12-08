@@ -14,13 +14,17 @@ const exportedMethods = {
     groupName,
     groupDescription,
     groupLocation,
+    budget,
+    genderPreference,
     users
   ) {
 
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!budget) || (!genderPreference) || (!users) ) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "groupName must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
+        if (typeof budget !== "number") throw "budget must be a number";
+        if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
 
@@ -38,6 +42,14 @@ const exportedMethods = {
       // longitude can be [-90, 90]
       if (groupLocation[1] < -90 || groupLocation[1] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
 
+
+      // budget
+      if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
+
+      // making it uppercase just to avoid cases where it's lowercase 
+      genderPreference = genderPreference.toUpperCase();
+      // if genderPreference is neither M, F, or O, throw error
+      if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The genderPreference must be either M, F, or O';
 
       // ensuring there are MAX 4 users in the group
       if (users.length > 4) throw 'There are more than 4 users in this group. Not allowed.';
@@ -60,7 +72,7 @@ const exportedMethods = {
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
       if (usedGroupName) throw `A group with the name ${groupName} already exists.`;
 
-      if (groupDescription.length > 500) throw 'The description exceeds the 500 character limit.';
+      if (groupDescription.length > 1000) throw 'The description exceeds the 1000 character limit.';
 
       /* Reviews is initialized to an empty list like you suggested */
       let group = {
@@ -72,8 +84,11 @@ const exportedMethods = {
         'groupLocation': {
           type: "Point", 
           coordinates: groupLocation
-        }, 
-        'users': users, 
+        },
+        'budget': budget,
+        'genderPreference': genderPreference, 
+        'users': users,
+        'matches': [], 
         'reviews': []
       };
       const insertInfo = await groupsCollection.insertOne(group);
@@ -136,7 +151,10 @@ const exportedMethods = {
     groupName,
     groupDescription,
     groupLocation,
+    budget,
+    genderPreference,
     users,
+    matches,
     reviews
   ) {
       groupId = validation.checkId(groupId, "group ID");
@@ -152,7 +170,7 @@ const exportedMethods = {
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
       if (usedGroupName) throw `A group with the name ${groupName} already exists.`;
 
-      if (groupDescription.length > 500) throw 'The description has exceeded the 500 character limit.';
+      if (groupDescription.length > 1000) throw 'The description has exceeded the 1000 character limit.';
 
       // ... the groupLocation and user checking ...
 
@@ -166,6 +184,14 @@ const exportedMethods = {
       // longitude can be [-90, 90]
       if (groupLocation[1] < -90 || groupLocation[1] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
 
+      // budget
+      if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
+
+      // making it uppercase just to avoid cases where it's lowercase 
+      genderPreference = genderPreference.toUpperCase();
+      // if genderPreference is neither M, F, or O, throw error
+      if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The genderPreference must be either M, F, or O';
+
 
       // ensuring there are MAX 4 users in the group
       if (users.length > 4) throw 'There are more than 4 users in this group. Not allowed.';
@@ -175,8 +201,36 @@ const exportedMethods = {
       }
 
 
+      // running get(match) on each groupId in matches. if there's no group with that groupId, get() will throw the appropriate not found error
+      for (const match of matches) {
+          let valid_group = await this.get(match);
+      }
+
+      // checking the _id, score, and description of each review
+      for (const review of reviews) {
+          // the review's _id
+          // calling get(id) on the review._id to ensure a review is being made by an existing group (that isn't the same group ofc)
+          let _id = review._id;
+          if (typeof _id !== 'string') throw "The review's id must be a string.";
+          // if (!ObjectId.isValid(_id)) throw "The review's id must be a valid objectId.";
+          let valid_group = await this.get(id);
+          if (_id === groupId) throw "The review's id CANNOT be the same as the group you're leaving the review on.";
+
+          // the review's score
+          let score = review.score;
+          if (typeof score !== 'number') throw "The review's score must be a number.";
+          if (score < 0 || score > 5) throw "The review's score must be between [0, 5].";
+
+          // the review's description
+          let description = review.description;
+          if (typeof description !== 'string') throw "The review's description must be a string.";
+          if (description.length > 1000) throw "The review exceeds the 1000 character limit.";          
+
+      }
+
+
       // the new updated group object
-      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': {type: 'Point', coordinates: groupLocation}, 'users': users, 'reviews': reviews};
+      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': {type: 'Point', coordinates: groupLocation}, 'budget': budget, 'genderPreference': genderPreference, 'users': users, 'matches': matches, 'reviews': reviews};
       const updateInfo = await groupsCollection.findOneAndReplace(
         { _id: new ObjectId(groupId)},
         group,
