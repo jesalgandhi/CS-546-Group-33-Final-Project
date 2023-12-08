@@ -93,6 +93,8 @@ try {
         "The Cool Kids", 
         "We're the coolest kids on the block!", 
         [-73.971623, 40.850708], // 1615-1593 Gerome Ave, Fort Lee, NJ 07024
+        1500,
+        "M",
         [user2._id, user3._id, user4._id]
     )
 
@@ -101,6 +103,8 @@ try {
         "The Lame Adults", 
         "We're the WORST ADULTS on O'block!", 
         [-74.043181, 40.883850], // 17-1 Mercer St, Hackensack, NJ 07601
+        1,
+        "F",
         [user5._id]
     )
 
@@ -109,6 +113,8 @@ try {
         "The Boring Fellas", 
         "We're the most boring fellas on the planet", 
         [-74.184897, 40.732781], // 186-158 Howard St, Newark, NJ 07103
+        25000,
+        "O",
         [user6._id, user7._id]
     )
 
@@ -117,6 +123,8 @@ try {
         "Garden State Explorers", 
         "Looking for roommates in NJ Hit us up", 
         [-74.278195, 40.924945],  // 118 Whitmore Ave, Wayne, NJ 07470
+        45000,
+        "F",
         [user8._id, user9._id, user10._id, user11._id]
     )
     
@@ -125,6 +133,8 @@ try {
         "Jersey Jazz Enthusiasts", 
         "Jazz lovers sharing who love music and need roommates", 
         [-74.0713, 40.7357],  // 73 Broadway, Jersey City, NJ 07306
+        50000,
+        "O",
         [user12._id]
     )
 
@@ -141,7 +151,7 @@ try {
     // console.log('ONLY group2:\n', only_group2);
 
     // groups update()
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', 'Sleeping on the job', [2.124872, 13.239743], [user1._id, user2._id], group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', 'Sleeping on the job', [2.124872, 13.239743], 1265, "O", [user1._id, user2._id], group1.matches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead
