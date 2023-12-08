@@ -154,8 +154,10 @@ try {
     // console.log('All groups after deleting group5:\n', allGroups);
 
     
-    // create conversation
-    // const conversation1 = await messagesData.createNewConversation()
+    // MESSAGES
+    /* Create a conversation between group 1 and 2 */
+    // const conversation1 = await messagesData.createNewConversation(group1._id.toString(), group2._id.toString());
+
 
 
     console.log('Done seeding database');
