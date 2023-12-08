@@ -9,20 +9,19 @@ import {messagesData} from '../data/index.js';
 
 router.route('/settings')
   .get(async (req, res) => {
-    // try {
-    //   const userId = req.session.user._id;
-    //   const userSettings = await usersData.getUserById(userId);
-    //   res.json(userSettings);
-    // } catch (e) {
-    //   res.status(500).json({ error: e.toString() });
-    // }
-    return res.render('settings', {title: 'Settings'});
+    try {
+      const userId = req.session.user._id;
+      const userSettings = await usersData.getUserById(userId);
+      res.json(userSettings);
+    } catch (e) {
+      res.status(500).json({ error: e.toString() });
+    }
   })
   // .post(async (req, res) => {
   // })
   .put(async (req, res) => {
     try {
-      const userId = req.session.user._id;
+      const userId = req.session.user.id;
       const updatedSettings = req.body;
 
       if (updatedSettings.firstName && (typeof updatedSettings.firstName !== 'string' || updatedSettings.firstName.trim().length === 0)) {
