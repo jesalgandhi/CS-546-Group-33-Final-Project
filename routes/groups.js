@@ -17,7 +17,15 @@ router
   .route('/create')
   .get(async (req, res) => {
     //return res.json("groups/create route");
-    return res.render("createGroup");
+
+    /* Retrieve userId from the session */
+    // if (!(req.session.user && req.session.user.id)) {
+    //   return res.redirect('/login');
+    // }
+
+
+
+    return res.render("createGroup", {title: 'Create a Group'});
   })
   .post(async (req, res) => {
     //todo
@@ -27,10 +35,30 @@ router
   .route('/join')
   .get(async (req, res) => {
     //return res.json("groups/join route");
-    return res.render("joinGroup");
+    return res.render("joinGroup", {title: 'Join a Group'});
   })
   .post(async (req, res) => {
-    //todo
+      // const groupInfo = req.body;
+      // let groupPassword = groupInfo.groupPassword;
+      // console.log(groupPassword);
+      // // let errors = [];
+
+      // try {
+      //   if (!groupPassword) throw "A group password must be provided.";
+      //   if (typeof groupPassword !== "string") throw "The group password must be a string.";
+      //   groupPassword = groupPassword.trim();
+      //   if (groupPassword.length === 0) throw "An empty spaces group password is not valid.";
+      // } catch (e) {
+      //     // console.log(e);
+      //     return res.render('joinGroup', {error: e});
+      //   }
+
+      // try {
+      //     const group = await 
+      // } catch (e) {
+        
+      // }
+
   });
 
 router
@@ -44,7 +72,7 @@ router
       group = await groupsData.get(req.params.groupId);
 
     }
-    catch
+    catch (e)
     {
       return res.render('error', {title: "Error", error: e});
     }
@@ -52,20 +80,24 @@ router
     console.log(group);
     //console.log(group.users);
 
-    let users = {};
+    let users = [];
 
     for (let i = 0; i < Object.keys(group.users).length; i++)
     {
       try
       {
-        users[i] = await usersData.getUser(group.users[i]);
+        users[i] = await usersData.getUser(group.users[i].toString());
       }
 
       catch(e)
       {
-        return res.render('error', {title: "Error", error: e});
+        // calvin made the bottom line of code, i commented it out atm and im keeping it here for my memory
+        // return res.render('error', {title: "Error", error: e});
+        console.log(e);
       }
     }
+
+
 
     /*const result = lookUpRaw(group.groupLocation.coordinates[0],group.groupLocation.coordinates[1] );
 

@@ -12,23 +12,27 @@ const exportedMethods = {
 
   async create(
     groupName,
+    groupUsername,
     groupDescription,
     groupLocation,
     budget,
     genderPreference,
-    users
+    users,
+    groupPassword
   ) {
 
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!budget) || (!genderPreference) || (!users) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "groupName must be a string";
+        if (typeof groupUsername !== "string") throw "groupUsername must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
         if (typeof budget !== "number") throw "budget must be a number";
         if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
+        if (typeof groupPassword !== "string") throw "groupPassword must be a string";
 
-        //TODO
+
         // check that groupLocation is a valid list of exactly 2 coordinates ....
         // check that users contains a max of 4 valid ObjectIds ....
 
@@ -63,10 +67,14 @@ const exportedMethods = {
       // trimming as necessary
       groupName = groupName.trim();
       groupDescription = groupDescription.trim();
+      groupUsername = groupUsername.trim();
+      groupPassword = groupPassword.trim();
 
-      // ensure groupName/groupDescription is nonempty
+      // ensure groupName/groupDescription/groupUsername/groupPassword is nonempty
       if (groupName.length === 0) throw 'The groupName field is empty.';
       if (groupDescription.length === 0) throw 'The groupDescription field is empty.';
+      if (groupUsername.length === 0) throw 'The groupUsername field is empty.';
+      if (groupPassword.length === 0) throw 'The groupPassword field is empty.';
 
       // seeing if the groupName already exists in the database, meaning a diff group already has the name
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
@@ -74,9 +82,26 @@ const exportedMethods = {
 
       if (groupDescription.length > 1000) throw 'The description exceeds the 1000 character limit.';
 
+      // seeing if the groupUsername already exists in the database, meaning a diff group already has the name, or if it contains spaces
+      let usernameSpaces = groupUsername.split(" ");
+      if (usernameSpaces.length > 1) throw `${groupUsername} contains spaces, invalid!`;
+
+      // console.log('here is the groupUsername: ', groupUsername);
+      const usedUsername = await groupsCollection.findOne( {groupUsername: groupUsername} );
+      if (usedUsername) 
+        {
+          // console.log('here is the groupUsername: ', groupUsername);
+          throw `A group with the username ${groupUsername} already exists.`;
+        }
+
+      // ensuring the length of password follows protocol
+      if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+
+
       /* Reviews is initialized to an empty list like you suggested */
       let group = {
         'groupName': groupName, 
+        'groupUsername': groupUsername,
         'groupDescription': groupDescription, 
 
         // https://www.mongodb.com/docs/manual/geospatial-queries/ 
@@ -88,6 +113,7 @@ const exportedMethods = {
         'budget': budget,
         'genderPreference': genderPreference, 
         'users': users,
+        'groupPassword': groupPassword,
         'matches': [], 
         'suggestedMatches': [],
         'reviews': []
@@ -150,26 +176,63 @@ const exportedMethods = {
   async update(
     groupId,
     groupName,
+    groupUsername,
     groupDescription,
     groupLocation,
     budget,
     genderPreference,
     users,
+    groupPassword,
     matches,
     reviews
   ) {
       groupId = validation.checkId(groupId, "group ID");
-      // ensuring inputs are there and are strings
-      if ( (!groupName) || (!groupDescription) || (!groupLocation) || (!users)) throw 'Please provide all of the required inputs.';
-      if ( (typeof groupName !== "string") || (typeof groupDescription !== "string")) throw "All the required inputs must be strings.";
+        // ensuring inputs are there and are strings
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+        if (typeof groupName !== "string") throw "groupName must be a string";
+        if (typeof groupUsername !== "string") throw "groupUsername must be a string";
+        if (typeof groupDescription !== "string") throw "groupDescription must be a string";
+        if (typeof budget !== "number") throw "budget must be a number";
+        if (typeof genderPreference !== "string") throw "genderPreference must be a string";
+        if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
+        if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
+        if (typeof groupPassword !== "string") throw "groupPassword must be a string";
+
+
       // trimming as necessary
       groupName = groupName.trim();
       groupDescription = groupDescription.trim();
+      groupUsername = groupUsername.trim();
+      groupPassword = groupPassword.trim();
       // groupLocation = groupLocation.trim();
 
-      // seeing if the groupName already exists in the database, meaning a diff group already has the name
-      const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
-      if (usedGroupName) throw `A group with the name ${groupName} already exists.`;
+      // ensure groupName/groupDescription/groupUsername/groupPassword is nonempty
+      if (groupName.length === 0) throw 'The groupName field is empty.';
+      if (groupDescription.length === 0) throw 'The groupDescription field is empty.';
+      if (groupUsername.length === 0) throw 'The groupUsername field is empty.';
+      if (groupPassword.length === 0) throw 'The groupPassword field is empty.';
+
+      const checkGroup = await this.get(groupId);
+      if (checkGroup.groupName !== groupName) {
+          // seeing if the groupName already exists in the database, meaning a diff group already has the name
+          const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
+          if (usedGroupName) throw `A group with the name ${groupName} already exists.`;
+      }
+
+      // seeing if the groupUsername already exists in the database, meaning a diff group already has the name, or if it contains spaces
+      let usernameSpaces = groupUsername.split(" ");
+      if (usernameSpaces.length > 1) throw `${groupUsername} contains spaces, invalid!`;
+
+
+      if (checkGroup.groupUsername !== groupUsername) {
+          const usedUsername = await groupsCollection.findOne( {groupUsername: groupUsername} );
+          if (usedUsername) throw `A group with the username ${groupUsername} already exists.`;
+    }
+
+
+      // ensuring the length of password follows protocol
+      if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+
 
       if (groupDescription.length > 1000) throw 'The description has exceeded the 1000 character limit.';
 
@@ -231,7 +294,17 @@ const exportedMethods = {
 
 
       // the new updated group object
-      let group = {'groupName': groupName, 'groupDescription': groupDescription, 'groupLocation': {type: 'Point', coordinates: groupLocation}, 'budget': budget, 'genderPreference': genderPreference, 'users': users, 'matches': matches, 'reviews': reviews};
+      let group = {
+        'groupName': groupName, 
+        'groupUsername': groupUsername,
+        'groupDescription': groupDescription, 
+        'groupLocation': {type: 'Point', coordinates: groupLocation}, 
+        'budget': budget, 
+        'genderPreference': genderPreference, 
+        'users': users, 
+        'groupPassword': groupPassword,
+        'matches': matches, 
+        'reviews': reviews};
       const updateInfo = await groupsCollection.findOneAndReplace(
         { _id: new ObjectId(groupId)},
         group,
