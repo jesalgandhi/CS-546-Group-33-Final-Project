@@ -10,8 +10,8 @@ import {messagesData} from '../data/index.js';
 router.route('/')
   .get(async (req, res) => {
     try {
-      const userId = req.session.user._id;
-      const userSettings = await usersData.getUserById(userId);
+      const userId = req.session.user.id;
+      const userSettings = await usersData.getUser(userId);
       res.json(userSettings);
     } catch (e) {
       res.status(500).json({ error: e.toString() });
@@ -21,7 +21,7 @@ router.route('/')
   // })
   .put(async (req, res) => {
     try {
-      const userId = req.session.user._id;
+      const userId = req.session.user.id;
       const updatedSettings = req.body;
       const updatedUser = await usersData.updateUser(userId, updatedSettings);
       res.json(updatedUser);

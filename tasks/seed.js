@@ -66,7 +66,7 @@ try {
         "The Lame Adults", 
         "We're the WORST ADULTS on O'block!", 
         [7.524024, -12.583203], 
-        [user1._id]
+        [user5._id]
     )
     console.log("Group 2:\n", group2);
 
