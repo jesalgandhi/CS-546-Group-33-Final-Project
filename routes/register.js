@@ -8,7 +8,7 @@ import {messagesData} from '../data/index.js';
 
 
 router
-  .route('/register')
+  .route('/')
   .get((req, res) => {
     res.render("register", { title: "Register" });
   })
@@ -28,7 +28,7 @@ router
     if (!/\S+@\S+\.\S+/.test(emailAddressInput.toLowerCase())) errors.push("Invalid Email Address");
     if (!/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(passwordInput)) errors.push("Invalid Password");
     if (passwordInput !== confirmPasswordInput) errors.push("Either the email address or password is invalid");
-    if (typeof biographyInput !== 'string' || biographyInput.trim().length === 0 || biographyInput.trim().length > 200)
+    if (typeof biographyInput !== 'string' || biographyInput.trim().length === 0 || biographyInput.trim().length > 200) errors.push("Invalid Biography");
     if (!Number.isInteger(parseInt(ageInput)) || ageInput < 18 || ageInput > 120) errors.push("Invalid Age");
     if (!Array.isArray(interestsInput) || interestsInput.length === 0) errors.push("Interests are required");
 
