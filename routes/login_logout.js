@@ -5,6 +5,7 @@ import validation from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import {users} from '../config/mongoCollections.js'
 
 import bcrypt from 'bcrypt';
 
