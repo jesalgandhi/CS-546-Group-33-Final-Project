@@ -18,27 +18,32 @@ router
   })
   .post(async (req, res) => 
   {
-    //TODO
-    let email = req.body.emailAddressInput;
-    let password = req.body.passwordInput;
+    const requiredFields = ['emailAddressInput', 'passwordInput'];
+    const missingFields = requiredFields.filter(field => !req.body[field]);
 
-   if (email.trim().length == 0 || password.trim().length == 0)
-    throw "Email/Password must not be empty";
+    if (missingFields.length > 0) {
+      return res.status(400).render("login", { title: "Login", error: missingFields.map(field => `${field.replace('Input', '')} is required`) });
+    }
 
-    email = email.trim();
+    let {emailAddressInput, passwordInput} = req.body;
 
-    let users = await users();
+   if (emailAddressInput.trim().length == 0 || passwordInput.trim().length == 0)
+   return res.render('error', {title: "Error", error: "Email or password must not be empty"});
 
-    const user = await usersCollection.findOne({emailAddress: email}); 
+    emailAddressInput = emailAddressInput.trim();
+
+    let usersCollection = await users();
+
+    const user = await usersCollection.findOne({emailAddress: emailAddressInput}); 
 
     //Basing this off fact that each user is logging in with own information (email, password)
-    if (user === null)
-      throw "Invalid username or password";
+    if (!user)
+    return res.render('error', {title: "Error", error: "Email or password is incorrect"});
 
-    let passwordCheck = await bcrypt.compare(password, user.password);
+    let passwordCheck = await bcrypt.compare(passwordInput, user.password);
 
     if (!passwordCheck)
-      throw "Invalid username or password";
+      return res.render('error', {title: "Error", error: "Email or password is incorrect"});
   
     //Basing this off user being logged in rather than group being logged in
     req.session.user = {
@@ -54,7 +59,7 @@ router
       id: user._id.toString()
     };
 
-    return req.session.user;
+    return res.redirect('/');
   });
 
 router

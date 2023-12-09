@@ -7,11 +7,11 @@ import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
 
 
-router.route('/settings')
+router.route('/')
   .get(async (req, res) => {
     try {
-      const userId = req.session.user._id;
-      const userSettings = await usersData.getUserById(userId);
+      const userId = req.session.user.id;
+      const userSettings = await usersData.getUser(userId);
       res.json(userSettings);
     } catch (e) {
       res.status(500).json({ error: e.toString() });
