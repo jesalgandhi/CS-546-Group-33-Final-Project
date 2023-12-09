@@ -14,19 +14,30 @@ import validation from '../helpers.js';
 // const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 // const usersCollection = await users();
 
+const validatePassword = (password) => {
+  const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+  const passwordReg = new RegExp(passwordPattern);
+  if (!passwordReg.test(password)) {
+    throw "There needs to be at least one uppercase character, there has to be at least one number and there has to be at least one special character";
+  }
+};
 const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
-  async createUser(firstName, lastName, emailAddress, password, phoneNumber, biography, age, interests, picture) {
+  async createUser(firstName, lastName, emailAddress, password, phoneNumber, biography, age, interests) { //picture
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
     { throw 'firstName must be a non-empty string'; } 
     if (typeof lastName !== 'string' || lastName.trim().length === 0) 
     { throw 'lastName must be a non-empty string'; }
     if (!validate(emailAddress)) 
     { throw 'You must provide a valid contact email'; }
-    if (!/^[0-9]{10}$/.test(phoneNumber))
-    { throw 'phoneNumber must be a non-empty string'; }
+    // if (!/^[0-9]{10}$/.test(phoneNumber))
+    // { throw 'phoneNumber must be a non-empty string'; }
+    
+    validatePassword(password);
+    const saltRounds = await bcrypt.genSalt(8);
+    const hashedPass = await bcrypt.hash(password, saltRounds);
 
 
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
@@ -62,12 +73,12 @@ const exportedMethods = {
       firstName: firstName.trim(),
       lastName: lastName.trim(), 
       emailAddress: emailAddress.trim(),
-      password: password,
+      password: hashedPass,
       phoneNumber: phoneNumber,
       biography: biography.trim(),
       age: age,
       interests: interests,
-      picture: picture, 
+      // picture: picture, 
       admin: false
     };
 
