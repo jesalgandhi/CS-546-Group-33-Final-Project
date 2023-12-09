@@ -28,7 +28,7 @@ router
     if (!/\S+@\S+\.\S+/.test(emailAddressInput.toLowerCase())) errors.push("Invalid Email Address");
     if (!/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(passwordInput)) errors.push("Invalid Password");
     if (passwordInput !== confirmPasswordInput) errors.push("Either the email address or password is invalid");
-    if (!/^[a-zA-Z]{2,200}$/.test(biographyInput)) errors.push("Invalid Biography");
+    if (!/^.{0,200}$/.test(biographyInput)) errors.push("Invalid Biography");
     let age = typeof ageInput === 'number' ? ageInput : parseInt(ageInput);
     if (!Number.isInteger(age) || age < 18 || age > 120) errors.push("Invalid Age");
     if (typeof interestsInput === 'string') {

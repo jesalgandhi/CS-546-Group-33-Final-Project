@@ -25,6 +25,9 @@ const exportedMethods = {
     { throw 'lastName must be a non-empty string'; }
     if (!validate(emailAddress)) 
     { throw 'You must provide a valid contact email'; }
+    if (!/^[0-9]{10}$/.test(phoneNumber))
+    { throw 'phoneNumber must be a non-empty string'; }
+
 
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
     { throw 'biography must be a non-empty string over the lentgh of 200'; }
