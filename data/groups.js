@@ -89,6 +89,7 @@ const exportedMethods = {
         'genderPreference': genderPreference, 
         'users': users,
         'matches': [], 
+        'suggestedMatches': [],
         'reviews': []
       };
       const insertInfo = await groupsCollection.insertOne(group);

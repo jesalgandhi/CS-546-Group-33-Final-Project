@@ -9,62 +9,62 @@ try {
     /* USERS */
     /* Create 12 users - user1 will be deleted for demonstration */
     const user1 = await usersData.createUser(
-        "John", "Smith", "johnsmith@example.com", "2015554516", "I am eager to make and meet new roommates", 23, 
+        "John", "Smith", "johnsmith@example.com", "Test123$", "2015554516", "I am eager to make and meet new roommates", 23, 
         ["Biking", "Movies", "Painting"], "picture url with be here i guess"
     );
     
     const user2 = await usersData.createUser(
-        "Emily", "Johnson", "emilyjohnson@example.com", "2015557845", "Love hiking and outdoor adventures", 27, 
+        "Emily", "Johnson", "emilyjohnson@example.com", "Test123$", "2015557845", "Love hiking and outdoor adventures", 27, 
         ["Hiking", "Photography", "Cooking"], "picture url goes here"
     );
     
     const user3 = await usersData.createUser(
-        "Miguel", "Hernandez", "miguelhernandez@example.com", "2015558964", "A tech enthusiast and bookworm", 30, 
+        "Miguel", "Hernandez", "miguelhernandez@example.com", "Test123$", "2015558964", "A tech enthusiast and bookworm", 30, 
         ["Technology", "Reading", "Chess"], "picture url will be inserted here"
     );
     
     const user4 = await usersData.createUser(
-        "Sara", "Khan", "sarakhan@example.com", "2015556732", "Passionate about music and traveling", 25, 
+        "Sara", "Khan", "sarakhan@example.com", "Test123$", "2015556732", "Passionate about music and traveling", 25, 
         ["Music", "Traveling", "Yoga"], "image url will be here"
     );
     
     const user5 = await usersData.createUser(
-        "Alex", "Tanaka", "alextanaka@example.com", "2015554321", "Gamer and aspiring chef", 22, 
+        "Alex", "Tanaka", "alextanaka@example.com", "Test123$", "2015554321", "Gamer and aspiring chef", 22, 
         ["Gaming", "Cooking", "Anime"], "URL for the picture here"
     );
 
     const user6 = await usersData.createUser(
-        "Miguel", "Garcia", "miguelgarcia@example.com", "2015557890", "Avid reader and history buff", 28,
+        "Miguel", "Garcia", "miguelgarcia@example.com", "Test123$", "2015557890", "Avid reader and history buff", 28,
         ["Reading", "History", "Hiking"], "URL for the picture here"
     );
     
     const user7 = await usersData.createUser(
-        "Aisha", "Patel", "aishapatel@example.com", "2015551234", "Tech enthusiast and amateur photographer", 24,
+        "Aisha", "Patel", "aishapatel@example.com", "Test123$", "2015551234", "Tech enthusiast and amateur photographer", 24,
         ["Technology", "Photography", "Blogging"], "URL for the picture here"
     );
 
     const user8 = await usersData.createUser(
-        "Elena", "Rodriguez", "elenarodriguez@example.com", "2015552468", "Fitness lover and outdoor enthusiast", 26,
+        "Elena", "Rodriguez", "elenarodriguez@example.com", "Test123$", "2015552468", "Fitness lover and outdoor enthusiast", 26,
         ["Fitness", "Hiking", "Kayaking"], "URL for the picture here"
     );
     
     const user9 = await usersData.createUser(
-        "Liam", "Nguyen", "liamnguyen@example.com", "2015551357", "Movie fanatic and amateur playwright", 30,
+        "Liam", "Nguyen", "liamnguyen@example.com", "Test123$", "2015551357", "Movie fanatic and amateur playwright", 30,
         ["Movies", "Theater", "Writing"], "URL for the picture here"
     );
     
     const user10 = await usersData.createUser(
-        "Zoe", "Smith", "zoesmith@example.com", "2015558642", "Passionate about sustainable living and gardening", 27,
+        "Zoe", "Smith", "zoesmith@example.com", "Test123$", "2015558642", "Passionate about sustainable living and gardening", 27,
         ["Sustainability", "Gardening", "Cooking"], "URL for the picture here"
     );
 
     const user11 = await usersData.createUser(
-        "Noah", "Lee", "noahlee@example.com", "2015559473", "Enthusiastic about digital art and animation", 23,
+        "Noah", "Lee", "noahlee@example.com", "Test123$", "2015559473", "Enthusiastic about digital art and animation", 23,
         ["Digital Art", "Animation", "Video Games"], "URL for the picture here"
     );
     
     const user12 = await usersData.createUser(
-        "Emma", "Johnson", "emmajohnson@example.com", "2015557621", "Lover of classical music and playing the violin", 29,
+        "Emma", "Johnson", "emmajohnson@example.com", "Test123$", "2015557621", "Lover of classical music and playing the violin", 29,
         ["Classical Music", "Violin", "Reading"], "URL for the picture here"
     );
 
