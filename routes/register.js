@@ -22,18 +22,23 @@ router
 
     let { firstNameInput, lastNameInput, emailAddressInput, phonenumberInput, passwordInput, confirmPasswordInput, biographyInput, ageInput, interestsInput} = req.body; //pictureInput} = req.body;
 
+    // console.log(ageInput)
+    // console.log(biographyInput)
+
     const errors = [];
     if (!/^[a-zA-Z]{2,25}$/.test(firstNameInput)) errors.push("Invalid First Name");
     if (!/^[a-zA-Z]{2,25}$/.test(lastNameInput)) errors.push("Invalid Last Name");
     if (!/\S+@\S+\.\S+/.test(emailAddressInput.toLowerCase())) errors.push("Invalid Email Address");
     if (!/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(passwordInput)) errors.push("Invalid Password");
     if (passwordInput !== confirmPasswordInput) errors.push("Either the email address or password is invalid");
-    if (!/^.{0,200}$/.test(biographyInput)) errors.push("Invalid Biography");
+    if (!/^[a-zA-Z]{2,200}$/.test(biographyInput)) errors.push("Invalid Biography");
     let age = typeof ageInput === 'number' ? ageInput : parseInt(ageInput);
     if (!Number.isInteger(age) || age < 18 || age > 120) errors.push("Invalid Age");
     if (typeof interestsInput === 'string') {
       interestsInput = interestsInput.split(',').map(interest => interest.trim());
     }
+
+    console.log(interestsInput);
     
     if (!Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
       errors.push("Interests must be a list of strings");
@@ -44,7 +49,7 @@ router
     }
 
     try {
-      const newUser = await usersData.createUser(firstNameInput, lastNameInput, emailAddressInput.toLowerCase(), phonenumberInput, passwordInput, biographyInput, ageInput, interestsInput); //pictureInput);
+      const newUser = await usersData.createUser(firstNameInput, lastNameInput, emailAddressInput.toLowerCase(), phonenumberInput, passwordInput, biographyInput, age, interestsInput); //pictureInput);
       if (newUser.insertedUser) {
         return res.redirect("/login");
       } else {
