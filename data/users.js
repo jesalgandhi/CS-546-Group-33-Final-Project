@@ -8,24 +8,24 @@ import {users} from '../config/mongoCollections.js';
 import {groupsData} from './index.js';
 import {usersData} from './index.js';
 import {messagesData} from './index.js';
-
+import bcrypt from 'bcrypt';
 import validation from '../helpers.js';
 
 // const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 // const usersCollection = await users();
 
-const validatePassword = (password) => {
-  const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
-  const passwordReg = new RegExp(passwordPattern);
-  if (!passwordReg.test(password)) {
-    throw "There needs to be at least one uppercase character, there has to be at least one number and there has to be at least one special character";
-  }
-};
+// const validatePassword = (password) => {
+//   const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+//   const passwordReg = new RegExp(passwordPattern);
+//   if (!passwordReg.test(password)) {
+//     throw "There needs to be at least one uppercase character, there has to be at least one number and there has to be at least one special character";
+//   }
+// };
 const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
-  async createUser(firstName, lastName, emailAddress, password, phoneNumber, biography, age, interests) { //picture
+  async createUser(firstName, lastName, emailAddress, password, phoneNumber, biography, age, interests, picture) { //picture
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
     { throw 'firstName must be a non-empty string'; } 
     if (typeof lastName !== 'string' || lastName.trim().length === 0) 
@@ -35,7 +35,7 @@ const exportedMethods = {
     // if (!/^[0-9]{10}$/.test(phoneNumber))
     // { throw 'phoneNumber must be a non-empty string'; }
     
-    validatePassword(password);
+    // CHANGE SALT TO 16 BEFORE SUBMITTING
     const saltRounds = await bcrypt.genSalt(8);
     const hashedPass = await bcrypt.hash(password, saltRounds);
 
@@ -43,7 +43,7 @@ const exportedMethods = {
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
     { throw 'biography must be a non-empty string over the lentgh of 200'; }
     age = parseInt(age);
-    if (!isNaN(age) || age < 18 || age > 120) {
+    if (isNaN(age) || age < 18 || age > 120) {
       throw 'age must be a number over the age of 18 and under the age of 121';
     }
     if (typeof interests === 'string') {
@@ -78,7 +78,7 @@ const exportedMethods = {
       biography: biography.trim(),
       age: age,
       interests: interests,
-      // picture: picture, 
+      picture: picture, 
       admin: false
     };
 
