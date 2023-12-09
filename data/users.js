@@ -18,7 +18,7 @@ const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
-  async createUser(firstName, lastName, emailAddress, phoneNumber, biography, age, interests, picture) {
+  async createUser(firstName, lastName, emailAddress, password, phoneNumber, biography, age, interests, picture) {
     if (typeof firstName !== 'string' || firstName.trim().length === 0) 
     { throw 'firstName must be a non-empty string'; } 
     if (typeof lastName !== 'string' || lastName.trim().length === 0) 
@@ -32,16 +32,16 @@ const exportedMethods = {
     if (typeof biography !== 'string' || biography.trim().length === 0 || biography.trim().length > 200)
     { throw 'biography must be a non-empty string over the lentgh of 200'; }
     age = parseInt(age);
-    if (isNaN(age) || age < 18 || age > 120) {
+    if (!isNaN(age) || age < 18 || age > 120) {
       throw 'age must be a number over the age of 18 and under the age of 121';
     }
     if (typeof interests === 'string') {
         interests = interests.split(',').map(interest => interest.trim());
       }
       
-      if (!Array.isArray(interests) || !interests.every(interest => typeof interest === 'string')) {
+    if (!Array.isArray(interests) || !interests.every(interest => typeof interest === 'string')) {
         throw 'Interests must be a list of strings';
-      }
+    }
 
     const usersCollection = await users();
     const existingEmail = await usersCollection.findOne({ emailAddress: emailAddress.trim() });
@@ -62,6 +62,7 @@ const exportedMethods = {
       firstName: firstName.trim(),
       lastName: lastName.trim(), 
       emailAddress: emailAddress.trim(),
+      password: password,
       phoneNumber: phoneNumber,
       biography: biography.trim(),
       age: age,
