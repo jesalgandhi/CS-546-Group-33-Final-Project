@@ -59,13 +59,13 @@ const exportedMethods = {
     if (existingEmail) {
         throw `User with email address ${emailAddress} already exists`;
     }
-    phoneNumber = phone(phoneNumber);
-    if (!phoneNumber.isValid) throw 'Invalid phone number!';
-    phoneNumber = phoneNumber.phoneNumber;
+    let number = phone(phoneNumber);
+    if (!number.isValid) throw 'This phone number is invalid!';
+    number = number.phoneNumber;
 
-    const existingPhone = await usersCollection.findOne({ phoneNumber: phoneNumber });
+    const existingPhone = await usersCollection.findOne({ phoneNumber: number });
     if (existingPhone) {
-        throw `User with phone number ${phoneNumber} already exists`;
+        throw `User with phone number ${number} already exists`;
     }
 
     let newUser = { 
@@ -74,7 +74,7 @@ const exportedMethods = {
       lastName: lastName.trim(), 
       emailAddress: emailAddress.trim(),
       password: hashedPass,
-      phoneNumber: phoneNumber,
+      phoneNumber: number,
       biography: biography.trim(),
       age: age,
       interests: interests,

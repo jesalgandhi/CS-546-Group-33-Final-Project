@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import validation from '../helpers.js';
+import {phone} from 'phone';
 
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
@@ -31,7 +32,7 @@ router
     if (!/\S+@\S+\.\S+/.test(emailAddressInput.toLowerCase())) errors.push("Invalid Email Address");
     if (!/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(passwordInput)) errors.push("Invalid Password");
     if (passwordInput !== confirmPasswordInput) errors.push("Either the email address or password is invalid");
-    if (!/^[a-zA-Z]{2,200}$/.test(biographyInput)) errors.push("Invalid Biography");
+    if (!/^.{2,200}$/.test(biographyInput)) errors.push("Invalid Biography");
     let age = typeof ageInput === 'number' ? ageInput : parseInt(ageInput);
     if (!Number.isInteger(age) || age < 18 || age > 120) errors.push("Invalid Age");
     if (typeof interestsInput === 'string') {
@@ -43,14 +44,17 @@ router
     if (!Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
       errors.push("Interests must be a list of strings");
     }
-    if (!/^[0-9]{10}$/.test(phonenumberInput)) errors.push("Invalid Phone Number");
+    phonenumberInput = phone(phonenumberInput);
+    if (!phonenumberInput.isValid) errors.push('Invalid phone number!');
+    phonenumberInput = phonenumberInput.phoneNumber;
+    console.log(phonenumberInput);
     if (errors.length > 0) {
       return res.status(400).render("register", { title: "Registration Form", error: errors });
     }
 
     try {
-      const newUser = await usersData.createUser(firstNameInput, lastNameInput, emailAddressInput.toLowerCase(), phonenumberInput, passwordInput, biographyInput, age, interestsInput); //pictureInput);
-      if (newUser.insertedUser) {
+      const newUser = await usersData.createUser(firstNameInput, lastNameInput, emailAddressInput.toLowerCase(), passwordInput, phonenumberInput, biographyInput, age, interestsInput, "pictureInput");
+      if (newUser) {
         return res.redirect("/login");
       } else {
         return res.status(500).render("register", { title: "Registration Form", error: "Internal Server Error" });
