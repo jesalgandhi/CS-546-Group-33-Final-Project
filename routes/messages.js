@@ -110,7 +110,7 @@ router
       return res.status(400).render('conversation', {error: e});
     }
     try {
-      otherGroupName = await groupsData.get(thisGroupId);
+      otherGroupName = await groupsData.get(otherGroupId.toString());
       otherGroupName = otherGroupName.groupName;
     } catch (e) {
       return res.status(400).render('conversation', {error: e});
