@@ -28,6 +28,27 @@ const middleware = {
         next();
     },
 
+    // Redirects user to login page if user is not logged in and tries to access homepage
+    loginRedirect(req, res, next)
+    {
+        let authorized = false;
+        if (req.cookies.AuthState) 
+            authorized = true;
+
+        if (!authorized) 
+            return res.redirect('/login');
+
+        else if (authorized && req.path == "/")
+            next();
+
+
+        else if (req.path != "/")
+            next();
+
+
+        
+    },
+
     /* Redirects if user is not logged in (or page denied if they are not an admin(?)) */
     messagesRedirect(req, res, next) {
         let authorized = false;
