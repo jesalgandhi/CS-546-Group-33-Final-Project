@@ -17,7 +17,7 @@ router
     const userId = req.session.user.id;
     
     /* Check if user is part of a group - if not, prompt to create/join */
-    const groupId = undefined;
+    let groupId = undefined;
     try {
       groupId = await groupsData.getGroupByUserId(userId);
     } catch (e) {
@@ -27,7 +27,7 @@ router
     /* Get conversations from the group the user is a part of + pass thru */
     const conversations = messagesData.getAllConversations(groupId);
     return res.render('messages', {
-      error: false, 
+      // error: false, 
       title: "Your Conversations", 
       conversations: conversations
     });
