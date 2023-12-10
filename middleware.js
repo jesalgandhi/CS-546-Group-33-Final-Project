@@ -29,13 +29,14 @@ const middleware = {
     },
 
     // Redirects user to login page if user is not logged in and tries to access homepage
-    loginRedirect(req, res, next)
+    homepageRedirect(req, res, next)
     {
         let authorized = false;
+
         if (req.cookies.AuthState) 
             authorized = true;
 
-        if (!authorized) 
+        if (!authorized && req.path == "/") 
             return res.redirect('/login');
 
         else if (authorized && req.path == "/")

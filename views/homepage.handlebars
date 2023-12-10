@@ -21,55 +21,24 @@
 
 
 <!--4. Plan on drop-down menu with different sorting methods (age, gender, etc.) -->
-<!--Taken from w3schools example-->
-<!--Need to add a form with POST method that re-renders homepage.handlebars-->
-<div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
-    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-    <a href="#locationASC">Location (Closest -> Furthest) (DEFAULT)</a>
-    <a href="#locationDESC">Location (Furthest -> Closest)/a>
-    <a href="#ageASC">Age (ASC)</a>
-    <a href="#ageDESC">Age (DESC)</a>
-    <a href="#onlyMales">Males</a>
-    <a href="#onlyFemales">Females</a>
-    <a href="#bothGenders">Co-ed</a>
-    <a href="#about">Budget (ASC)</a>
-    <a href="#base">Budget (DESC)</a>
-  </div>
-</div>
-
-<script>
-function myFunction() 
-{
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
-function filterFunction() 
-{
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
-}
-</script>
-
-
-
-
+<form action="#">
+      <label for="lang">Language</label>
+      <select name="languages" id="lang" multiple>
+        <option value="javascript">JavaScript</option>
+        <option value="php">PHP</option>
+        <option value="java">Java</option>
+        <option value="golang">Golang</option>
+        <option value="python">Python</option>
+        <option value="c#">C#</option>
+        <option value="C++">C++</option>
+        <option value="erlang">Erlang</option>
+      </select>
+      <input type="submit" value="Submit" />
+</form>
 
 
 <!--5. Plan on adding gear icon on top right corner of menu which will render the view of user to settings.handlebars -->
-<a href"settings">Settings</a>
+<a href="/settings">Settings</a>
 
 
 <!--Before rendering homepage, pass handlebars parameter with ALL ROOMMATE GROUPS-->

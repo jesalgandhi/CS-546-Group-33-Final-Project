@@ -15,6 +15,19 @@ router
   })
   .post(async (req, res) => {
     //TODO
+    let filter = req.body.filter;
+
+    if (filter == age_desc)
+    {
+      //Get all groups
+
+      //Get all users from each group
+
+      //FIlter users based on ages?
+
+      //Return groups of other users based on applied filter
+    }
+
   });
 
 /* IMPORTANT:
