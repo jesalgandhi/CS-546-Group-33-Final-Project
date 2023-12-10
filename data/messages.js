@@ -15,7 +15,7 @@ const exportedMethods = {
   firstGroupId (str: ObjectId of a sender group) 
   secondGroupId (str: ObjectId of receiving group - must be matched with secondGroupId) 
 
-  Returns: string representation of ObjectId of the created conversation
+  Returns: ObjectId of the created conversation
   */
   async createNewConversation(firstGroupId, secondGroupId) {
     /* Check for valid ObjectId for both groups */
@@ -23,21 +23,21 @@ const exportedMethods = {
     secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
 
     /* Check if firstGroup is matched with secondGroup and vice versa */
-    const groupsCollection = await groups();
-    let firstGroupMatches = groupsCollection.find({_id: new ObjectId(firstGroupId)}, {_id: 0, matches: 1}).toArray();
-    let secondGroupMatches = groupsCollection.find({_id: new ObjectId(secondGroupId)}, {_id: 0, matches: 1}).toArray();
-    if (!(firstGroupMatches.includes(secondGroupId))) throw "Error: The group with id secondGroupId has not matched with group with firstGroupId";
-    if (!(secondGroupMatches.includes(firstGroupId))) throw "Error: The group with id firstGroupId has not matched with group with secondGroupId";
+    // const groupsCollection = await groups();
+    // let firstGroupMatches = groupsCollection.find({_id: new ObjectId(firstGroupId)}, {_id: 0, matches: 1}).toArray();
+    // let secondGroupMatches = groupsCollection.find({_id: new ObjectId(secondGroupId)}, {_id: 0, matches: 1}).toArray();
+    // if (!(firstGroupMatches.includes(secondGroupId))) throw "Error: The group with id secondGroupId has not matched with group with firstGroupId";
+    // if (!(secondGroupMatches.includes(firstGroupId))) throw "Error: The group with id firstGroupId has not matched with group with secondGroupId";
 
     /* Insert new conversation into conversations collection + return its associated id as a string */
     const conversationsCollection = await conversations();
     let newConversation = {
-      participants: [firstGroupId, secondGroupId],
+      participants: [new ObjectId(firstGroupId), new ObjectId(secondGroupId)],
       messages: []
     }
     const insertInfo = await conversationsCollection.insertOne(newConversation);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not create conversation';
-    return insertInfo.insertedId.toString();
+    return insertInfo.insertedId;
   },
   
   /* Creates a new message from senderId (which is a groupId belonging to the conversation with conversationId) 
@@ -53,17 +53,18 @@ const exportedMethods = {
     /* Check for valid ObjectId for conversationId and senderId; check for valid message */
     conversationId = helpers.checkId(conversationId, 'conversationId');
     senderId = helpers.checkId(senderId, 'senderId');
+    message = message.trim();
     if (typeof message !== 'string') throw "Error: message must be a string";
-    if ((message.trim().length === 0) || (message.length > 1024)) throw "Error: message must be between 1 and 1024 characters";
+    if ((message.length === 0) || (message.length > 1024)) throw "Error: message must be between 1 and 1024 characters";
 
     /* Attempt to append the new message to the messages array for the current conversation */
     const conversationsCollection = await conversations();
     const updatedConversation = await conversationsCollection.updateOne(
-      {_id: new ObjectId(eventId)}, 
+      {_id: new ObjectId(conversationId)}, 
       {
         $push: {
           messages: {
-            _id: new ObjectId(),
+            // _id: new ObjectId(),
             senderId: senderId, 
             text: message
           }
@@ -106,6 +107,17 @@ const exportedMethods = {
     const matchedConversation = await conversationsCollection.findOne({_id: new ObjectId(conversationId)});
     if (!matchedConversation) throw "Error: Conversation with the given id not found";
     return matchedConversation.messages;
+  },
+
+  /* Returns a 2-element array of participants of a conversation, given conversationId */
+  async getParticipants(conversationId) {
+    conversationId = helpers.checkId(conversationId);
+    const conversationsCollection = await conversations();
+    const participants = await conversationsCollection.findOne(
+      {_id: new ObjectId(conversationId)}, 
+      { projection: { _id: 0, participants: 1 } }
+    );
+    return participants.participants;
   },
 
   /* Removes a conversation with given id from the conversations collection; returns true if successful, else false
