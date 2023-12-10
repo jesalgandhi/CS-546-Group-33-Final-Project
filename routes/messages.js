@@ -34,19 +34,6 @@ router
     
     /* Populate conversationsAndGroupNames with conversationId as key, groupName as val */
     let conversationsAndGroupNames = {};
-    // conversations.forEach(async convo => {
-    //   // filter out participant that is currently logged in - participants will
-    //   // now contain one participant id of the other group
-    //   let participants = convo.participants.filter(p => p.toString() !== groupId);
-    //   let groupData = undefined;
-    //   try {
-    //     groupData = await groupsData.get(participants[0].toString());
-    //   } catch (e) {
-    //     return res.render('messages', {error:e});
-    //   }
-    //   conversationsAndGroupNames[convo._id.toString()] = groupData.groupName;
-    // });
-
     /* Create array of promises of conversations to be retrieved */
     let fetchGroupNamesPromises = conversations.map(async convo => {
       let participants = convo.participants.filter(p => p.toString() !== groupId);
@@ -85,7 +72,23 @@ router
 router
   .route('/:conversationId')
   .get(async (req, res) => {
-  //TODO
+    /* Retrieve userId from the session */
+    if (!(req.session.user && req.session.user.id)) {
+      return res.redirect('/login');
+    }
+    const userId = req.session.user.id;
+
+    /* Ensure the conversationId is a valid id */
+    try {
+      req.params.conversationId = validation.checkId(req.params.conversationId, 'conversationId');
+    } catch (e) {
+      res.render('conversation', {error: e});
+    }
+
+    
+
+
+
   })
   .post(async (req, res) => {
     //TODO

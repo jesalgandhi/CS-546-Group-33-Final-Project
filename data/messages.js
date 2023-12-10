@@ -15,7 +15,7 @@ const exportedMethods = {
   firstGroupId (str: ObjectId of a sender group) 
   secondGroupId (str: ObjectId of receiving group - must be matched with secondGroupId) 
 
-  Returns: string representation of ObjectId of the created conversation
+  Returns: ObjectId of the created conversation
   */
   async createNewConversation(firstGroupId, secondGroupId) {
     /* Check for valid ObjectId for both groups */
@@ -37,7 +37,7 @@ const exportedMethods = {
     }
     const insertInfo = await conversationsCollection.insertOne(newConversation);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not create conversation';
-    return insertInfo.insertedId.toString();
+    return insertInfo.insertedId;
   },
   
   /* Creates a new message from senderId (which is a groupId belonging to the conversation with conversationId) 
@@ -53,17 +53,18 @@ const exportedMethods = {
     /* Check for valid ObjectId for conversationId and senderId; check for valid message */
     conversationId = helpers.checkId(conversationId, 'conversationId');
     senderId = helpers.checkId(senderId, 'senderId');
+    message = message.trim();
     if (typeof message !== 'string') throw "Error: message must be a string";
-    if ((message.trim().length === 0) || (message.length > 1024)) throw "Error: message must be between 1 and 1024 characters";
+    if ((message.length === 0) || (message.length > 1024)) throw "Error: message must be between 1 and 1024 characters";
 
     /* Attempt to append the new message to the messages array for the current conversation */
     const conversationsCollection = await conversations();
     const updatedConversation = await conversationsCollection.updateOne(
-      {_id: new ObjectId(eventId)}, 
+      {_id: new ObjectId(conversationId)}, 
       {
         $push: {
           messages: {
-            _id: new ObjectId(),
+            // _id: new ObjectId(),
             senderId: senderId, 
             text: message
           }
