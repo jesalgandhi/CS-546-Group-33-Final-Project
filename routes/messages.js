@@ -77,21 +77,63 @@ router
       return res.redirect('/login');
     }
     const userId = req.session.user.id;
+    let conversationId = req.params.conversationId;
 
     /* Ensure the conversationId is a valid id */
     try {
-      req.params.conversationId = validation.checkId(req.params.conversationId, 'conversationId');
+      conversationId = validation.checkId(conversationId, 'conversationId');
     } catch (e) {
-      res.render('conversation', {error: e});
+      res.status(400).render('conversation', {error: e});
     }
 
-    
+    /* Create variables that represent this group and the other group's ids and names */
+    let thisGroupId = undefined;
+    let thisGroupName = undefined;
+    let otherGroupId = undefined;
+    let otherGroupName = undefined;
+    try {
+      thisGroupId = await groupsData.getGroupByUserId(userId);
+    } catch (e) {
+      return res.status(400).render('conversation', {error: e});
+    }
+    try {
+      thisGroupName = await groupsData.get(thisGroupId);
+      thisGroupName = thisGroupName.groupName;
+    } catch (e) {
+      return res.status(400).render('conversation', {error: e});
+    }
+    try {
+      let participants = await messagesData.getParticipants(conversationId);
+      let participant = participants.filter(p => p.toString() !== thisGroupId);
+      otherGroupId = participant[0];
+    } catch (e) {
+      return res.status(400).render('conversation', {error: e});
+    }
+    try {
+      otherGroupName = await groupsData.get(thisGroupId);
+      otherGroupName = otherGroupName.groupName;
+    } catch (e) {
+      return res.status(400).render('conversation', {error: e});
+    }
 
-
+    return res.render('conversation', {
+      conversationId: conversationId, 
+      thisGroupId: thisGroupId,
+      otherGroupId: otherGroupId,
+      thisGroupName: thisGroupName,
+      otherGroupName: otherGroupName
+    });
 
   })
   .post(async (req, res) => {
     //TODO
+  });
+
+/* Route from which the client-side JS will retrieve messages periodically */
+router
+  .route('/:conversationId/content')
+  .get(async (req, res) => {
+
   });
 
 

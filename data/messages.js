@@ -115,9 +115,9 @@ const exportedMethods = {
     const conversationsCollection = await conversations();
     const participants = await conversationsCollection.findOne(
       {_id: new ObjectId(conversationId)}, 
-      {_id: 0, particpants: 1}
-    ).toArray();
-    return participants;
+      { projection: { _id: 0, participants: 1 } }
+    );
+    return participants.participants;
   },
 
   /* Removes a conversation with given id from the conversations collection; returns true if successful, else false
