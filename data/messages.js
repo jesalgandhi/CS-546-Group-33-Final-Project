@@ -108,6 +108,17 @@ const exportedMethods = {
     return matchedConversation.messages;
   },
 
+  /* Returns a 2-element array of participants of a conversation, given conversationId */
+  async getParticipants(conversationId) {
+    conversationId = helpers.checkId(conversationId);
+    const conversationsCollection = await conversations();
+    const participants = await conversationsCollection.findOne(
+      {_id: new ObjectId(conversationId)}, 
+      {_id: 0, particpants: 1}
+    ).toArray();
+    return participants;
+  },
+
   /* Removes a conversation with given id from the conversations collection; returns true if successful, else false
   Param: conversationId (str: ObjectId of conversation to remove)
   */

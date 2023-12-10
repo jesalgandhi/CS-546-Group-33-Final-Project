@@ -1,6 +1,21 @@
 {{#if error}}
     <div id="error">Please Create or Join a group first!</div>
 {{else}}
-    <p>Other content</p>
-{{/if}}
+    {{#if noConversations}}
+        <p>You have no conversations!</p>
+    {{else}}
+        <ul class="conversationsList">
+        {{#each conversationsAndGroupNames}}
+            <li><a href="/conversations/{{@key}}">{{this}}</a></li>
+        {{/each}}
+        </ul>
+    {{/if}}
+    
 
+
+
+
+
+
+
+{{/if}}
