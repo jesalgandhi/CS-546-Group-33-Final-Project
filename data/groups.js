@@ -34,13 +34,13 @@ const exportedMethods = {
 
       if (groupLocation.length !== 2) throw 'There MUST be only 2 coordinates in the groupLocation array.';
 
-      // the longitude gets stored first, so checking that to start
-      // longitude can be [-180, 180]
-      if (groupLocation[0] < -180 || groupLocation[0] > 180) throw 'The longitude is not between [-180, 180] (inclusive of both ends).';
+      // the latitude gets stored first, so checking that to start
+      // latitude can be [-180, 180]
+      if (groupLocation[0] < -90 || groupLocation[0] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
       
-      // the latitude gets stored second, so checking that now
+      // the longitude gets stored second, so checking that now
       // longitude can be [-90, 90]
-      if (groupLocation[1] < -90 || groupLocation[1] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
+      if (groupLocation[1] < -180 || groupLocation[1] > 180) throw 'The longitude is not between [-180, 180] (inclusive of both ends).';
 
 
       // budget
@@ -177,13 +177,13 @@ const exportedMethods = {
 
       if (groupLocation.length !== 2) throw 'There MUST be only 2 coordinates in the groupLocation array.';
 
-      // the longitude gets stored first, so checking that to start
-      // longitude can be [-180, 180]
-      if (groupLocation[0] < -180 || groupLocation[0] > 180) throw 'The longitude is not between [-180, 180] (inclusive of both ends).';
+      // the latitude gets stored first, so checking that to start
+      // latitude can be [-180, 180]
+      if (groupLocation[0] < -90 || groupLocation[0] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
       
-      // the latitude gets stored second, so checking that now
+      // the longitude gets stored second, so checking that now
       // longitude can be [-90, 90]
-      if (groupLocation[1] < -90 || groupLocation[1] > 90) throw 'The latitude is not between [-90, 90] (inclusive of both ends).';
+      if (groupLocation[1] < -180 || groupLocation[1] > 180) throw 'The longitude is not between [-180, 180] (inclusive of both ends).';
 
       // budget
       if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
