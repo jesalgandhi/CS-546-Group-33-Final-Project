@@ -11,7 +11,7 @@ router
   .route('/')
   .get(async (req, res) => {
     /* Retrieve userId from the session */
-    if (!req.session.user.id) {
+    if (!(req.session.user && req.session.user.id)) {
       return res.redirect('/login');
     }
     const userId = req.session.user.id;
@@ -24,12 +24,27 @@ router
       return res.render('messages', {error: true});
     }
 
-    /* Get conversations from the group the user is a part of + pass thru */
-    const conversations = messagesData.getAllConversations(groupId);
+    /* Get conversations from the group the user is a part of */
+    const conversations = await messagesData.getAllConversations(groupId);
+    
+    /* Populate conversationsAndGroupNames with conversationId as key, groupName as val */
+    let conversationsAndGroupNames = {};
+    conversations.forEach(async convoId => {
+      // get participants of convo
+      let participants = await messagesData.getParticipants(convoId);
+      // filter out participant that is currently logged in - participants will
+      // now contain one participant id of the other group
+      participants = participants.filter(p => p !== groupId);
+      const groupData = groupsData.get(participants[0]);
+      conversationsAndGroupNames[convoId] = groupData.name;
+    });
+
+    let noConversations = (conversations.length === 0) ? true : false;
     return res.render('messages', {
       // error: false, 
       title: "Your Conversations", 
-      conversations: conversations
+      conversationsAndGroupNames: conversationsAndGroupNames,
+      noConversations: noConversations
     });
   })
   .post(async (req, res) => {
@@ -46,7 +61,7 @@ router
   });
 
 router
-  .route('/:groupId')
+  .route('/:conversationId')
   .get(async (req, res) => {
   //TODO
   })
