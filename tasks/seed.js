@@ -166,9 +166,13 @@ try {
     
     // MESSAGES
     /* Create a conversation between group 1 and 2 */
-    // const conversation1 = await messagesData.createNewConversation(group1._id.toString(), group2._id.toString());
+    const conversation1 = await messagesData.createNewConversation(group1._id.toString(), group2._id.toString());
 
+    /* Create a conversation between group 3 and 4 */
+    const conversation2 = await messagesData.createNewConversation(group3._id.toString(), group4._id.toString());
 
+    /* Create a conversation between group 1 and 3 */
+    const conversation3 = await messagesData.createNewConversation(group1._id.toString(), group3._id.toString());
 
     console.log('Done seeding database');
 

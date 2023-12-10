@@ -23,16 +23,16 @@ const exportedMethods = {
     secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
 
     /* Check if firstGroup is matched with secondGroup and vice versa */
-    const groupsCollection = await groups();
-    let firstGroupMatches = groupsCollection.find({_id: new ObjectId(firstGroupId)}, {_id: 0, matches: 1}).toArray();
-    let secondGroupMatches = groupsCollection.find({_id: new ObjectId(secondGroupId)}, {_id: 0, matches: 1}).toArray();
-    if (!(firstGroupMatches.includes(secondGroupId))) throw "Error: The group with id secondGroupId has not matched with group with firstGroupId";
-    if (!(secondGroupMatches.includes(firstGroupId))) throw "Error: The group with id firstGroupId has not matched with group with secondGroupId";
+    // const groupsCollection = await groups();
+    // let firstGroupMatches = groupsCollection.find({_id: new ObjectId(firstGroupId)}, {_id: 0, matches: 1}).toArray();
+    // let secondGroupMatches = groupsCollection.find({_id: new ObjectId(secondGroupId)}, {_id: 0, matches: 1}).toArray();
+    // if (!(firstGroupMatches.includes(secondGroupId))) throw "Error: The group with id secondGroupId has not matched with group with firstGroupId";
+    // if (!(secondGroupMatches.includes(firstGroupId))) throw "Error: The group with id firstGroupId has not matched with group with secondGroupId";
 
     /* Insert new conversation into conversations collection + return its associated id as a string */
     const conversationsCollection = await conversations();
     let newConversation = {
-      participants: [firstGroupId, secondGroupId],
+      participants: [new ObjectId(firstGroupId), new ObjectId(secondGroupId)],
       messages: []
     }
     const insertInfo = await conversationsCollection.insertOne(newConversation);
