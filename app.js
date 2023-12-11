@@ -33,7 +33,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(middleware.rewriteUnsupportedBrowserMethods);
 app.use("/", middleware.logRequests); // logs every request
-//app.use("/", middleware.create_joinGroupRedirect); //redirects user not in group to addGroup
 app.use("/", middleware.homepageRedirect); //redirects for / (homepage)
 app.use("/messages", middleware.messagesRedirect); // redirects for /messages
 // ...
