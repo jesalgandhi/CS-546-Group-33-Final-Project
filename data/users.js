@@ -131,8 +131,7 @@ async removeUser(userId) {
           await groupsData.updateGroup(group._id, { users: updatedUsers });
       }
   } else {
-      // Handle the case where group.users is undefined or not an array
-      // This might include logging the error or throwing an exception
+      if (!group) throw 'Group not found';
   }
 
   const usersCollection = await users();
