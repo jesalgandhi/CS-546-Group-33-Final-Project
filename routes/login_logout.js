@@ -44,6 +44,22 @@ router
 
     if (!passwordCheck)
       return res.render('error', {title: "Error", error: "Email or password is incorrect"});
+
+      var groupID;
+ 
+      try
+      {
+        groupID = await groupsData.getGroupByUserId(user._id.toString());
+      }
+
+      catch
+      {
+        groupID = undefined;
+      }
+     
+
+
+      
   
     //Basing this off user being logged in rather than group being logged in
     req.session.user = {
@@ -56,8 +72,11 @@ router
       interests: user.interests,
       picture: user.picture, 
       admin: user.admin,
-      id: user._id.toString()
+      id: user._id.toString(),
+      groupID: groupID
     };
+
+    console.log(req.session.user);
 
     return res.redirect('/');
   });
@@ -70,6 +89,7 @@ router
     anHourAgo.setHours(anHourAgo.getHours() - 1);
     res.cookie('AuthState', '', {expires: anHourAgo});
     res.clearCookie('AuthState');
+    req.session.destroy();
     return res.render('logout', {title: 'Logout Successful'});
   })
 
