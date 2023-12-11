@@ -22,19 +22,17 @@
 
 
 <!--4. Plan on drop-down menu with different sorting methods (age, gender, etc.) -->
-<form action="#">
-      <label for="lang">Language</label>
-      <select name="languages" id="lang" multiple>
-        <option value="javascript">JavaScript</option>
-        <option value="php">PHP</option>
-        <option value="java">Java</option>
-        <option value="golang">Golang</option>
-        <option value="python">Python</option>
-        <option value="c#">C#</option>
-        <option value="C++">C++</option>
-        <option value="erlang">Erlang</option>
-      </select>
-      <input type="submit" value="Submit" />
+<form action="/" method="POST">
+  <label for="filter">Filter Options:</label>
+  <select id="filter" name="filter">
+    <option value="age">Age</option>
+    <option value="male">Only Males</option>
+    <option value="female">Only Females</option>
+    <option value="other">Only Other</option>
+    <option value="budget">Budget</option>
+  </select>
+
+  <button type="submit">Submit</button>
 </form>
 
 
@@ -71,6 +69,4 @@ for group members that are less than: (4 - roommateGroup.users.length) -->
 <a ref="/groupbyID/{{groupID}}">View profile page</h1>
 {{/each}}
 
-<!-- Script that re-renders homepage if certain sorting filter is applied -->
-<script src ='../public/js/homepage.js'></script>
 
