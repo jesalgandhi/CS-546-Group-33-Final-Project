@@ -35,11 +35,18 @@ router
   .route('/:groupId')
   .get(async (req, res) => 
   {
-    let group = await groupsData.get(req.params.groupId);
+    let group;
+    
+    try
+    {
+      group = await groupsData.get(req.params.groupId);
 
-    if (group == null)
-      return res.redirect("/error");
-
+    }
+    catch
+    {
+      return res.redirect('/error');
+    }
+ 
     console.log(group);
     //console.log(group.users);
 
