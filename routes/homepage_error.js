@@ -17,16 +17,41 @@ router
     //TODO
     let filter = req.body.filter;
 
-    if (filter == age_desc)
+    console.log(filter);
+
+    let filteredUsers = [];
+
+      //For each filter:
+      //1. Get all users 
+      //2. Filter users based on user dropdown menu value
+      //3. Return groups of other users based on applied filter
+
+    /*if (filter == age)
     {
-      //Get all groups
 
-      //Get all users from each group
+    }*/
 
-      //FIlter users based on ages?
+    /*else if (filter = male)
+    {
 
-      //Return groups of other users based on applied filter
-    }
+    }*/
+
+    /*else if (filter = female)
+    {
+
+    }*/
+
+    /*else if (filter = other)
+    {
+
+    }*/
+
+    /*else if (filter = budget)
+    {
+
+    }*/
+
+    // return res.json("homepage", {group: req.session.user.group, title: "Homepage", suggestedMatches: filteredUsers});
 
   });
 
