@@ -155,3 +155,73 @@ a:hover {
 .user-info p {
     margin-bottom: 10px;
 }
+
+/*Some Homepage CSS Styles*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color:deepskyblue;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+}
+
+nav#homepage {
+    background-color: #ddd;
+    padding: 1em;
+    text-align: center;
+}
+
+nav#homepage a {
+    text-decoration: none;
+    color: black;
+    padding: 0.5em 1em;
+    margin: 0 0.5em;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+section {
+    padding: 2em;
+}
+
+.homepage-section1 {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 300px;
+    float: left;
+}
+
+.homepage-section2 {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    /*width: 500px;*/
+    float:right;
+}
+
+.homepage-container {
+    display: flex;
+}
+
+div#corner_border
+{
+border: 2px solid #0299eb;
+border-radius: 25px;
+padding: 20px; 
+}
+
+.group-user {
+box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); 
+text-align: center;
+font-family: arial;
+display: inline-block;
+max-width:200;
+max-height:200;
+}
