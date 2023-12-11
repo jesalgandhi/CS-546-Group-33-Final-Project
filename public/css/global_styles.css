@@ -6,6 +6,13 @@ body {
 h1 {
     text-align: center;
 }
+a {
+    color: #007bff; 
+    text-decoration: none; 
+}
+a:hover {
+    color: #0056b3; 
+}
 
 
 /* Conversations/Messages Styles */
@@ -64,3 +71,34 @@ h1 {
     margin-top: 1%;
 }
 
+/* Create Conversation Styles */
+/* Some styles Retrieved from here: https://stackoverflow.com/questions/3915917/make-a-link-use-post-instead-of-get */
+.inline {
+    display: inline-block; 
+}
+.link-button {
+    border-radius: 20px; 
+    cursor: pointer;
+    font-size: 16px; 
+    padding: 10px 15px; 
+    text-align: center; 
+    text-decoration: none; 
+    color: #333; 
+}
+
+.link-button:hover {
+    background-color: #e7e7e7; 
+    color: #0056b3; 
+}
+.newConversationsList {
+    list-style-type: none;
+    padding: 0;  
+    margin-top: 20px;  
+}
+.newConversationListElements {
+    margin-bottom: 10px; 
+    padding: 5px; 
+}
+.newConversationsContainer {
+    text-align: center;
+}

@@ -76,7 +76,7 @@ const exportedMethods = {
     return message;
   }, 
 
-  /* Returns an array of conversation id's associated with a given group id 
+  /* Returns an array of conversations associated with a given group id 
   Param: groupId (str: ObjectId of group from which to retrieve all conversations)
   */
   async getAllConversations(groupId) {
