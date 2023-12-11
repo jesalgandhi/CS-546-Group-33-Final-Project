@@ -13,11 +13,15 @@ router
 
     console.log(req.session.user);
     
-    if (req.session.user.groupID != undefined)
-      return res.render('homepage', {title: "Home", user: req.session.user});
+    if (!req.session.user)
+      return res.render('login');
+      
+    else if (req.session.user.groupID == undefined)
+      return res.render('addGroup');
 
     else
-      return res.render('addGroup');
+      return res.render('homepage', {title: "Home", user: req.session.user});
+
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage"})
   })
