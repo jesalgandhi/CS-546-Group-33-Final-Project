@@ -56,6 +56,9 @@ router
       {
         groupID = undefined;
       }
+
+      let group = await groupsData.get(groupID.toString());
+      console.log(group);
      
 
 
@@ -73,7 +76,8 @@ router
       picture: user.picture, 
       admin: user.admin,
       id: user._id.toString(),
-      groupID: groupID
+      groupID: groupID,
+      group: group
     };
 
     console.log(req.session.user);
