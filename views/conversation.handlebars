@@ -18,25 +18,28 @@
 {{#if error}}
     <div id="error"><p>{{error}}</p></div>
 {{else}}
-    <div id="conversationInfo" data-conversation-id="{{conversationId}}">
-        <p>Conversation ID: {{conversationId}}</p>
+    <div id="conversationHeader"><h1>Conversation with {{otherGroupName}}</h1></div>
+    <div id="conversationId" data-conversation-id="{{conversationId}}">
+        {{!-- <p>Conversation ID: {{conversationId}}</p> --}}
     </div>
-    <div id="senderInfo" data-sender-id="{{thisGroupId}}">
-        <p>This group: {{thisGroupName}}: {{thisGroupId}}</p>
+    <div id="senderId" data-sender-id="{{thisGroupId}}">
+        {{!-- <p>This group: {{thisGroupName}}: {{thisGroupId}}</p> --}}
     </div>
+    <div id="thisGroupName" data-this-group-name="{{thisGroupName}}"></div>
+    <div id="otherGroupName" data-other-group-name="{{otherGroupName}}"></div>
 
-    <p>Other Group: {{otherGroupName}}: {{otherGroupId}}</p>
+    {{!-- <p>Other Group: {{otherGroupName}}: {{otherGroupId}}</p> --}}
 
-    <!-- Message Container -->
     <div id="messageContainer"></div>
 
-    <!-- Message Sending Form -->
     <form id="messageForm" method="POST">
         <textarea id="messageText" placeholder="Type your message here"></textarea>
-        <button type="submit">Send Message</button>
+        <div id="sendMessageButton"><button type="submit">Send Message</button></div>
+        <div id="messageSendError" hidden> <p>There was an error sending your message</p></div>
     </form>
 
-    <div id="messageSendError" hidden> <p>There was an error sending your message</p></div>
+
+    <a href="/messages">Go back to your other conversations</a>
 
 {{/if}}
 <script src="../public/js/conversation.js"></script>

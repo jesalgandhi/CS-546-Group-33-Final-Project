@@ -1,6 +1,8 @@
 $(document).ready(function() {
-    const conversationId = $('#conversationInfo').data('conversationId');
-    const senderId = $('#senderInfo').data('senderId');
+    const conversationId = $('#conversationId').data('conversationId');
+    const senderId = $('#senderId').data('senderId');
+    const thisGroupName = $('#thisGroupName').data('thisGroupName');
+    const otherGroupName = $('#otherGroupName').data('otherGroupName');
     
     /* AJAX request to /messages/:conversationId/content that periodically fetches msgs */
     const fetchMessages = () => {
@@ -11,10 +13,24 @@ $(document).ready(function() {
                 $('#messageContainer').empty();
                 messages.forEach(message => {
                     if (message.senderId === senderId) {
-                        $('#messageContainer').append(`<p class="sender">${message.text}</p>`);
+                        $('#messageContainer').append(
+                            `
+                            <div class="sender">
+                                <p class="groupName">${thisGroupName}</p>
+                                <p class="message">${message.text}</p>
+                            </div>
+                            `
+                        );
                     }
                     else {
-                        $('#messageContainer').append(`<p class="receiver">${message.text}</p>`);
+                        $('#messageContainer').append(
+                            `
+                            <div class="receiver">
+                                <p class="groupName">${otherGroupName}</p>
+                                <p class="message">${message.text}</p>
+                            </div>
+                            `
+                        );
                     }
                 });
             },

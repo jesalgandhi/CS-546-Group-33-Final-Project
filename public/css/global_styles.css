@@ -1,12 +1,66 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+body {
+    font-family: 'Roboto', sans-serif;
+}
+h1 {
+    text-align: center;
+}
+
+
 /* Conversations/Messages Styles */
 .sender {
     text-align: right;
-    background-color: lightblue;
-    /* other styles */
+    padding-right: 2%;
+    background-color: #218aff;
+    border-radius: 20px;
+    box-shadow: 3px 3px;
 }
-
 .receiver {
     text-align: left;
-    background-color: lightgrey;
-    /* other styles */
+    padding-left: 2%;
+    background-color: #aeb9cc;
+    border-radius: 15px;
+    box-shadow: 3px 3px;
 }
+.groupName {
+    font-weight: bold;
+    padding-top: 1%;
+}
+.message {
+    padding-bottom: 1%;
+}
+#messageForm {
+    margin-top: 2%;
+    padding: 1%;
+    margin-bottom: 2%;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+#messageForm textarea {
+    width: 70%;
+    padding: 1%;
+    margin-bottom: 1%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 60px;
+    resize: none;
+}
+#sendMessageButton button {
+    width: 20%;
+    padding: 0.5% 2%;
+    background-color: #218aff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+#sendMessageButton button:hover {
+    background-color: #1a6fca;
+}
+#messageSendError {
+    color: red;
+    margin-top: 1%;
+}
+
