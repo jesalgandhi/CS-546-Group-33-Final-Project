@@ -17,7 +17,7 @@
 {{/each}}
 
 <!--3. Plan on implementing edit profile menu which will allow user to update group info, etc. -->
-<a href="/settings">Edit User/Group Profile</a>
+{{!-- <a href="/settings">Edit User/Group Profile</a> --}}
 
 
 <!--4. Plan on drop-down menu with different sorting methods (age, gender, etc.) -->
@@ -38,8 +38,9 @@
 
 
 <!--5. Plan on adding gear icon on top right corner of menu which will render the view of user to settings.handlebars -->
-<a href="/settings">Settings</a>
+<div class="settingsContainer"><a href="/settings">Settings</a></div>
 
+<div class="messagesContainer"><a href="/messages">Messages</a></div>
 
 <!--Before rendering homepage, pass handlebars parameter with ALL ROOMMATE GROUPS-->
 <!--6. Each roomante group will have a rectangle that shows their group profile page, their bio, and member information -->

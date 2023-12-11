@@ -3,13 +3,20 @@
     <div id="error"><p>{{error}}</p></div>
 {{else}}
     {{#if noConversations}}
-        <p>You have no conversations!</p>
+        <div>
+            <p>You have no conversations!</p>
+        </div>
+        <div><a href="/messages/create">Create New Conversation</a></div>
+        <div><a href="/">Go Home</a></div>
+
     {{else}}
         <ul class="conversationsList">
         {{#each conversationsAndGroupNames}}
             <li><a href="/messages/{{@key}}">{{this}}</a></li>
         {{/each}}
         </ul>
+        <div><a href="/messages/create">Create New Conversation</a></div>
+        <div><a href="/">Go Home</a></div>
     {{/if}}
     
 
