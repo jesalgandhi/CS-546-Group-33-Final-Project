@@ -10,7 +10,15 @@ import {messagesData} from '../data/index.js';
 router
   .route('/')
   .get(async (req, res) => {
-    return res.render('homepage', {title: "Home", user: req.session.user});
+
+    console.log(req.session.user);
+    
+    if (req.session.user.groupID != undefined)
+      return res.render('homepage', {title: "Home", user: req.session.user});
+
+    else
+      return res.render('addGroup');
+
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage"})
   })
   .post(async (req, res) => {
