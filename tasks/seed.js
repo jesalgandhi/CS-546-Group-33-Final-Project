@@ -79,8 +79,7 @@ try {
     // console.log("User after update:", updatedUser);
     
 
-    /* Remove user1 */
-    const removedUser = await usersData.removeUser(user1._id);
+   
     // console.log("User removed:", removedUser);
 
     const allUsers = await usersData.getAllUsers();
@@ -97,6 +96,9 @@ try {
         "M",
         [user2._id, user3._id, user4._id]
     )
+     /* Remove user2 */
+     const removedUser = await usersData.removeUser(user2._id);
+     console.log("User removed:", removedUser);
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(

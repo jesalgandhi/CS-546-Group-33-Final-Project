@@ -118,18 +118,31 @@ async getAllUsers() {
 
   
 async removeUser(userId) {
-  if (!ObjectId.isValid(userId)) {
+  const userIdString = (userId instanceof ObjectId) ? userId.toString() : userId;
+
+  if (!ObjectId.isValid(userIdString)) {
       throw 'You must provide a valid user ID';
   }
 
+  const group = await groupsData.getGroupByUserId(userIdString);
+  if (group && Array.isArray(group.users)) {
+      const updatedUsers = group.users.filter(user => user.toString() !== userIdString);
+      if (group.users.length !== updatedUsers.length) {
+          await groupsData.updateGroup(group._id, { users: updatedUsers });
+      }
+  } else {
+      // Handle the case where group.users is undefined or not an array
+      // This might include logging the error or throwing an exception
+  }
+
   const usersCollection = await users();
-  const deletionResult = await usersCollection.deleteOne({ _id: new ObjectId(userId) });
+  const deletionResult = await usersCollection.deleteOne({ _id: new ObjectId(userIdString) });
 
   if (deletionResult.deletedCount === 0) {
       throw 'Could not delete user or user not found';
   }
 
-  return { deleted: true, userId: userId };
+  return { deleted: true, userId: userIdString };
 },
 
 
