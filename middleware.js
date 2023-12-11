@@ -51,20 +51,21 @@ const middleware = {
   
     },
 
-    /* Redirects if user is not logged in (or page denied if they are not an admin(?)) */
-    messagesRedirect(req, res, next) {
+    /* Prevents an authorized user from accessing /register */
+    unprotectedRouteRedirect(req, res, next) {
+        let authorized = false;
+        if (req.cookies.AuthState) authorized = true;
+        if (authorized) return res.redirect('/');
+        next();
+    },
+
+    /* Prevents an unauthorized user from accessing a protected route */
+    protectedRouteRedirect(req, res, next) {
         let authorized = false;
         if (req.cookies.AuthState) authorized = true;
         if (!authorized) return res.redirect('/login');
-
-        /* Uncomment below if we decide that only admins can send messages */
-        // if (authorized && req.session.user && req.session.user.admin !== false) {
-        //     req.session.errorCode = 403;
-        //     req.session.errorMessage = "You do not have permission to view this page";
-        //     return res.redirect('/error');
-        // }
-        next()
-    },  
+        next();
+    }
 }
 
 export default middleware;

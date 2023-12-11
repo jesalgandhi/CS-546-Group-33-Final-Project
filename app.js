@@ -34,7 +34,11 @@ app.use(cookieParser());
 app.use(middleware.rewriteUnsupportedBrowserMethods);
 app.use("/", middleware.logRequests); // logs every request
 app.use("/", middleware.homepageRedirect); //redirects for / (homepage)
-app.use("/messages", middleware.messagesRedirect); // redirects for /messages
+app.use("/messages", middleware.protectedRouteRedirect); // prevent unauthorized users from accessing /messages
+app.use("/register", middleware.unprotectedRouteRedirect); // prevent authorized users from accessing /register
+app.use("/matches", middleware.protectedRouteRedirect); // prevent unauthorized users from accessing /matches
+app.use("/settings", middleware.protectedRouteRedirect); // prevent unauthorized users from accessing /settings
+
 // ...
 
 
