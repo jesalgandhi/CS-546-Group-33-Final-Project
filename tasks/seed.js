@@ -30,7 +30,7 @@ try {
     
     const user5 = await usersData.createUser(
         "Alex", "Tanaka", "alextanaka@example.com", "Test123$", "2015554321", "Gamer and aspiring chef", 22, 
-        ["Gaming", "Cooking", "Anime"], "URL for the picture here"
+        ["Gaming", "Cooking", "Anime"], "https://mario.wiki.gallery/images/b/b8/SMBW_Yoshi.png"
     );
 
     const user6 = await usersData.createUser(
