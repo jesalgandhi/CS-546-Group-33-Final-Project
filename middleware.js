@@ -31,6 +31,8 @@ const middleware = {
     // Redirects user to login page if user is not logged in and tries to access homepage
     homepageRedirect(req, res, next)
     {
+        console.log("awooga1");
+        
         let authorized = false;
 
         if (req.cookies.AuthState) 
@@ -40,15 +42,39 @@ const middleware = {
             return res.redirect('/login');
 
         else if (authorized && req.path == "/")
+            
             next();
 
 
         else if (req.path != "/")
             next();
 
-
-        
+  
     },
+
+    /*// Redirects user to login page if groupID is undefined (not in group);
+    create_joinGroupRedirect(req, res, next)
+    {
+        let authorized = false;
+
+        if (req.cookies.AuthState) 
+            authorized = true;
+
+        if (authorized && req.session.groupID == undefined && req.path == "/" )
+            return res.render("addGroup");
+
+        else if (!authorized && req.path == "/") 
+            return res.redirect('/login');
+
+        else if (authorized && req.path == "/")
+        {   
+            return res.redirect('/');
+        }
+        else if (req.path != "/")
+        {    
+            next();
+        }
+    },*/
 
     /* Redirects if user is not logged in (or page denied if they are not an admin(?)) */
     messagesRedirect(req, res, next) {
@@ -63,7 +89,7 @@ const middleware = {
         //     return res.redirect('/error');
         // }
         next()
-    },
+    },  
 }
 
 export default middleware;
