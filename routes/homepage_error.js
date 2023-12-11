@@ -20,7 +20,7 @@ router
       return res.render('addGroup');
 
     else
-      return res.render('homepage', {title: "Home", user: req.session.user});
+      return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.group});
 
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage"})
