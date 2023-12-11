@@ -57,7 +57,6 @@ router
     });
   })
   .post(async (req, res) => {
-    //TODO
   });
 
 router
@@ -126,14 +125,31 @@ router
 
   })
   .post(async (req, res) => {
-    //TODO
+    let conversationId = req.body.conversationId;
+    let message = req.body.text;
+    let senderId = req.body.senderId;
+    let attemptedMessageInsert = undefined;
+    try {
+      attemptedMessageInsert = await messagesData.createMessage(conversationId, senderId, message);
+    } catch (e) {
+      return res.status(500).render('conversation', {error: e});
+    }
+
+    return res.json({message: attemptedMessageInsert});
+
   });
 
 /* Route from which the client-side JS will retrieve messages periodically */
 router
   .route('/:conversationId/content')
   .get(async (req, res) => {
-
+    const conversationId = req.params.conversationId;
+    try {
+      const messages = await messagesData.getAllMessages(conversationId);
+      return res.json(messages);
+    } catch (e) {
+      return res.status(500).json({error: e});
+    }
   });
 
 

@@ -1,7 +1,12 @@
-/* You will create a CSS stylesheet in /public/css/styles.css; this file should have at least 5 rulesets.  You will need to utilize all 5 rulesets on each of the pages (not every page has to use all 5 rulesets each but all 5 rulesets must be utilized by the various pages in your application).  So you can have some rulesets for one page, some for another page but there needs to be at least 5 total rulesets that are used between all the pages.  */
+/* Conversations/Messages Styles */
+.sender {
+    text-align: right;
+    background-color: lightblue;
+    /* other styles */
+}
 
-
-
-
-  
-
+.receiver {
+    text-align: left;
+    background-color: lightgrey;
+    /* other styles */
+}
