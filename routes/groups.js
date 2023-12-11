@@ -16,7 +16,8 @@ const cities = require('cities');
 router
   .route('/create')
   .get(async (req, res) => {
-    return res.json("groups/create route");
+    //return res.json("groups/create route");
+    return res.render("createGroup");
   })
   .post(async (req, res) => {
     //todo
@@ -25,7 +26,8 @@ router
 router
   .route('/join')
   .get(async (req, res) => {
-    return res.json("groups/join route");
+    //return res.json("groups/join route");
+    return res.render("joinGroup");
   })
   .post(async (req, res) => {
     //todo
