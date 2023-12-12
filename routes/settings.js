@@ -18,6 +18,8 @@ router.route('/')
       biographyInput, ageInput, interestsInput 
     } = req.body;
 
+    console.log(req.body);
+
     const errors = [];
     if (firstNameInput && !/^[a-zA-Z]{2,25}$/.test(firstNameInput)) errors.push("Invalid First Name");
     if (lastNameInput && !/^[a-zA-Z]{2,25}$/.test(lastNameInput)) errors.push("Invalid Last Name");
