@@ -9,41 +9,65 @@ import {messagesData} from '../data/index.js';
 
 router.route('/')
   .get(async (req, res) => {
-    try {
-      const userId = req.session.user.id;
-      const userSettings = await usersData.getUser(userId);
-      res.json(userSettings);
-    } catch (e) {
-      res.status(500).json({ error: e.toString() });
-    }
+    res.render("settings", { title: "Settings" });
   })
-  // .post(async (req, res) => {
-  // })
   .put(async (req, res) => {
+    let { 
+      userId, firstNameInput, lastNameInput, emailAddressInput, 
+      phonenumberInput, passwordInput, confirmPasswordInput, 
+      biographyInput, ageInput, interestsInput 
+    } = req.body;
+
+    const errors = [];
+    if (firstNameInput && !/^[a-zA-Z]{2,25}$/.test(firstNameInput)) errors.push("Invalid First Name");
+    if (lastNameInput && !/^[a-zA-Z]{2,25}$/.test(lastNameInput)) errors.push("Invalid Last Name");
+    if (emailAddressInput && !/\S+@\S+\.\S+/.test(emailAddressInput.toLowerCase())) errors.push("Invalid Email Address");
+    if (passwordInput && !/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(passwordInput)) errors.push("Invalid Password");
+    if (passwordInput && passwordInput !== confirmPasswordInput) errors.push("Passwords do not match");
+    if (biographyInput && !/^.{2,200}$/.test(biographyInput)) errors.push("Invalid Biography");
+    if (ageInput) {
+      let age = typeof ageInput === 'number' ? ageInput : parseInt(ageInput);
+      if (!Number.isInteger(age) || age < 18 || age > 120) errors.push("Invalid Age");
+    }
+    if (interestsInput) {
+      if (typeof interestsInput === 'string') {
+        interestsInput = interestsInput.split(',').map(interest => interest.trim());
+      }
+      if (!Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
+        errors.push("Interests must be a list of strings");
+      }
+    }
+    if (phonenumberInput) {
+      phonenumberInput = phone(phonenumberInput);
+      if (!phonenumberInput.isValid) errors.push('Invalid phone number!');
+      phonenumberInput = phonenumberInput.phoneNumber;
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).render("settings", { title: "Settings", error: errors, userData: req.body });
+    }
+
     try {
-      const userId = req.session.user.id;
-      const updatedSettings = req.body;
+      const updatedFields = {
+        ...(firstNameInput && { firstName: firstNameInput }),
+        ...(lastNameInput && { lastName: lastNameInput }),
+        ...(emailAddressInput && { emailAddress: emailAddressInput }),
+        ...(phonenumberInput && { phoneNumber: phonenumberInput }),
+        ...(passwordInput && { password: passwordInput }),
+        ...(biographyInput && { biography: biographyInput }),
+        ...(ageInput && { age: parseInt(ageInput) }),
+        ...(interestsInput && { interests: interestsInput }),
+      };
 
-      if (updatedSettings.firstName && (typeof updatedSettings.firstName !== 'string' || updatedSettings.firstName.trim().length === 0)) {
-        return res.status(400).json({ error: 'Invalid first name' });
+      const updatedUser = await usersData.updateUser(userId, updatedFields);
+      
+      if (updatedUser) {
+        return res.redirect("/matches");
+      } else {
+        return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error", userData: req.body });
       }
-
-      if (updatedSettings.emailAddress && !validate(updatedSettings.emailAddress)) {
-        return res.status(400).json({ error: 'Invalid email address' });
-      }
-
-      if (updatedSettings.phoneNumber) {
-        let phoneNumber = phone(updatedSettings.phoneNumber);
-        if (!phoneNumber.isValid) {
-          return res.status(400).json({ error: 'Invalid phone number' });
-        }
-        updatedSettings.phoneNumber = phoneNumber.phoneNumber;
-      }
-
-      const updatedUser = await usersData.updateUser(userId, updatedSettings);
-      res.json(updatedUser);
     } catch (e) {
-      res.status(500).json({ error: e.toString() });
+      return res.status(500).render("settings", { title: "Settings", error: e.toString(), userData: req.body });
     }
   });
 

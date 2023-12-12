@@ -71,12 +71,12 @@ try {
     
     /* Update user2's bio and number */
     const updatedFields = {
-        biography: "Updated biography text",
+        age: 32,
         phoneNumber: "2025559876", 
     };
     await usersData.updateUser(user2._id, updatedFields);
     const updatedUser = await usersData.getUser(user2._id);
-    // console.log("User after update:", updatedUser);
+    console.log("User after update:", updatedUser);
     
 
    

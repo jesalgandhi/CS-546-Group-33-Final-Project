@@ -39,7 +39,7 @@ router
       interestsInput = interestsInput.split(',').map(interest => interest.trim());
     }
 
-    console.log(interestsInput);
+    // console.log(interestsInput);
     
     if (!Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
       errors.push("Interests must be a list of strings");
@@ -47,7 +47,7 @@ router
     phonenumberInput = phone(phonenumberInput);
     if (!phonenumberInput.isValid) errors.push('Invalid phone number!');
     phonenumberInput = phonenumberInput.phoneNumber;
-    console.log(phonenumberInput);
+    // console.log(phonenumberInput);
     if (errors.length > 0) {
       return res.status(400).render("register", { title: "Registration Form", error: errors });
     }
