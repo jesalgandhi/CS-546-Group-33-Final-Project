@@ -19,9 +19,9 @@ router
     //return res.json("groups/create route");
 
     /* Retrieve userId from the session */
-    // if (!(req.session.user && req.session.user.id)) {
-    //   return res.redirect('/login');
-    // }
+    if (!(req.session.user && req.session.user.id)) {
+      return res.redirect('/login');
+    }
 
 
 
@@ -34,8 +34,15 @@ router
 router
   .route('/join')
   .get(async (req, res) => {
-    //return res.json("groups/join route");
-    return res.render("joinGroup", {title: 'Join a Group'});
+
+      /* Retrieve userId from the session */
+      if (!(req.session.user && req.session.user.id)) {
+        return res.redirect('/login');
+      }
+
+
+      //return res.json("groups/join route");
+      return res.render("joinGroup", {title: 'Join a Group'});
   })
   .post(async (req, res) => {
       // const groupInfo = req.body;
