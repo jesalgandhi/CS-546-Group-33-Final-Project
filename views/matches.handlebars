@@ -1,3 +1,32 @@
+<h1>Matches</h1>
+
+<div class="matches-container"> 
+    {{#each matches}}
+        <div class="match-card">
+            <h2>Group Name: {{this.groupName}}</h2>
+            <p>Group Description: {{this.groupDescription}}</p>
+            <p>Location: {{this.groupLocation}}</p>
+
+            <h3>Members:</h3>
+            {{#each this.users}}
+                <p>{{users}}</p>
+            {{/each}}
+
+            {{#if this.reviews}}
+                <h3>Reviews:</h3>
+                {{#each this.reviews}}
+                    <p>Review by {{this.firstName}} {{this.lastName}}: {{this.review}}</p>
+                {{/each}}
+            {{/if}}
+
+            <a href="/messages/{{this.groupID}}">Message this group</a>
+        </div>
+    {{/each}}
+</div>
+
+
+{{!--
+
 <h1>{{title}}</h1>
 
 {{#if matchedGroup.length}}
@@ -26,3 +55,5 @@
     <h1>You currently have no matches</h1>
     <a href"homepage">Go back to homepage</a>
 {{/if}}
+
+--}}
