@@ -49,7 +49,7 @@ router
  
       try
       {
-        groupID = await groupsData.getGroupByUserId(user._id.toString());
+        groupID = await groupsData.getGroupByUserId(user.id);
       }
 
       catch
@@ -57,7 +57,18 @@ router
         groupID = undefined;
       }
 
-      let group = await groupsData.get(groupID.toString());
+      var group;
+
+      try
+      {
+        group = await groupsData.get(groupID);
+      }
+
+      catch
+      {
+        group = undefined;
+      }
+      
       console.log(group);
      
 
