@@ -46,7 +46,7 @@ router
     }
     catch
     {
-      return res.redirect('/error');
+      return res.render('error', {title: "Error", error: e});
     }
  
     console.log(group);
@@ -56,7 +56,15 @@ router
 
     for (let i = 0; i < Object.keys(group.users).length; i++)
     {
-      users[i] = await usersData.getUser(group.users[i]);
+      try
+      {
+        users[i] = await usersData.getUser(group.users[i]);
+      }
+
+      catch(e)
+      {
+        return res.render('error', {title: "Error", error: e});
+      }
     }
 
     /*const result = lookUpRaw(group.groupLocation.coordinates[0],group.groupLocation.coordinates[1] );
