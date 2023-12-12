@@ -11,12 +11,14 @@ router.route('/')
   .get(async (req, res) => {
     res.render("settings", { title: "Settings" });
   })
-  .put(async (req, res) => {
+  .post(async (req, res) => {
     let { 
       userId, firstNameInput, lastNameInput, emailAddressInput, 
       phonenumberInput, passwordInput, confirmPasswordInput, 
       biographyInput, ageInput, interestsInput 
     } = req.body;
+
+    console.log(req.body);
 
     const errors = [];
     if (firstNameInput && !/^[a-zA-Z]{2,25}$/.test(firstNameInput)) errors.push("Invalid First Name");
