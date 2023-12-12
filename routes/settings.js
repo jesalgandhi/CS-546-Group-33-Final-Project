@@ -11,7 +11,7 @@ router.route('/')
   .get(async (req, res) => {
     res.render("settings", { title: "Settings" });
   })
-  .put(async (req, res) => {
+  .post(async (req, res) => {
     let { 
       userId, firstNameInput, lastNameInput, emailAddressInput, 
       phonenumberInput, passwordInput, confirmPasswordInput, 
