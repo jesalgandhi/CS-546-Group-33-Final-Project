@@ -23,6 +23,16 @@ const exportedMethods = {
     //  Retrieve both groups from the database.
     const group1 = data.groupsData.get(firstGroupId)
     const group2 = data.groupsData.get(secondGroupId)
+    // Check if genderPreferences, location, and budget are compatible.
+    if (group1.genderPreference !== group2.genderPreference) {
+      throw 'Gender preferences do not match.';
+    }
+
+    //Location calculation add here **********************
+
+    if (Math.abs(group1.budget - group2.budget) > 1000) {
+      throw 'Budgets are not similar enough.'
+    }
 
     //From the groups we need to retrieve all the userids 
     const users1 = data.usersData.getAllUsers(firstGroupId)
@@ -188,6 +198,67 @@ const exportedMethods = {
     return bothUpdatesSuccessful;
 
   },
+
+
+
+  async getMatches(groupId) {
+    // Validate group ID.
+    groupId = helpers.checkId(groupId, 'groupId');
+
+    //  Retrieve group from the database.
+    const group = await data.groupsData.get(groupId);
+
+    //Check if group exists
+    if (!group) {
+      throw 'Group does not exist.'
+    }
+
+    //Return matches array
+    return group.matches;
+
+  },
+
+  async getSuggestedMatches(groupId) {
+    //Validate group ID
+    groupId = helpers.checkId(groupId, 'groupId');
+
+    //Retrieve group from database
+    const group = await data.groupsData.get(groupId);
+
+    //check if group exists
+    if (!group) {
+      throw 'Group does not exist.'
+    }
+
+    return group.suggestedMatches;
+  },
+
+  //This function will be called when a group is created
+  //It will suggest matches for the group based on all users in our current DB with matching filters
+  async suggestAllMatches(currentGroupId){
+    //Validate group ID
+    groupId = helpers.checkId(currentGroupId, 'groupId');
+
+    // Get the current group
+    const currentGroup = await data.groupsData.get(currentGroupId);
+    
+    //Get all groups
+    const allGroups = await data.groupsData.getAll();
+
+    //Iterate over all groups
+    for(let i = 0; i < allGroups.length; i++){
+      const otherGroupId = allGroups[i]._id.toString();
+
+        //If the group is not the current group, and it's not already in the matches or suggestedMatches arrays, suggest a match
+      if(otherGroupId !== currentGroupId && !currentGroup.matches.includes(otherGroupId) && 
+      !currentGroup.suggestedMatches.includes(otherGroupId)) {
+          await this.matchGroups(currentGroupId, otherGroupId);
+        }
+
+    }
+
+  },
+
 
 
 
