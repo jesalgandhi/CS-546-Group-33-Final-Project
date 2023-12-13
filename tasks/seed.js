@@ -89,57 +89,70 @@ try {
     /* GROUPS */
     /* Create group1 with users 2-4 */
     const group1 = await groupsData.create(
-        "The Cool Kids", 
+        "The Cool Kids",
+        "Username1", 
         "We're the coolest kids on the block!", 
         [-73.971623, 40.850708], // 1615-1593 Gerome Ave, Fort Lee, NJ 07024
         1500,
         "M",
-        [user2._id, user3._id, user4._id]
+        [user2._id, user3._id, user4._id],
+        "Password1"
     )
      /* Remove user2 */
      const removedUser = await usersData.removeUser(user2._id);
      console.log("User removed:", removedUser);
+     console.log(group1);
+    //  console.log(group1);
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(
-        "The Lame Adults", 
+        "The Lame Adults",
+        "Username2",  
         "We're the WORST ADULTS on O'block!", 
         [-74.043181, 40.883850], // 17-1 Mercer St, Hackensack, NJ 07601
         1,
         "F",
-        [user5._id]
+        [user5._id],
+        "Password2"
     )
 
     // create group3 with user6 and user7
     const group3 = await groupsData.create(
         "The Boring Fellas", 
+        "Username3", 
         "We're the most boring fellas on the planet", 
         [-74.184897, 40.732781], // 186-158 Howard St, Newark, NJ 07103
         25000,
         "O",
-        [user6._id, user7._id]
+        [user6._id, user7._id],
+        "Password3"
     )
 
     // create group3 with users 8-11
     const group4 = await groupsData.create(
         "Garden State Explorers", 
+        "Username4",
         "Looking for roommates in NJ Hit us up", 
         [-74.278195, 40.924945],  // 118 Whitmore Ave, Wayne, NJ 07470
         45000,
         "F",
-        [user8._id, user9._id, user10._id, user11._id]
+        [user8._id, user9._id, user10._id, user11._id],
+        "Password4"
     )
     
     // create group5 with user12
     const group5 = await groupsData.create(
         "Jersey Jazz Enthusiasts", 
+        "Username5",
         "Jazz lovers sharing who love music and need roommates", 
         [-74.0713, 40.7357],  // 73 Broadway, Jersey City, NJ 07306
         50000,
         "O",
-        [user12._id]
+        [user12._id],
+        "Password5"
     )
 
+    // console.log('HEREEEE');
     // groups getGroupByUserId()
     const found = await groupsData.getGroupByUserId(user3._id.toString());
     // console.log(`The group that has userId ${user3._id} is groupId ${found}`);
@@ -153,7 +166,8 @@ try {
     // console.log('ONLY group2:\n', only_group2);
 
     // groups update()
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', 'Sleeping on the job', [2.124872, 13.239743], 1265, "O", [user1._id, user2._id], group1.matches, group1.reviews);
+    // console.log('HEREEE');
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], 1265, "O", [user1._id, user2._id], group1.groupPassword, group1.matches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead

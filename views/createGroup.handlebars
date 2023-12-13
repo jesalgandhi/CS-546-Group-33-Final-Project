@@ -1,1 +1,55 @@
-<h1>Create Group!</h1>
+<title> {{title}} </title>
+
+{{!-- if the user has entered anything wrong, itll show the error they had --}}
+{{#if error}}
+    <div id="error"><p>{{error}}</p></div>
+
+{{else}}
+    {{!-- no errors --}}
+    <h1>Create a Group!</h1>
+    <p>Please make sure to fill out every field!</p>
+
+    {{!-- going to homepage route upon successful creation of a group --}}
+    <form action="/" method="POST">
+        <label>
+            Group Name:
+            <input type="text" name="groupPassword" id="groupPassword">
+        </label>
+
+        <br> {{!-- need these between them to hace them show up on separate lines, can probably be removed and handled with CSS later anyway --}}
+
+        <label>
+            Group Username:
+            <input type="text" name="groupPassword" id="groupPassword">
+        </label>
+
+        <br>
+
+        <label>
+            Group Description:
+            <input type="text" name="groupPassword" id="groupPassword">
+        </label>
+
+        <br>
+
+        <label>
+            Budget:
+            <input type="text" name="groupPassword" id="groupPassword">
+        </label>
+
+        <br>
+
+        <label>
+            Gender Preference:
+            <input type="text" name="groupPassword" id="groupPassword">
+        </label>
+
+        <br>
+        
+        <input type="submit">
+    </form>
+
+    {{!-- upon successful group creation, implicitly add the user to the group they just made, aka they dont enter any kind of userId themselves obv --}}
+
+
+{{/if}}
