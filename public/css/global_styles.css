@@ -262,3 +262,16 @@ max-height:200;
       margin-bottom: 20px;
       box-sizing: border-box; 
   }
+
+  .home-button-container {
+    width: 100%;
+    text-align: center;
+}
+
+.home-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
