@@ -97,8 +97,7 @@ try {
         [user2._id, user3._id, user4._id]
     )
      /* Remove user2 */
-     const removedUser = await usersData.removeUser(user2._id);
-     console.log("User removed:", removedUser);
+     
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(
@@ -163,6 +162,11 @@ try {
     // groups getAll()
     allGroups = await groupsData.getAll();
     console.log('All groups:', allGroups);
+    const removedUser = await usersData.removeUser(user9._id);
+    console.log("User removed:", removedUser);
+    
+    console.log(await groupsData.get(group4._id.toString()));
+
     // console.log('All groups after deleting group5:\n', allGroups);
 
     

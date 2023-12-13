@@ -124,16 +124,24 @@ async removeUser(userId) {
       throw 'You must provide a valid user ID';
   }
 
-  const group = await groupsData.getGroupByUserId(userIdString);
-  if (group && Array.isArray(group.users)) {
-      const updatedUsers = group.users.filter(user => user.toString() !== userIdString);
-      if (group.users.length !== updatedUsers.length) {
-          await groupsData.updateGroup(group._id, { users: updatedUsers });
-      }
-  } else {
-      if (!group) throw 'Group not found';
+  // Fetch the group where the user is a member
+  const groupId = await groupsData.getGroupByUserId(userIdString);
+  if (!groupId) {
+      throw 'User not found in any group';
   }
 
+  const group = await groupsData.get(groupId); // Fetch the group by its ID
+  if (!group) {
+      throw 'Group not found';
+  }
+
+  const updatedUsers = group.users.filter(user => user.toString() !== userIdString);
+  if (group.users.length !== updatedUsers.length) {
+      // Update the group's user list without creating a new group
+      await groupsData.updateGroupUsers(groupId, updatedUsers);
+  }
+
+  // Delete the user from the users collection
   const usersCollection = await users();
   const deletionResult = await usersCollection.deleteOne({ _id: new ObjectId(userIdString) });
 
@@ -142,7 +150,8 @@ async removeUser(userId) {
   }
 
   return { deleted: true, userId: userIdString };
-},
+}
+,
 
 
   async updateUser(userId, updatedFields) {

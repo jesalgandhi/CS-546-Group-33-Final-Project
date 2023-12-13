@@ -146,6 +146,20 @@ const exportedMethods = {
 
       return result;
   },
+  async updateGroupUsers(groupId, updatedUsers) {
+    const updateInfo = await groupsCollection.updateOne(
+        { _id: new ObjectId(groupId) },
+        { $set: { users: updatedUsers } }
+    );
+
+    if (!updateInfo.modifiedCount) {
+        throw 'Could not update the group';
+    }
+
+    return updateInfo;
+}
+,
+
   
   async update(
     groupId,
