@@ -1,6 +1,6 @@
 import { groups } from '../config/mongoCollections.js';
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
-import {groupsData, usersData, messagesData} from '../data/index.js';
+import {groupsData, usersData, messagesData, matchesData} from '../data/index.js';
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -203,10 +203,11 @@ try {
     await messagesData.createMessage(conversation3.toString(), group1._id.toString(), "   nm hbu    ");
     await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
 
-    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea11", "6579124dee9fe9171a79ea12")); // should return "6579124dee9fe9171a79ea16"
-    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea12", "6579124dee9fe9171a79ea11")); // should also return "6579124dee9fe9171a79ea16"
-    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea14", "6579124dee9fe9171a79ea13")); // should also return "6579124dee9fe9171a79ea17"
-    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea14", "6579124dee9fe9171a79ea17")); // should return undefined (no convo)
+    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group2._id.toString())); // should return a convoId
+    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group2._id.toString())); // should return the same convoId above
+    // console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group1._id.toString())); // should throw an error (cant have convo with self)
+    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group3._id.toString())); // should return a diff convoId than the above two
+    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group4._id.toString())); // should return undefined (no convo)
 
 
 

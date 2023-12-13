@@ -140,12 +140,12 @@ const exportedMethods = {
   async getConversationIdByGroupIds(thisGroupId, otherGroupId) {
     thisGroupId = helpers.checkId(thisGroupId);
     otherGroupId = helpers.checkId(otherGroupId);
-    let participants = [new ObjectId(thisGroupId), new ObjectId(otherGroupId)];
+    if (thisGroupId === otherGroupId) throw "Error: group IDs are the same";
+    let participants_ = [new ObjectId(thisGroupId), new ObjectId(otherGroupId)];
     const conversationsCollection = await conversations();
-    let conversationId = undefined;
-    conversationId = await conversationsCollection.find(
-      {participants: {$all: participants}},
-      {_id: 1}
+    let conversationId = await conversationsCollection.find(
+      {participants: {$all: participants_}}
+      // {_id: 1}
     ).toArray();
     if (conversationId.length !== 0) return conversationId[0]._id.toString();
     else return undefined;
