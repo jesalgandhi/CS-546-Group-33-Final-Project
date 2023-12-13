@@ -46,16 +46,18 @@ router
       return res.render('error', {title: "Error", error: "Email or password is incorrect"});
 
       var groupID;
- 
-      try
-      {
-        groupID = await groupsData.getGroupByUserId(user.id);
-      }
 
-      catch
-      {
-        groupID = undefined;
-      }
+    try
+    {
+      groupID = await groupsData.getGroupByUserId(user._id.toString());
+    } 
+    catch
+    {
+      groupID = undefined;
+    }
+      
+    //console.log("Group ID: " + groupID);
+      
 
       var group;
 
@@ -63,13 +65,14 @@ router
       {
         group = await groupsData.get(groupID);
       }
-
       catch
-      {
-        group = undefined;
-      }
+    {
+      group = undefined;
+    }
       
-      console.log(group);
+     
+      
+      //console.log(group);
      
 
 
