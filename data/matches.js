@@ -35,8 +35,8 @@ const exportedMethods = {
     }
 
     //From the groups we need to retrieve all the userids 
-    const users1 = data.usersData.getAllUsers(firstGroupId)
-    const users2 = data.usersData.getAllUsers(secondGroupId)
+    const users1 = await data.usersData.getAllUsers(firstGroupId)
+    const users2 = await data.usersData.getAllUsers(secondGroupId)
 
     //Create two sets to track unique interests
     const interests1 = new Set();
