@@ -203,6 +203,12 @@ try {
     await messagesData.createMessage(conversation3.toString(), group1._id.toString(), "   nm hbu    ");
     await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
 
+    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea11", "6579124dee9fe9171a79ea12")); // should return "6579124dee9fe9171a79ea16"
+    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea12", "6579124dee9fe9171a79ea11")); // should also return "6579124dee9fe9171a79ea16"
+    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea14", "6579124dee9fe9171a79ea13")); // should also return "6579124dee9fe9171a79ea17"
+    console.log(await messagesData.getConversationIdByGroupIds("6579124dee9fe9171a79ea14", "6579124dee9fe9171a79ea17")); // should return undefined (no convo)
+
+
 
     console.log('Done seeding database');
 
