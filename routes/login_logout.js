@@ -58,26 +58,29 @@ router
       
     //console.log("Group ID: " + groupID);
       
+    var groupInfo;
 
-      var group;
-
-      try
-      {
-        group = await groupsData.get(groupID);
-      }
-      catch
+    try
     {
-      group = undefined;
+        groupInfo = await groupsData.get(groupID);
+    }
+    catch
+    {
+      groupInfo = undefined;
     }
       
-     
-      
-      //console.log(group);
-     
+     let groupMembers = [];
 
-
-      
-  
+     for (let x = 0; x < group.users.length; x++)
+     {
+        //console.log(user._id.toString() + "vs. " + group.users[x]);
+        if (user._id.toString() != group.users[x])
+        {
+          let this_user = await usersData.getUser(group.users[x]);
+          groupMembers.push(this_user);
+        }
+     }
+       
     //Basing this off user being logged in rather than group being logged in
     req.session.user = {
       firstName: user.firstName, 
@@ -91,10 +94,11 @@ router
       admin: user.admin,
       id: user._id.toString(),
       groupID: groupID,
-      group: group
+      groupInfo: groupInfo,
+      groupMembers: groupMembers
     };
 
-    console.log(req.session.user);
+    //console.log(req.session.user);
 
     return res.redirect('/');
   });
