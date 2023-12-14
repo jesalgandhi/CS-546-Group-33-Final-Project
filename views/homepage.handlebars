@@ -19,15 +19,54 @@
     <div class = "homepage-section1">
         <h2>Welcome {{user.firstName}} {{user.lastName}}</h2>
         <img src = "{{user.picture}}" alt = "{{user.firstName}}" width = "300" height = "300">
-        <h2>List of Group Members:</h2>
-          <h3>Gordon Sharkie</h2>
+        <h2>Other Group Members:</h2>
+          <!--<h3>Gordon Sharkie</h2>
           <img src = "https://m.media-amazon.com/images/W/MEDIAX_792452-T2/images/I/51tyD1SIIGL.jpg" alt = "yoshi" width = "200" height = "200">
           <h3>Hestu the Korok</h2>
-          <img src = "https://cdn.vox-cdn.com/thumbor/suDxa0hNB-UgjsTUDnXBV8d63s8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/24653529/Tears_of_the_Kingdom_Hestu_and_Koroks_dancing.jpg" alt = "yoshi" width = "200" height = "200">
+          <img src = "https://cdn.vox-cdn.com/thumbor/suDxa0hNB-UgjsTUDnXBV8d63s8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/24653529/Tears_of_the_Kingdom_Hestu_and_Koroks_dancing.jpg" alt = "yoshi" width = "200" height = "200">-->
+        {{#each groupMembers}}
+            <h3>{{firstName}} {{lastName}} </h3>
+            <img src = "{{picture}}" alt = "{{firstName}}" width = "200" height = "200">
+        {{/each}}
     </div>
     
-
     <div class = "homepage-section2">
+    <h1>List of Suggested Groups:</h1>
+    <br>
+
+    {{#each suggestedMatches}}
+        <div id="corner_border">
+            <h2>{{groupName}}</h2>
+            <h4>Description: {{groupDescription}}</h4>
+            <h4>Group Location: {{groupLocation}}</h4>
+            <h4>Group Budget: ${{budget}}</h4>
+            <h4>Gender Preference: {{genderPreference}}</h4>
+            <h4>Group Members:</h4>
+            <ol>
+                <div class = "container">
+                {{#each groupMember}}
+                    <div class = "group-user">
+                        <img src = "{{picture}}" alt = "{{firstName}}" width = "125" height = "125">
+                        <h2>{{firstName}} {{lastName}}</h2>
+                        <h4>Age: {{age}}</h4>
+                        <h4>Biography: {{biography}}</h4>
+                        <h4>Interests:
+                            {{#each interests}}
+                                {{this}}, 
+                            {{/each}}
+                        </h4>
+                    </div>
+                
+                {{/each}}
+                </div>
+            </ol>
+        </div>
+   {{/each}}
+   </div>
+   </div>
+    
+
+    <!--<div class = "homepage-section2">
         <h1>List of Suggested Groups:</h1>
         <br>
         <div id="corner_border">
@@ -57,6 +96,6 @@
                     </div>         
             </ol>
         </div>
-    </div>
+    </div>-->
     
 </div>
