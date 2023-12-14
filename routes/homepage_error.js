@@ -66,15 +66,21 @@ router
         }
       }
 
+      //console.log(allGroups);
+
       //Gets location data for each group
       for (let group in allGroups)
       {
+        //console.log("Before: " + allGroups[group]._id);
+        allGroups[group]._id = allGroups[group]._id.toString();
+        //console.log("After: " + allGroups[group]._id);
         let this_city = cities.gps_lookup(allGroups[group].groupLocation.coordinates[0], allGroups[group].groupLocation.coordinates[1]);
         allGroups[group].groupLocation.city = this_city;
         //console.log(this_city);
         //console.log(allGroups[group].groupLocation.coordinates[0], allGroups[group].groupLocation.coordinates[1]);
       }
 
+      console.log(allGroups);
       //Gets location data for USER GROUPS
       let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
       return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: allGroups });
