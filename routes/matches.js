@@ -51,4 +51,32 @@ router
 })
 
 
+router
+  .route('/suggestedMatches')
+  .get(async (req, res) => {
+    if (!(req.session.user && req.session.user.id)) {
+      return res.redirect('/login');
+    }
+
+    const userId = req.session.user.id;
+
+    // Get the group ID for the current user
+    let groupId;
+    try {
+      groupId = await groupsData.getGroupByUserId(userId);
+    } catch (e) {
+      return res.render('matches', {error: "Please Create or Join a group first!"});
+    }
+
+    // Call suggestAllMatches for the current group
+    try {
+      await matchesData.suggestAllMatches(groupId);
+      res.redirect('/'); // Redirect to the homepage or wherever you want
+    } catch (e) {
+      console.error(e);
+      res.status(500).send('An error occurred while suggesting matches.');
+    }
+  });
+
+
 export default router;
