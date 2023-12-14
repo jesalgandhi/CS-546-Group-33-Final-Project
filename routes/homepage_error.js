@@ -20,7 +20,10 @@ router
       return res.render('addGroup');
 
     else
-      return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.group});
+    //return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.group, groupMembers: req.session.user.groupMembers});
+    
+    //TESTING PURPOSES ONLY
+      return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.groupInfo, groupMembers: req.session.user.groupMembers, suggestedMatches: await groupsData.getAll() });
 
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage"})
