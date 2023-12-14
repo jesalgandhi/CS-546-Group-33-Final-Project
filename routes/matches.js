@@ -1,7 +1,9 @@
 import express from 'express';
 const router = express.Router();
 import validation from '../helpers.js';
-
+const require = createRequire(import.meta.url);
+import { createRequire } from 'module';
+const cities = require('cities');
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
@@ -64,13 +66,23 @@ router
           }
         }
 
+
+        //Get location data for each match
+        // Get the latitude and longitude
+        let latitude = matches[i].groupLocation.coordinates[1];
+        let longitude = matches[i].groupLocation.coordinates[0];
+
+        // Use cities.gpsLookup to get the city
+        let city = cities.gps_lookup(latitude, longitude);
+        //console.log(city);
+
+
         // Create an object with the match and conversation ID
         let matchWithConversation = {
           match: matches[i],
           conversationId: conversationId,
           users: users,
-          latitude: matches[i].groupLocation.coordinates[1],
-          longitude: matches[i].groupLocation.coordinates[0]
+          city: city
         };
 
         // Add the object to the matchesWithConversations array

@@ -15,9 +15,15 @@
                 <h3><strong>Group Description: {{this.match.groupDescription}}</strong></h3>
             {{/if}}
             
-            {{#if this.match.groupName}}
-                <p>Location: Latitude - {{this.latitude}}, Longitude - {{this.longitude}}</p>
+            {{#if this.city}}
+                <div class="location-info">
+                    <h3>Location:</h3>
+                    <p>City: {{this.city.city}}</p>
+                    <p>State: {{this.city.state}}</p>
+                    <p>Zipcode: {{this.city.zipcode}}</p>
+                </div>
             {{/if}}
+            
             
 
             

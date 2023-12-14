@@ -273,6 +273,12 @@ max-height:200;
       box-sizing: border-box;
       background-color: rgb(54, 200, 249); 
   }
+  .location-info {
+    border: 1px solid #0299eb;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e0f7fa;
+}
 
   .group-name-box {
     border: 1px solid #0299eb;
