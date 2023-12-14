@@ -41,13 +41,13 @@
         <div id="corner_border">
             <h2>{{groupName}}</h2>
             <h4>Description: {{groupDescription}}</h4>
-            <h4>Group Location: {{groupLocation}}</h4>
+            <h4>Group Location: {{groupLocation.city.city}}, {{groupLocation.city.state}} {{groupLocation.city.zipcode}}</h4>
             <h4>Group Budget: ${{budget}}</h4>
             <h4>Gender Preference: {{genderPreference}}</h4>
             <h4>Group Members:</h4>
             <ol>
                 <div class = "container">
-                {{#each groupMember}}
+                {{#each users}}
                     <div class = "group-user">
                         <img src = "{{picture}}" alt = "{{firstName}}" width = "125" height = "125">
                         <h2>{{firstName}} {{lastName}}</h2>
