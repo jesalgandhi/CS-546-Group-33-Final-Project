@@ -78,8 +78,17 @@ router
           //console.log(user._id.toString() + "vs. " + group.users[x]);
           if (user._id.toString() != group.users[x])
           {
-            let this_user = await usersData.getUser(group.users[x]);
-            groupMembers.push(this_user);
+            try
+            {
+              let this_user = await usersData.getUser(group.users[x]);
+              groupMembers.push(this_user);
+            }
+            
+            catch(e)
+            {
+              console.log(e);
+            }
+            
           }
       }
     }
