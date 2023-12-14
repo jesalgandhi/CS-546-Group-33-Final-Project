@@ -171,11 +171,10 @@ a:hover {
 }
 
 /*Some Homepage CSS Styles*/
-body {
-    font-family: Arial, sans-serif;
+body 
+{
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
 }
 
 header {
@@ -186,18 +185,17 @@ header {
 }
 
 nav#homepage {
-    background-color: #ddd;
+    background-color: deepskyblue;
     padding: 1em;
     text-align: center;
 }
 
 nav#homepage a {
     text-decoration: none;
-    color: black;
+    color: white;
     padding: 0.5em 1em;
     margin: 0 0.5em;
-    border-radius: 4px;
-    background-color: #fff;
+    background-color:blue;
 }
 
 section {
