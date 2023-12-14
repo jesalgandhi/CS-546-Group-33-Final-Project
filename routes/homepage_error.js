@@ -6,6 +6,10 @@ import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const cities = require('cities');
+
 
 router
   .route('/')
@@ -21,10 +25,12 @@ router
 
     else
     //return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.group, groupMembers: req.session.user.groupMembers});
-    
+    {
     //TESTING PURPOSES ONLY
-      return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.groupInfo, groupMembers: req.session.user.groupMembers, suggestedMatches: await groupsData.getAll() });
-
+      let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
+    
+      return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: await groupsData.getAll() });
+    }
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage"})
   })

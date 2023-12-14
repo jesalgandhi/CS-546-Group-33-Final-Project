@@ -3,7 +3,7 @@
         <h4>Description: {{group.groupDescription}}</h4>
         <h4>Gender Preference: {{group.genderPreference}}</h4>
         <h4>Group Budget: ${{group.budget}}</h4>
-        <h4>Location: {{group.groupLocation}}</h4>   
+        <h4>Location: {{location.city}}, {{location.state}} {{location.zipcode}}</h4>
     </header>
 
     <nav id = "homepage">
@@ -12,6 +12,7 @@
         <a href="/messages">Messages</a>
         <a href="/settings">Settings</a>
         <a href="/logout">Log Out</a>
+        
     </nav>
 
 
@@ -19,15 +20,17 @@
     <div class = "homepage-section1">
         <h2>Welcome {{user.firstName}} {{user.lastName}}</h2>
         <img src = "{{user.picture}}" alt = "{{user.firstName}}" width = "300" height = "300">
-        <h2>Other Group Members:</h2>
-          <!--<h3>Gordon Sharkie</h2>
-          <img src = "https://m.media-amazon.com/images/W/MEDIAX_792452-T2/images/I/51tyD1SIIGL.jpg" alt = "yoshi" width = "200" height = "200">
-          <h3>Hestu the Korok</h2>
-          <img src = "https://cdn.vox-cdn.com/thumbor/suDxa0hNB-UgjsTUDnXBV8d63s8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/24653529/Tears_of_the_Kingdom_Hestu_and_Koroks_dancing.jpg" alt = "yoshi" width = "200" height = "200">-->
-        {{#each groupMembers}}
-            <h3>{{firstName}} {{lastName}} </h3>
-            <img src = "{{picture}}" alt = "{{firstName}}" width = "200" height = "200">
-        {{/each}}
+        {{#if groupMembers.length}}
+            <h2>Other Group Members:</h2>
+            <!--<h3>Gordon Sharkie</h2>
+            <img src = "https://m.media-amazon.com/images/W/MEDIAX_792452-T2/images/I/51tyD1SIIGL.jpg" alt = "yoshi" width = "200" height = "200">
+            <h3>Hestu the Korok</h2>
+            <img src = "https://cdn.vox-cdn.com/thumbor/suDxa0hNB-UgjsTUDnXBV8d63s8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/24653529/Tears_of_the_Kingdom_Hestu_and_Koroks_dancing.jpg" alt = "yoshi" width = "200" height = "200">-->
+                {{#each groupMembers}}
+                    <h3>{{firstName}} {{lastName}} </h3>
+                    <img src = "{{picture}}" alt = "{{firstName}}" width = "200" height = "200">
+                {{/each}}
+        {{/if}}
     </div>
     
     <div class = "homepage-section2">
@@ -60,6 +63,7 @@
                 {{/each}}
                 </div>
             </ol>
+            <a href = "#">Add Match</a> 
         </div>
         <br>
    {{/each}}
