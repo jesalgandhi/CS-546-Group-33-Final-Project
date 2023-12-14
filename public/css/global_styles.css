@@ -239,6 +239,18 @@ max-height:200;
 }
 
 /* Matches CSS*/
+
+.Matches-header {
+    text-align: center;
+    background-color: #0299eb;
+    color: white;
+    padding: 20px 0;
+}
+
+.Matches-header h1 {
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 .matches-container {
     display: flex;
     justify-content: center;
@@ -258,8 +270,48 @@ max-height:200;
       justify-content: space-around; 
       width: calc(33% - 40px); 
       margin-bottom: 20px;
-      box-sizing: border-box; 
+      box-sizing: border-box;
+      background-color: rgb(54, 200, 249); 
   }
+
+  .group-name-box {
+    border: 1px solid #0299eb;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e0f7fa;
+  }
+  
+  .members-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .members-list li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+  }
+  
+  .members-list li:last-child {
+    border-bottom: none;
+  }
+
+  .message-button {
+    display: inline-block;
+    border: 1px solid #0299eb;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: rgb(11, 193, 11);
+    color: white;
+    text-decoration: none;
+}
+
+.message-button a {
+    color: white;
+    text-decoration: none;
+}
+
+
 
   .home-button-container {
     width: 100%;
@@ -267,9 +319,12 @@ max-height:200;
 }
 
 .home-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
+    display: inline-block;
+    padding: 20px 35px;
+    font-size: 22px;
+    background-color: #0299eb;
     color: white;
-    border-radius: 5px;
     text-decoration: none;
+    border-radius: 20px;
+    margin-top: 20px;
 }
