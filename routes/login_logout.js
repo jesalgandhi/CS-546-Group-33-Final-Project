@@ -97,7 +97,7 @@ router
       admin: user.admin,
       id: user._id.toString(),
       groupID: groupID,
-      group: group,
+      groupInfo: group,
       groupMembers: groupMembers
     };
 
