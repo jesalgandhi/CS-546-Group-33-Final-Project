@@ -4,26 +4,26 @@
 <!--<h1>Welcome {{group.groupName}}</h1>-->
 
 <!-- Renders ALL profile pictures together-->
-
+  <header>
   <h1>{{group.groupName}}</h1>
   <h2>Description: {{group.groupDescription}}</h2>
   <h2>Location: {{location.city}}, {{location.state}} {{location.zipcode}}</h2>
   <h2>Budget: ${{group.budget}}</h2>
   <h2>Gender Preference: {{group.genderPreference}}</h2>
+  </header>
   <br>
 
 <div class = "user-body">
 {{#each groupMembers}}
   <div class="user-container">
         <div class="user-picture">
-            <img src="{{picture}}" alt="User Picture">
+            <img src="{{picture}}" alt="{{firstName}}">
         </div>
         <div class="user-info">
             <h2>{{firstName}} {{lastName}}</h2>
-            <p>Gender: {{gender}}</p>
-            <p>Biography: {{biography}}</p>
             <p>Age: {{age}}</p>
-             <p>Interests:</p>
+            <p>Biography: {{biography}}</p>    
+            <p>Interests:</p>
             <ol>
              {{#each interests}}
                 <li>{{this}}</li>

@@ -5,7 +5,6 @@ import helpers from '../helpers.js';
 import * as data from './index.js'
 
 
-const groupsCollection = await groups(); // this retrieves the groups collection
 
 const exportedMethods = {
 
@@ -16,6 +15,8 @@ const exportedMethods = {
    * @param {string} secondGroupId - The ID of the second group.
    */
   async matchGroups(firstGroupId, secondGroupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     // Validate group IDs.
     firstGroupId = helpers.checkId(firstGroupId, 'firstGroupId');
     secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
@@ -35,8 +36,8 @@ const exportedMethods = {
     }
 
     //From the groups we need to retrieve all the userids 
-    const users1 = data.usersData.getAllUsers(firstGroupId)
-    const users2 = data.usersData.getAllUsers(secondGroupId)
+    const users1 = await data.usersData.getAllUsers(firstGroupId)
+    const users2 = await data.usersData.getAllUsers(secondGroupId)
 
     //Create two sets to track unique interests
     const interests1 = new Set();
@@ -98,6 +99,8 @@ const exportedMethods = {
 
   
   async confirmMatch(groupId, suggestedGroupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     // 1. Validate group IDs.
     groupId = helpers.checkId(groupId, 'groupId');
     suggestedGroupId = helpers.checkId(suggestedGroupId, 'suggestedGroupId');
@@ -118,27 +121,28 @@ const exportedMethods = {
     }
 
     // 5. Check if the groups are not already in each other's confirmedMatches.
-    if (group.confirmedMatches.includes(suggestedGroupId) || suggestedGroup.confirmedMatches.includes(groupId)) {
+    if (group.matches.includes(suggestedGroupId) || suggestedGroup.matches.includes(groupId)) {
       throw 'The groups are already matched.'
     }
 
     // 6. Move the suggestedGroupId from suggestedMatches to confirmedMatches for both groups.
     //This effectively matches the groups
     //confirmedMatches will hold the final list of matches that are used to message eachother
-    const confirmMatch1 = groupsCollection.updateOne(
+    const confirmMatch1 = await groupsCollection.updateOne(
       { _id: new ObjectId(groupId) },
       { 
-        $pull: { suggestedMatches: new ObjectId(suggestedGroupId) },
-        $addToSet: { confirmedMatches: new ObjectId(suggestedGroupId) } 
+        $pull: { suggestedMatches: new ObjectId(suggestedGroupId).toString() },
+        $addToSet: { matches: new ObjectId(suggestedGroupId).toString() } 
       }
     );
-    const confirmMatch2 = groupsCollection.updateOne(
+    const confirmMatch2 = await groupsCollection.updateOne(
       { _id: new ObjectId(suggestedGroupId) },
       { 
-        $pull: { suggestedMatches: new ObjectId(groupId) },
-        $addToSet: { confirmedMatches: new ObjectId(groupId) } 
+        $pull: { suggestedMatches: new ObjectId(groupId).toString() },
+        $addToSet: { matches: new ObjectId(groupId).toString() } 
       }
     );
+    
 
     //Check if updates were successful
     const bothUpdatesSuccessful = confirmMatch1.modifiedCount === 1 && confirmMatch2.modifiedCount === 1;
@@ -163,6 +167,8 @@ const exportedMethods = {
    * @returns {Promise<boolean>} - Promise resolving to true if the operation was successful.
    */
   async unmatchGroups(firstGroupId, secondGroupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     // 1. Validate group IDs.
     firstGroupId = helpers.checkId(firstGroupId, 'firstGroupId');
     secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
@@ -202,6 +208,8 @@ const exportedMethods = {
 
 
   async getMatches(groupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     // Validate group ID.
     groupId = helpers.checkId(groupId, 'groupId');
 
@@ -219,6 +227,8 @@ const exportedMethods = {
   },
 
   async getSuggestedMatches(groupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     //Validate group ID
     groupId = helpers.checkId(groupId, 'groupId');
 
@@ -236,26 +246,47 @@ const exportedMethods = {
   //This function will be called when a group is created
   //It will suggest matches for the group based on all users in our current DB with matching filters
   async suggestAllMatches(currentGroupId){
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     //Validate group ID
-    groupId = helpers.checkId(currentGroupId, 'groupId');
+    let groupId = helpers.checkId(currentGroupId.toString(), 'groupId');
 
     // Get the current group
-    const currentGroup = await data.groupsData.get(currentGroupId);
+    console.log("shark");
+    const currentGroup = await data.groupsData.get(currentGroupId.toString());
     
     //Get all groups
+    console.log("shark 2");
     const allGroups = await data.groupsData.getAll();
 
+    let suggestedMatches = [];
+
     //Iterate over all groups
-    for(let i = 0; i < allGroups.length; i++){
-      const otherGroupId = allGroups[i]._id.toString();
+    for (let i = 0; i < allGroups.length; i++)
+    {
+      if (allGroups[i]._id.toString() != currentGroupId)
+      {
+        //Get groupData for other group
+        let otherGroup = await data.groupsData.get(allGroups[i]._id.toString());
+        
+        //Gender Preference Check
+        if (currentGroup.genderPreference == otherGroup.genderPreference)
+          suggestedMatches.push(otherGroup._id);
 
-        //If the group is not the current group, and it's not already in the matches or suggestedMatches arrays, suggest a match
-      if(otherGroupId !== currentGroupId && !currentGroup.matches.includes(otherGroupId) && 
-      !currentGroup.suggestedMatches.includes(otherGroupId)) {
-          await this.matchGroups(currentGroupId, otherGroupId);
-        }
+        //Budget Check (+/- $5000 for now)
+        /*else if (currentGroup.budget >= otherGroup.budget + 5000 || currentGroup.budget <= otherGroup.budget + 5000)
 
+        
+        //Location Check
+        else if */
+        
+      }  
     }
+
+      console.log(suggestedMatches);
+      return suggestedMatches;
+
+
 
   },
 
@@ -276,6 +307,8 @@ const exportedMethods = {
    * @returns {Promise<boolean>} - Promise resolving to true if the operation was successful.
    */
   async superlikeGroup(groupId, superlikedGroupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
     // Validate group IDs.
 
     //  Increment the superlikes counter for the superliked group.

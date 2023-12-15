@@ -49,10 +49,12 @@ router
 
     try
     {
+      console.log(user._id);
       groupID = await groupsData.getGroupByUserId(user._id.toString());
     } 
-    catch
+    catch(e)
     {
+      console.log(e);
       groupID = undefined;
     }
       
@@ -65,13 +67,32 @@ router
       {
         group = await groupsData.get(groupID);
       }
-      catch
+      catch(e)
     {
+      console.log(e);
       group = undefined;
     }
       
-     
-      
+    let groupMembers = [];
+    if(group){for (let x = 0; x < group.users.length; x++)
+      {
+        try 
+        {
+          if (user._id.toString() != group.users[x])
+          {
+            let get_user = await usersData.getUser(group.users[x]);
+            groupMembers.push(get_user);
+          }
+          
+        }
+  
+        catch(e)
+        {
+          console.log(e);
+        }
+      }} 
+    
+
       //console.log(group);
      
 
@@ -91,7 +112,8 @@ router
       admin: user.admin,
       id: user._id.toString(),
       groupID: groupID,
-      group: group
+      groupInfo: group,
+      groupMembers: groupMembers
     };
 
     console.log(req.session.user);

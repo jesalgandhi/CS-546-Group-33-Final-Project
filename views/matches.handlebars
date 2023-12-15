@@ -1,27 +1,60 @@
-<h1>Matches</h1>
+<div class="Matches-header">
+    <h1>Matches</h1>
+</div>
 
 <div class="matches-container"> 
-    {{#each matches}}
+    {{#each matchesWithConversations}}
         <div class="match-card">
-            <h2>Group Name: {{this.groupName}}</h2>
-            <p>Group Description: {{this.groupDescription}}</p>
-            <p>Location: {{this.groupLocation}}</p>
+            {{#if this.match.groupName}}
+                <div class="group-name-box">
+                    <h2>Group Name: {{this.match.groupName}}</h2>
+                </div>
+            {{/if}}
+            
+            {{#if this.match.groupName}}
+                <h3><strong>Group Description: {{this.match.groupDescription}}</strong></h3>
+            {{/if}}
+            
+            {{#if this.city}}
+                <div class="location-info">
+                    <h3>Location:</h3>
+                    <p>City: {{this.city.city}}</p>
+                    <p>State: {{this.city.state}}</p>
+                    <p>Zipcode: {{this.city.zipcode}}</p>
+                </div>
+            {{/if}}
+            
+            
 
+            
+            {{#if this.users}}
             <h3>Members:</h3>
-            {{#each this.users}}
-                <p>{{users}}</p>
-            {{/each}}
+                <ul class="members-list">
+                    {{#each this.users}}
+                        <li>{{this.firstName}} {{this.lastName}}</li>
+                    {{/each}}
+                </ul>
+            {{/if}}
 
-            {{#if this.reviews}}
+            {{#if this.match.reviews}}
                 <h3>Reviews:</h3>
                 {{#each this.reviews}}
                     <p>Review by {{this.firstName}} {{this.lastName}}: {{this.review}}</p>
                 {{/each}}
             {{/if}}
 
-            <a href="/messages/{{this.groupID}}">Message this group</a>
+            {{#if this.conversationId}}
+                <div class="message-button"><a href="/messages/{{this.conversationId}}">Message this group</a></div>
+            {{else}}
+                <div class="message-button"><a href="/messages/create">Create New Conversation</a></div>
+            {{/if}}
         </div>
     {{/each}}
+
+    
+</div>
+<div class="home-button-container">
+    <a href="/" class="home-button">Go Home</a>
 </div>
 
 

@@ -22,6 +22,8 @@ const exportedMethods = {
     firstGroupId = helpers.checkId(firstGroupId, 'firstGroupId');
     secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
 
+    //TODO: ensure that a convo between the two groups doesn't already exist (use getConversationIdbyGroupIds for this)
+
     /* Check if firstGroup is matched with secondGroup and vice versa */
     // const groupsCollection = await groups();
     // let firstGroupMatches = groupsCollection.find({_id: new ObjectId(firstGroupId)}, {_id: 0, matches: 1}).toArray();
@@ -129,6 +131,24 @@ const exportedMethods = {
     const removedConversation = await conversationsCollection.deleteOne({_id: new ObjectId(conversationId)});
     if (!removedConversation) throw "Error: could not remove attendee";
     return removedConversation.acknowledged;
+  },
+
+  /* Returns conversationId given two groupIds (current group and a different group)
+     If no convo exists between the two groups, returns undefined
+    Params: thisGroupId (str: ObjectId of current group) 
+            otherGroupId (str: ObjectId of other group) */
+  async getConversationIdByGroupIds(thisGroupId, otherGroupId) {
+    thisGroupId = helpers.checkId(thisGroupId);
+    otherGroupId = helpers.checkId(otherGroupId);
+    if (thisGroupId === otherGroupId) throw "Error: group IDs are the same";
+    let participants_ = [new ObjectId(thisGroupId), new ObjectId(otherGroupId)];
+    const conversationsCollection = await conversations();
+    let conversationId = await conversationsCollection.find(
+      {participants: {$all: participants_}}
+      // {_id: 1}
+    ).toArray();
+    if (conversationId.length !== 0) return conversationId[0]._id.toString();
+    else return undefined;
   }
 };
 
