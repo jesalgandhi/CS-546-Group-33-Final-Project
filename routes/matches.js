@@ -50,5 +50,29 @@ router
   //return res.render('matches', { matches });
 })
 
+.post(async(req,res) =>
+{
+  console.log("In matches post route");
+  console.log(req.body);
+  let user_id = req.body.user_id;
+  let suggested_id = req.body.suggested_id;
+
+  try
+  {
+    let confirmedMatch = await matchesData.confirmMatch(user_id, suggested_id);
+  }
+
+  catch(e)
+  {
+    console.log(e);
+  }
+
+
+
+  return res.redirect('/');
+
+});
+
+
 
 export default router;
