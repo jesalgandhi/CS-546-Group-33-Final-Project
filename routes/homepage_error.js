@@ -29,7 +29,7 @@ router
     else
     {
       //Gets location data for USER GROUPS
-      let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
+      let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[1], req.session.user.groupInfo.groupLocation.coordinates[0]);
       
       //Empty suggestedMatches array
       var updatedInfo;
@@ -101,7 +101,7 @@ router
       for (let i = 0; i < suggestedMatchInfo.length; i++)
       {
           suggestedMatchInfo[i].this_userID = req.session.user.groupID;
-          suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
+          suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[1],suggestedMatchInfo[i].groupLocation.coordinates[0]);
           //console.log(suggestedMatchInfo[i].city);
 
           for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)

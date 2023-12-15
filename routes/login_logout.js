@@ -72,24 +72,29 @@ router
       console.log(e);
       group = undefined;
     }
+
+    console.log(group);
       
     let groupMembers = [];
-     
-    for (let x = 0; x < group.users.length; x++)
-    {
-      try 
-      {
-        if (user._id.toString() != group.users[x])
-        {
-          let get_user = await usersData.getUser(group.users[x]);
-          groupMembers.push(get_user);
-        }
-        
-      }
 
-      catch(e)
+    if (group)
+    {
+      for (let x = 0; x < group.users.length; x++)
       {
-        console.log(e);
+        try 
+        {
+          if (user._id.toString() != group.users[x])
+          {
+            let get_user = await usersData.getUser(group.users[x]);
+            groupMembers.push(get_user);
+          }
+          
+        }
+
+        catch(e)
+        {
+          console.log(e);
+        }
       }
     }
 

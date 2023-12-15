@@ -110,7 +110,7 @@ router
 
     console.log(result.features);*/
 
-    let city = cities.gps_lookup(group.groupLocation.coordinates[0],group.groupLocation.coordinates[1]);
+    let city = cities.gps_lookup(group.groupLocation.coordinates[1],group.groupLocation.coordinates[0]);
 
     console.log(city);
 
