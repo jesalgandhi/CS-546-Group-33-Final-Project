@@ -121,29 +121,48 @@ const exportedMethods = {
     }
 
     // 5. Check if the groups are not already in each other's confirmedMatches.
-    if (group.confirmedMatches.includes(suggestedGroupId) || suggestedGroup.confirmedMatches.includes(groupId)) {
+    if (group.matches.includes(suggestedGroupId) || suggestedGroup.matches.includes(groupId)) {
       throw 'The groups are already matched.'
     }
 
     // 6. Move the suggestedGroupId from suggestedMatches to confirmedMatches for both groups.
     //This effectively matches the groups
     //confirmedMatches will hold the final list of matches that are used to message eachother
-    const confirmMatch1 = groupsCollection.updateOne(
-      
-      
+    const confirmMatch1 = await groupsCollection.updateMany(
       { _id: new ObjectId(groupId) },
       { 
-        $pull: { suggestedMatches: new ObjectId(suggestedGroupId) },
-        $addToSet: { confirmedMatches: new ObjectId(suggestedGroupId) } 
+        $pull: { suggestedMatches: new ObjectId(suggestedGroupId)},
+        $addToSet: { matches: new ObjectId(suggestedGroupId)},
       }
     );
-    const confirmMatch2 = groupsCollection.updateOne(
+    
+    const confirmMatch2 = await groupsCollection.updateMany(
       { _id: new ObjectId(suggestedGroupId) },
       { 
-        $pull: { suggestedMatches: new ObjectId(groupId) },
-        $addToSet: { confirmedMatches: new ObjectId(groupId) } 
+        $pull: { suggestedMatches: new ObjectId(groupId.toString()) },
+       $addToSet: { matches: new ObjectId(groupId) }, 
       }
     );
+
+    const confirmMatch3 = await groupsCollection.updateOne(
+      { _id: new ObjectId(groupId) },
+      { 
+        $pull: { suggestedMatches: suggestedGroupId.toString() },
+      }
+    );
+    
+    
+    const confirmMatch4 = await groupsCollection.updateOne(
+      { _id: new ObjectId(suggestedGroupId) },
+      { 
+        $pull: { suggestedMatches: groupId.toString() },
+      }
+    );
+    
+
+    //console.log(confirmMatch1);
+
+    
 
     //Check if updates were successful
     const bothUpdatesSuccessful = confirmMatch1.modifiedCount === 1 && confirmMatch2.modifiedCount === 1;
@@ -250,37 +269,46 @@ const exportedMethods = {
     const groupsCollection = await groups(); // this retrieves the groups collection
 
     //Validate group ID
-    groupId = helpers.checkId(currentGroupId, 'groupId');
+    let groupId = helpers.checkId(currentGroupId.toString(), 'groupId');
 
     // Get the current group
-    const currentGroup = await data.groupsData.get(currentGroupId);
+    console.log("shark");
+    const currentGroup = await data.groupsData.get(currentGroupId.toString());
     
     //Get all groups
+    console.log("shark 2");
     const allGroups = await data.groupsData.getAll();
 
+    let suggestedMatches = [];
+
     //Iterate over all groups
-    for(let i = 0; i < allGroups.length; i++){
-      const otherGroupId = allGroups[i]._id.toString();
+    for (let i = 0; i < allGroups.length; i++)
+    {
+      if (allGroups[i]._id.toString() != currentGroupId)
+      {
+        //Get groupData for other group
+        let otherGroup = await data.groupsData.get(allGroups[i]._id.toString());
+        
+        //Gender Preference Check
+        if (currentGroup.genderPreference == otherGroup.genderPreference)
+          suggestedMatches.push(otherGroup._id);
 
-        //If the group is not the current group, and it's not already in the matches or suggestedMatches arrays, suggest a match
-      if(otherGroupId !== currentGroupId && !currentGroup.matches.includes(otherGroupId) && 
-      !currentGroup.suggestedMatches.includes(otherGroupId)) {
-          await this.matchGroups(currentGroupId, otherGroupId);
-        }
+        //Budget Check (+/- $5000 for now)
+        /*else if (currentGroup.budget >= otherGroup.budget + 5000 || currentGroup.budget <= otherGroup.budget + 5000)
 
+        
+        //Location Check
+        else if */
+        
+      }  
     }
 
+      console.log(suggestedMatches);
+      return suggestedMatches;
+
+
+
   },
-
-
-
-
-
-
-  
-
-
-
 
   /**
    * Handles the superlike feature, where one group can superlike another, possibly notifying them.

@@ -8,6 +8,8 @@ import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
 import {matchesData} from '../data/index.js';
+import {groups} from '../config/mongoCollections.js'
+import { ObjectId } from 'mongodb';
 
 
 router
@@ -105,6 +107,49 @@ router
 
   //return res.render('matches', { matches });
 })
+
+.post(async(req,res) =>
+{
+  console.log("In matches post route");
+  console.log(req.body);
+  let user_id = req.body.user_id;
+  let suggested_id = req.body.suggested_id;
+
+
+  //console.log(req.session.user);
+  let groupsCollection = await groups();
+
+  let this_group = await groupsData.get(user_id);
+  let suggestedGroup = await groupsData.get(suggested_id);
+
+  console.log(this_group._id);
+  console.log(suggestedGroup._id);
+
+
+
+
+try
+  {
+    let confirmedMatch = await matchesData.confirmMatch(user_id, suggested_id);
+  }
+
+
+
+  catch(e)
+  {
+    console.log(e);
+  }
+
+  console.log(req.session.user.groupInfo);
+
+
+
+
+
+  return res.redirect('/');
+
+});
+
 
 
 router
