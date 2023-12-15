@@ -118,7 +118,7 @@ const exportedMethods = {
     }
 
     // 5. Check if the groups are not already in each other's confirmedMatches.
-    if (group.confirmedMatches.includes(suggestedGroupId) || suggestedGroup.confirmedMatches.includes(groupId)) {
+    if (group.matches.includes(suggestedGroupId) || suggestedGroup.matches.includes(groupId)) {
       throw 'The groups are already matched.'
     }
 
@@ -129,14 +129,14 @@ const exportedMethods = {
       { _id: new ObjectId(groupId) },
       { 
         $pull: { suggestedMatches: new ObjectId(suggestedGroupId) },
-        $addToSet: { confirmedMatches: new ObjectId(suggestedGroupId) } 
+        $addToSet: { matches: new ObjectId(suggestedGroupId) } 
       }
     );
     const confirmMatch2 = groupsCollection.updateOne(
       { _id: new ObjectId(suggestedGroupId) },
       { 
         $pull: { suggestedMatches: new ObjectId(groupId) },
-        $addToSet: { confirmedMatches: new ObjectId(groupId) } 
+        $addToSet: { matches: new ObjectId(groupId) } 
       }
     );
 
