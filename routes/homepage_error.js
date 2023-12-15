@@ -39,7 +39,7 @@ router
       {
           //allGroups =  await matchesData.suggestAllMatches(group._id);
       
-        let allGroups = groupData.getAll();
+        let allGroups = await groupsData.getAll();
         
   
 
