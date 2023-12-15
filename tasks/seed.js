@@ -1,6 +1,6 @@
 import { groups } from '../config/mongoCollections.js';
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
-import {groupsData, usersData, messagesData, matchesData} from '../data/index.js';
+import {groupsData, usersData, messagesData} from '../data/index.js';
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -101,6 +101,8 @@ try {
      /* Remove user2 */
      const removedUser = await usersData.removeUser(user2._id);
      console.log("User removed:", removedUser);
+     console.log(group1);
+    //  console.log(group1);
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(
@@ -175,11 +177,6 @@ try {
     // groups getAll()
     allGroups = await groupsData.getAll();
     console.log('All groups:', allGroups);
-    const removedUser2 = await usersData.removeUser(user9._id);
-    console.log("User removed:", removedUser2);
-    
-    console.log(await groupsData.get(group4._id.toString()));
-
     // console.log('All groups after deleting group5:\n', allGroups);
 
     
@@ -205,13 +202,6 @@ try {
     await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   what u upto gng?    ");
     await messagesData.createMessage(conversation3.toString(), group1._id.toString(), "   nm hbu    ");
     await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
-
-    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group2._id.toString())); // should return a convoId
-    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group2._id.toString())); // should return the same convoId above
-    // console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group1._id.toString())); // should throw an error (cant have convo with self)
-    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group3._id.toString())); // should return a diff convoId than the above two
-    console.log(await messagesData.getConversationIdByGroupIds(group1._id.toString(), group4._id.toString())); // should return undefined (no convo)
-
 
 
     console.log('Done seeding database');
