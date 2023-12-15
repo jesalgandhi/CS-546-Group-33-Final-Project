@@ -49,50 +49,56 @@ router
 
     try
     {
+      console.log(user._id);
       groupID = await groupsData.getGroupByUserId(user._id.toString());
     } 
-    catch
+    catch(e)
     {
+      console.log(e);
       groupID = undefined;
     }
       
     //console.log("Group ID: " + groupID);
       
-    var group;
 
-    try
-    {
+      var group;
+
+      try
+      {
         group = await groupsData.get(groupID);
-    }
-    catch
+      }
+      catch(e)
     {
+      console.log(e);
       group = undefined;
     }
       
-     let groupMembers = [];
-
-    if (group)
+    let groupMembers = [];
+     
+    for (let x = 0; x < group.users.length; x++)
     {
-      for (let x = 0; x < group.users.length; x++)
+      try 
       {
-          //console.log(user._id.toString() + "vs. " + group.users[x]);
-          if (user._id.toString() != group.users[x])
-          {
-            try
-            {
-              let this_user = await usersData.getUser(group.users[x]);
-              groupMembers.push(this_user);
-            }
-            
-            catch(e)
-            {
-              console.log(e);
-            }
-            
-          }
+        if (user._id.toString() != group.users[x])
+        {
+          let get_user = await usersData.getUser(group.users[x]);
+          groupMembers.push(get_user);
+        }
+        
+      }
+
+      catch(e)
+      {
+        console.log(e);
       }
     }
-       
+
+      //console.log(group);
+     
+
+
+      
+  
     //Basing this off user being logged in rather than group being logged in
     req.session.user = {
       firstName: user.firstName, 
@@ -110,7 +116,7 @@ router
       groupMembers: groupMembers
     };
 
-    //console.log(req.session.user);
+    console.log(req.session.user);
 
     return res.redirect('/');
   });
