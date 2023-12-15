@@ -18,7 +18,7 @@ router
   .route('/')
   .get(async (req, res) => {
 
-    console.log(req.session.user);
+    //console.log(req.session.user);
 
     if (!req.session.user)
       return res.render('login');
@@ -28,17 +28,31 @@ router
 
     else
     {
+      if (!req.session.user.groupInfo)
+      {
+        req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
+      }
+
+     
+      
+      
+
       //Gets location data for USER GROUPS
       let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[1], req.session.user.groupInfo.groupLocation.coordinates[0]);
       
       //Empty suggestedMatches array
       var updatedInfo;
-      
+
+    
+      req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
+
+
+
       //Pre-populate suggestedMatches array if length = 0 with Adarsh's createMatches function
       if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
         let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
-        console.log(allGroups);
+        //console.log(allGroups);
 
 
         let groupsDataCollection = await groups();
@@ -75,8 +89,7 @@ router
 
 
       let currentGroup = await groupsData.get(req.session.user.groupID);
-
-      console.log(currentGroup);
+      //console.log(currentGroup);
 
       //With suggested matches group IDs, get their info before rendering homepage
       let suggestedMatchInfo = [];
@@ -85,7 +98,8 @@ router
       {
           try
           {
-            let groupData = await groupsData.get(currentGroup.suggestedMatches[i]);
+            let groupData = await groupsData.get(currentGroup.suggestedMatches[i].toString());
+            //console.log(groupData);
             suggestedMatchInfo.push(groupData);
           }
 
@@ -109,7 +123,7 @@ router
             try
             {
               let userData = await usersData.getUser(suggestedMatchInfo[i].users[x].toString());
-             suggestedMatchInfo[i].users[x] = userData;
+              suggestedMatchInfo[i].users[x] = userData;
             }
 
             catch(e)
