@@ -35,12 +35,17 @@ router
       var updatedInfo;
       
       //Pre-populate suggestedMatches array if length = 0 with Adarsh's createMatches function
-      if (req.session.user.groupInfo.suggestedMatches.length == 0)
+      if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
-          //allGroups =  await matchesData.suggestAllMatches(group._id);
-      
-        let allGroups = groupData.getAll();
-        
+        let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
+        console.log(allGroups);
+
+
+        let groupsDataCollection = await groups();
+
+        //let allGroups = await groupsData.getAll();
+
+
   
 
         //
@@ -51,7 +56,7 @@ router
             for (let i = 0; i < allGroups.length; i++)
             {
                 if(req.session.user.groupID != allGroups[i]._id)
-                  groupIDs.push(allGroups[i]._id);
+                  groupIDs.push(allGroups[i].toString());
             }
                        
             updatedInfo = await groupsDataCollection.updateMany(
@@ -68,11 +73,10 @@ router
       }
 
 
-      console.log(updatedInfo);
 
-      let currentGroup = await groupsData.get(req.session.user.groupInfo._id);
+      let currentGroup = await groupsData.get(req.session.user.groupID);
 
-      //console.log(currentGroup);
+      console.log(currentGroup);
 
       //With suggested matches group IDs, get their info before rendering homepage
       let suggestedMatchInfo = [];
@@ -92,19 +96,19 @@ router
          
       }
 
-      console.log(suggestedMatchInfo);
+      //console.log(suggestedMatchInfo);
       
       for (let i = 0; i < suggestedMatchInfo.length; i++)
       {
           suggestedMatchInfo[i].this_userID = req.session.user.groupID;
           suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
-          console.log(suggestedMatchInfo[i].city);
+          //console.log(suggestedMatchInfo[i].city);
 
           for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)
           {
             try
             {
-              let userData = await usersData.getUser(suggestedMatchInfo[i].users[x]);
+              let userData = await usersData.getUser(suggestedMatchInfo[i].users[x].toString());
              suggestedMatchInfo[i].users[x] = userData;
             }
 
