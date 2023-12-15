@@ -38,12 +38,12 @@ router
       if (req.session.user.groupInfo.suggestedMatches.length == 0)
       {
           //allGroups =  await matchesData.suggestAllMatches(group._id);
+      
+        let allGroups = groupData.getAll();
         
-        const groupsDataCollection = await groups();
-          let allGroups = groupData.getAll();
-          //allGroups =  await matchesData.suggestAllMatches(group._id);
   
 
+        //
           try 
           {
             let groupIDs = [];
