@@ -5,6 +5,9 @@ import validation from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import {phone} from 'phone';
+import { ObjectId } from 'mongodb';
+import bcrypt from 'bcrypt';
 
 
 router.route('/')
@@ -13,10 +16,13 @@ router.route('/')
   })
   .post(async (req, res) => {
     let { 
-      userId, firstNameInput, lastNameInput, emailAddressInput, 
+      firstNameInput, lastNameInput, emailAddressInput, 
       phonenumberInput, passwordInput, confirmPasswordInput, 
       biographyInput, ageInput, interestsInput 
     } = req.body;
+
+    const id = req.session.user.id;
+    let userId = new ObjectId(id);
 
     console.log(req.body);
 
@@ -44,10 +50,14 @@ router.route('/')
       if (!phonenumberInput.isValid) errors.push('Invalid phone number!');
       phonenumberInput = phonenumberInput.phoneNumber;
     }
+    
 
     if (errors.length > 0) {
       return res.status(400).render("settings", { title: "Settings", error: errors, userData: req.body });
     }
+
+    const saltRounds = await bcrypt.genSalt(16);
+    const hashedPass = await bcrypt.hash(passwordInput, saltRounds);
 
     try {
       const updatedFields = {
@@ -55,7 +65,7 @@ router.route('/')
         ...(lastNameInput && { lastName: lastNameInput }),
         ...(emailAddressInput && { emailAddress: emailAddressInput }),
         ...(phonenumberInput && { phoneNumber: phonenumberInput }),
-        ...(passwordInput && { password: passwordInput }),
+        ...(passwordInput && { password: hashedPass }),
         ...(biographyInput && { biography: biographyInput }),
         ...(ageInput && { age: parseInt(ageInput) }),
         ...(interestsInput && { interests: interestsInput }),
@@ -64,7 +74,7 @@ router.route('/')
       const updatedUser = await usersData.updateUser(userId, updatedFields);
       
       if (updatedUser) {
-        return res.redirect("/matches");
+        return res.redirect("/logout");
       } else {
         return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error", userData: req.body });
       }

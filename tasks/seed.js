@@ -175,8 +175,8 @@ try {
     // groups getAll()
     allGroups = await groupsData.getAll();
     console.log('All groups:', allGroups);
-    const removedUser = await usersData.removeUser(user9._id);
-    console.log("User removed:", removedUser);
+    const removeUser = await usersData.removeUser(user9._id);
+    console.log("User removed:", removeUser);
     
     console.log(await groupsData.get(group4._id.toString()));
 
