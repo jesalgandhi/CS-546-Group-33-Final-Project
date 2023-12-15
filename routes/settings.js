@@ -56,7 +56,7 @@ router.route('/')
       return res.status(400).render("settings", { title: "Settings", error: errors, userData: req.body });
     }
 
-    const saltRounds = await bcrypt.genSalt(16);
+    const saltRounds = await bcrypt.genSalt(8);
     const hashedPass = await bcrypt.hash(passwordInput, saltRounds);
 
     try {
