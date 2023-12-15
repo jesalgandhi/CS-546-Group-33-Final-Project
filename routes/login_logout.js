@@ -72,9 +72,14 @@ router
       console.log(e);
       group = undefined;
     }
+
+    console.log(group);
       
     let groupMembers = [];
-    if(group){for (let x = 0; x < group.users.length; x++)
+
+    if (group)
+    {
+      for (let x = 0; x < group.users.length; x++)
       {
         try 
         {
@@ -85,13 +90,13 @@ router
           }
           
         }
-  
+
         catch(e)
         {
           console.log(e);
         }
-      }} 
-    
+      }
+    }
 
       //console.log(group);
      

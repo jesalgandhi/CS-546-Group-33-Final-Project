@@ -128,20 +128,40 @@ const exportedMethods = {
     // 6. Move the suggestedGroupId from suggestedMatches to confirmedMatches for both groups.
     //This effectively matches the groups
     //confirmedMatches will hold the final list of matches that are used to message eachother
-    const confirmMatch1 = await groupsCollection.updateOne(
+    const confirmMatch1 = await groupsCollection.updateMany(
       { _id: new ObjectId(groupId) },
       { 
-        $pull: { suggestedMatches: new ObjectId(suggestedGroupId).toString() },
-        $addToSet: { matches: new ObjectId(suggestedGroupId).toString() } 
+        $pull: { suggestedMatches: new ObjectId(suggestedGroupId)},
+        $addToSet: { matches: new ObjectId(suggestedGroupId)},
       }
     );
-    const confirmMatch2 = await groupsCollection.updateOne(
+    
+    const confirmMatch2 = await groupsCollection.updateMany(
       { _id: new ObjectId(suggestedGroupId) },
       { 
-        $pull: { suggestedMatches: new ObjectId(groupId).toString() },
-        $addToSet: { matches: new ObjectId(groupId).toString() } 
+        $pull: { suggestedMatches: new ObjectId(groupId.toString()) },
+       $addToSet: { matches: new ObjectId(groupId) }, 
       }
     );
+
+    const confirmMatch3 = await groupsCollection.updateOne(
+      { _id: new ObjectId(groupId) },
+      { 
+        $pull: { suggestedMatches: suggestedGroupId.toString() },
+      }
+    );
+    
+    
+    const confirmMatch4 = await groupsCollection.updateOne(
+      { _id: new ObjectId(suggestedGroupId) },
+      { 
+        $pull: { suggestedMatches: groupId.toString() },
+      }
+    );
+    
+
+    //console.log(confirmMatch1);
+
     
 
     //Check if updates were successful
@@ -289,16 +309,6 @@ const exportedMethods = {
 
 
   },
-
-
-
-
-
-
-  
-
-
-
 
   /**
    * Handles the superlike feature, where one group can superlike another, possibly notifying them.
