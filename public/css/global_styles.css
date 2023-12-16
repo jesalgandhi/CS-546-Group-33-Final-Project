@@ -88,6 +88,12 @@ a:hover {
     text-align: center;
     font-size: large;
 }
+#homeHref {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: center;
+    font-size: large;
+}
 
 /* Create Conversation Styles */
 /* Some styles Retrieved from here: https://stackoverflow.com/questions/3915917/make-a-link-use-post-instead-of-get */
