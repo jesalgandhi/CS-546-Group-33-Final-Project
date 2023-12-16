@@ -53,15 +53,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 $(document).ready(function () {
+    // Initialize an array to store previously selected interests
+    const previousInterests = [];
+    
+    // When the page loads, populate previousInterests with the user's interests
+    $('input[name="interestsInput"]:checked').each(function () {
+        previousInterests.push($(this).val());
+    });
+
+    // Disable other checkboxes if the limit is reached
     $('input[name="interestsInput"]').on('change', function () {
         let checkedCount = $('input[name="interestsInput"]:checked').length;
 
-        // Disable other checkboxes if the limit is reached
         if (checkedCount === 5) {
-            $('input[name="interestsInput"]').not(':checked').prop('disabled', true);
+            $('input[name="interestsInput"]:not(:checked)').prop('disabled', true);
         } else {
-            // Enable all checkboxes if the limit is not reached
             $('input[name="interestsInput"]').prop('disabled', false);
         }
+    });
+
+    // Set the checked attribute based on the values in previousInterests
+    previousInterests.forEach(function (interest) {
+        $(`input[name="interestsInput"][value="${interest}"]`).prop('checked', true);
     });
 });
