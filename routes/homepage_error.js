@@ -254,7 +254,62 @@ router
 
     else if (filter == "interests")
     {
+      for (let i = 0; i < req.session.user.groupInfo.suggestedMatches.length; i++)
+      {
+          //Get groupData for other group
+          let currentGroup = req.session.user.groupInfo;
+          let otherGroup = await groupsData.get(req.session.user.groupInfo.suggestedMatches[i]);
+          console.log(otherGroup);
+        
+      
+      
+          let users1 = [];
+          let users2 = [];
 
+        // Assuming currentGroup.users is an array of user IDs
+          for (let userId of currentGroup.users) 
+          {
+            try 
+            {
+              let this_user = await usersData.getUser(userId);
+              console.log(this_user);
+              users1.push(this_user);
+            } 
+            catch (e) 
+            {
+              console.log(e);
+            }
+          }
+          for (let userId of otherGroup.users) 
+          {
+            try 
+            {
+              let this_user = await usersData.getUser(userId);
+              users2.push(this_user);
+            } 
+            catch (e) 
+            {
+              console.log(e);
+            }
+          }
+               
+          console.log(users1);
+          console.log(users2);
+        
+          // Create two sets to track unique interests
+          let interests1 = new Set(users1.flatMap(user => user.interests));
+          let interests2 = new Set(users2.flatMap(user => user.interests));
+        
+          // Find the intersection of the two sets (common interests)
+          let commonInterests = [...interests1].filter(interest => interests2.has(interest));
+        
+          // If there are common interests and they are not matched, create the match
+          // If there are common interests and the groups are not already suggested or matched, suggest the match        
+          if (commonInterests.length >= 3) 
+          {
+            filteredUsers.push(otherGroup);
+          }
+      }   
     }
 
     if (filteredUsers.length == 0)
@@ -263,8 +318,11 @@ router
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
     }
 
+
+
     else
     {
+      console.log(filteredUsers);
       for (let x = 0; x < filteredUsers.length; x++) 
       {
         try 
@@ -294,6 +352,7 @@ router
           }
         }
       }
+      
     
     
     
@@ -304,9 +363,6 @@ router
      
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage", suggestedMatches: filteredUsers});
-
-    return res.redirect('/');
-
   });
 
 /* IMPORTANT:
