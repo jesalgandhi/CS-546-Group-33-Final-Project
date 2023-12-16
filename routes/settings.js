@@ -177,7 +177,7 @@ router.route('/')
     if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
 
     if (errors.length > 0) {
-      return res.status(400).render("adminSettings", { title: "Admin Settings", error: errors, userData: req.body });
+      return res.status(400).render("adminSettings", { title: "Admin Settings", error: errors, groupInfo: groupInfo });
     }
 
     let hashedPass = groupInfo.groupPassword;
@@ -206,11 +206,11 @@ router.route('/')
       if (updatedGroup) {
         return res.redirect("/");
       } else {
-        return res.status(500).render("adminSettings", { title: "Admin Settings", error: "Internal Server Error", userData: req.body });
+        return res.status(500).render("adminSettings", { title: "Admin Settings", error: "Internal Server Error", groupInfo: groupInfo });
       }
     }
     catch (e) {
-      return res.status(500).render("adminSettings", { title: "Admin Settings", error: e.toString(), userData: req.body });
+      return res.status(500).render("adminSettings", { title: "Admin Settings", error: e.toString(), groupInfo: groupInfo });
     }
   }
   );

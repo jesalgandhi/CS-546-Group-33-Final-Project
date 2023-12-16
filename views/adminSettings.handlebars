@@ -3,7 +3,7 @@
     <p class="error-message">{{error}}</p>
 {{/if}}
 
-<div class="notice"><p>You will be logged out after making any changes</p></div>
+{{!-- <div class="notice"><p>You will be logged out after making any changes</p></div> --}}
 <form method="POST" action="/settings/admin" id="register-form">
     <div class="input-group">
         <label for="groupNameInput">Group Name</label>
@@ -53,8 +53,12 @@
     <div class="input-group">
         <input type="submit" value="Make Changes">
     </div>
+
+    <a href="/settings">Go back to user settings</a>
+    <br>
+    <a href="/">Go Home</a>
+    <br>
+    <p>Make any changes to your group profile that you wish!</p>
 </form>
-<a href="/settings">Go back to user settings</a>
-<a href="/">Go Home</a>
+
 {{!-- <script src="../scripts/register_loginscript.js"></script> --}}
-<p>Make any changes to your group profile that you wish!</p>
