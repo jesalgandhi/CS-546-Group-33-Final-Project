@@ -263,7 +263,7 @@ const randomBioText = randomWords.join(' ');
     //console.log(random_number);
 
     if (random_number < 100)
-        random_number = 0 + 0 + random_number;
+        random_number = "0" + random_number;
 
      
     let pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/" + random_number + ".png";
