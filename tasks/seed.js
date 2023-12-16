@@ -1,6 +1,10 @@
 import { groups } from '../config/mongoCollections.js';
+import { users } from '../config/mongoCollections.js';
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
 import {groupsData, usersData, messagesData} from '../data/index.js';
+import {ObjectId} from 'mongodb';
+
+let usersCollection = await users();
 
 const db = await dbConnection();
 await db.dropDatabase();
@@ -423,8 +427,16 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
 
     let groupData = generateRandomGroupData();
     //console.log("Group Data:" + groupData.groupUsername); // Log the groupData
-    
 
+    let getUser = await usersData.getUser(userIds[0]);
+   
+
+    const updateResult = await usersCollection.updateOne(
+        { _id: new ObjectId(userIds[0]) },
+        { $set: { admin: true } }
+    );
+    
+    
     try
     {
         let group = await groupsData.create(
