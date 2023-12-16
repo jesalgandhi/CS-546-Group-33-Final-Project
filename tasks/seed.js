@@ -257,7 +257,19 @@ const randomBioText = randomWords.join(' ');
     const bio = randomBioText
     const age = Math.floor(Math.random() * 20) + 20; // Random age between 20 and 39
     const interests = ["Music", "Movies", "Reading", "Traveling", "Hiking", "Cooking", "Baking", "Fitness", "Yoga", "Meditation", "Gardening", "Photography", "Art", "Crafting", "DIY Projects", "Technology", "Gaming", "Sports", "Cycling", "Running", "Dancing"];
-    const pictureUrl = "URL for the picture here"; // Update with actual URL or logic
+ // Update with actual URL or logic
+
+    var random_number = Math.floor(Math.random() * 1011);
+    //console.log(random_number);
+
+    if (random_number < 100)
+        random_number = 0 + 0 + random_number;
+
+     
+    let pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/" + random_number + ".png";
+
+
+
 
     
 
