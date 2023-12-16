@@ -172,7 +172,7 @@ try {
 
     // groups update()
     // console.log('HEREEE');
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], 1265, "O", [user1._id, user2._id], group1.groupPassword, group1.matches, group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], 1265, "O", [user1._id, user2._id], group1.groupPassword, group1.matches, group1.suggestedMatches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead

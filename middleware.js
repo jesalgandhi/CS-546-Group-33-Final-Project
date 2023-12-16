@@ -69,7 +69,7 @@ const middleware = {
         // redirect to /login for unauthorized users
         // if (!authorized) return res.redirect('/login');
         // redirect to home if authorized but NOT in a group
-        if (authorized && !req.session.user.groupID) return res.redirect('/');
+        // if (authorized && !(req.session.user && req.session.user.groupID)) return res.redirect('/');
         next();
     }
 }

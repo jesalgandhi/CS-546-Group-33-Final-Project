@@ -252,7 +252,8 @@ const exportedMethods = {
     users,
     groupPassword,
     matches,
-    reviews
+    suggestedMatches,
+    reviews, 
   ) {
       groupId = validation.checkId(groupId, "group ID");
         // ensuring inputs are there and are strings
@@ -265,6 +266,8 @@ const exportedMethods = {
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
         if (typeof groupPassword !== "string") throw "groupPassword must be a string";
+        if (!Array.isArray(matches)) throw "matches must be a list of object Id's";
+        if (!Array.isArray(suggestedMatches)) throw "suggestedMatches must be a list of object Id's";
 
 
       // trimming as necessary
@@ -337,6 +340,9 @@ const exportedMethods = {
       for (const match of matches) {
           let valid_group = await this.get(match);
       }
+      for (const match of suggestedMatches) {
+        let valid_group = await this.get(match);
+      }
 
       // checking the _id, score, and description of each review
       for (const review of reviews) {
@@ -372,6 +378,7 @@ const exportedMethods = {
         'users': users, 
         'groupPassword': groupPassword,
         'matches': matches, 
+        'suggestedMatches': suggestedMatches,
         'reviews': reviews};
       const updateInfo = await groupsCollection.findOneAndReplace(
         { _id: new ObjectId(groupId)},

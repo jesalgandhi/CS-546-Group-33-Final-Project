@@ -136,20 +136,29 @@ router.route('/')
     budgetInput = parseInt(budgetInput);
 
     const errors = [];
+    let newPassword = true;
+    if (groupPasswordInput.length >= 8 && groupConfirmPasswordInput.length >= 8) newPassword = true;
     if (typeof groupNameInput !== "string") errors.push("Invalid Group Name");
     if (typeof groupUsernameInput !== "string") errors.push("Invalid Group Username");
     if (typeof groupDescriptionInput !== "string") errors.push("Invalid Group Description");
     if (typeof budgetInput !== "number") errors.push("Invalid Budget");
     if (typeof genderPreferenceInput !== "string") errors.push("Invalid Gender Preference")
-    if (typeof groupPasswordInput !== "string") errors.push("Invalid Group Password");
-    if (groupConfirmPasswordInput !== groupPasswordInput) errors.push("Passwords do not Match");
+    if (newPassword && typeof groupPasswordInput !== "string") {
+      newPassword = false;
+      errors.push("Invalid Group Password");
+    }
+    if (newPassword && (groupConfirmPasswordInput !== groupPasswordInput)) { 
+      newPassword = false;
+      errors.push("Passwords do not Match");
+    }
+    // don't push an error; user did not type in password so it stays the same
+    if (newPassword && groupPasswordInput.length === 0) newPassword = false;
 
-    let updatedOrOldPassword = groupPasswordInput === "" ? groupInfo.groupPassword : groupInfo.groupPassword;
 
     groupNameInput = groupNameInput.trim();
     groupDescriptionInput = groupDescriptionInput.trim();
     groupUsernameInput = groupUsernameInput.trim();
-    updatedOrOldPassword = updatedOrOldPassword.trim();
+    groupPasswordInput = groupPasswordInput.trim();
     groupConfirmPasswordInput = groupConfirmPasswordInput.trim();
     if (groupNameInput.length === 0) errors.push('The groupName field is empty.');
     if (groupDescriptionInput.length === 0) errors.push('The groupDescription field is empty.');
@@ -158,19 +167,25 @@ router.route('/')
     // if (groupConfirmPasswordInput.length === 0) errors.push('The groupConfirmPasswordInput field is empty.');
     let usernameSpaces = groupUsernameInput.split(" ");
     if (usernameSpaces.length > 1) errors.push(`${groupUsernameInput} contains spaces, invalid!`);
-    if (updatedOrOldPassword.length < 8 || updatedOrOldPassword.length > 50) errors.push(`groupPasswordInput must be > 8 characters and < 50 characters long.`);
+    if (newPassword && (groupPasswordInput.length < 8 || groupPasswordInput.length > 50)) {
+      newPassword = false;
+      errors.push(`groupPasswordInput must be > 8 characters and < 50 characters long.`);
+    } 
     if (groupDescriptionInput.length > 1000) errors.push('The description has exceeded the 1000 character limit.');
     if (budgetInput <= 0 || budgetInput > 50000) errors.push('The budget must be nonnegative and below 50k.');
     genderPreferenceInput = genderPreferenceInput.toUpperCase();
     if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
 
     if (errors.length > 0) {
-      return res.status(400).render("settings", { title: "Settings", error: errors, userData: req.body });
+      return res.status(400).render("adminSettings", { title: "Admin Settings", error: errors, userData: req.body });
     }
 
-    const saltRounds = await bcrypt.genSalt(8);
-    const hashedPass = await bcrypt.hash(updatedOrOldPassword, saltRounds);
-
+    let hashedPass = groupInfo.groupPassword;
+    if (newPassword) {
+      saltRounds = await bcrypt.genSalt(8);
+      hashedPass = await bcrypt.hash(groupPasswordInput, saltRounds);
+    }
+    
     try {
 
       const updatedGroup = await groupsData.update(
@@ -184,17 +199,18 @@ router.route('/')
         groupInfo.users,
         hashedPass,
         groupInfo.matches,
+        groupInfo.suggestedMatches,
         groupInfo.reviews,
       );
       
       if (updatedGroup) {
         return res.redirect("/");
       } else {
-        return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error", userData: req.body });
+        return res.status(500).render("adminSettings", { title: "Admin Settings", error: "Internal Server Error", userData: req.body });
       }
     }
     catch (e) {
-      return res.status(500).render("settings", { title: "Settings", error: e.toString(), userData: req.body });
+      return res.status(500).render("adminSettings", { title: "Admin Settings", error: e.toString(), userData: req.body });
     }
   }
   );
