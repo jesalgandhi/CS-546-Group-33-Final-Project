@@ -23,6 +23,8 @@ router
   }
   const userId = req.session.user.id;
 
+  console.log(req.session.user);
+
   /* Check if user is part of a group - if not, prompt to create/join */
   let groupId = undefined;
   try {
@@ -34,7 +36,7 @@ router
   /* Get matches from the group the user is a part of */
   let matches = undefined;
   try {
-    matches = await matchesData.getMatches(groupId);
+    matches = await matchesData.getMatches(userId);
   } catch (e) {
     return res.render('matches', {error: e});
   }

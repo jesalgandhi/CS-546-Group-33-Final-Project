@@ -244,6 +244,49 @@ padding: 20px;
       
       
   }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    text-decoration: none;
+    color: white;
+    padding: 15px;
+    margin: 0 0.5em;
+    background-color:blue;
+}
+
+.homepage-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.homepage-dropdown-content label,
+.homepage-dropdown-content input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.homepage-dropdown-content button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dropdown:hover .homepage-dropdown-content {
+    display: block;
+}
   
 
 /* Matches CSS*/
