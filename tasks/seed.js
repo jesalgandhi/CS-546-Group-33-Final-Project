@@ -183,26 +183,26 @@ try {
     
     // MESSAGES
     /* Create a conversation between group 1 and 2 */
-    const conversation1 = await messagesData.createNewConversation(group1._id.toString(), group2._id.toString());
+    // const conversation1 = await messagesData.createNewConversation(group1._id.toString(), group2._id.toString());
 
     /* Create a conversation between group 3 and 4 */
-    const conversation2 = await messagesData.createNewConversation(group3._id.toString(), group4._id.toString());
+    // const conversation2 = await messagesData.createNewConversation(group3._id.toString(), group4._id.toString());
 
     /* Create a conversation between group 1 and 3 */
-    const conversation3 = await messagesData.createNewConversation(group1._id.toString(), group3._id.toString());
+    // const conversation3 = await messagesData.createNewConversation(group1._id.toString(), group3._id.toString());
 
     /* Create messages among groups */
-    await messagesData.createMessage(conversation1.toString(), group1._id.toString(), "Yo how ya doing ?     ");
-    await messagesData.createMessage(conversation1.toString(), group2._id.toString(), "      How u doing gang?");
-    await messagesData.createMessage(conversation1.toString(), group1._id.toString(), " im well brody thx  ");
+    // await messagesData.createMessage(conversation1.toString(), group1._id.toString(), "Yo how ya doing ?     ");
+    // await messagesData.createMessage(conversation1.toString(), group2._id.toString(), "      How u doing gang?");
+    // await messagesData.createMessage(conversation1.toString(), group1._id.toString(), " im well brody thx  ");
 
-    await messagesData.createMessage(conversation2.toString(), group3._id.toString(), "   do you want to meet up? ");
-    await messagesData.createMessage(conversation2.toString(), group4._id.toString(), "   ya im down");
-    await messagesData.createMessage(conversation2.toString(), group4._id.toString(), "   btw bring cookies...    ");
+    // await messagesData.createMessage(conversation2.toString(), group3._id.toString(), "   do you want to meet up? ");
+    // await messagesData.createMessage(conversation2.toString(), group4._id.toString(), "   ya im down");
+    // await messagesData.createMessage(conversation2.toString(), group4._id.toString(), "   btw bring cookies...    ");
 
-    await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   what u upto gng?    ");
-    await messagesData.createMessage(conversation3.toString(), group1._id.toString(), "   nm hbu    ");
-    await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
+    // await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   what u upto gng?    ");
+    // await messagesData.createMessage(conversation3.toString(), group1._id.toString(), "   nm hbu    ");
+    // await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
 
 
 // ... (your existing code)
