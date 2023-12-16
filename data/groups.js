@@ -159,6 +159,60 @@ const exportedMethods = {
       throw `No group has a user with userId ${userId}`;
 
   },
+
+    // returns the groupId of the group that has a groupPassword of groupPassword. throws error if nothing was found
+    async getGroupByGroupPassword(groupPassword) {
+      // userId = validation.checkId(userId, "user ID");
+      if (!groupPassword) throw `Error: You must provide a groupPassword`;
+      if (typeof groupPassword !== 'string') throw `Error: groupPassword must be a string`;
+      groupPassword = groupPassword.trim();
+      if (groupPassword.length === 0)
+        throw `Error: groupPassword cannot be an empty string or just spaces`;
+
+      // getting all the groups
+      const allGroups = await groupsCollection.find({}).toArray();
+
+      // iterating over all the groups
+      for (const group of allGroups) {
+          // console.log(group.users);
+          // console.log(group.users[1]);
+          // console.log(new ObjectId(userId));
+
+          // if this group's groupPassword matches groupPassword, return that group's groupId as a string
+          if (group.groupPassword === groupPassword) {
+              return group._id.toString();
+          }
+      }
+      throw `No group has a groupPassword of ${groupPassword}`;
+
+  },
+
+      // returns the groupId of the group that has a groupUsername of groupUsername. throws error if nothing was found
+      async getGroupByGroupUsername(groupUsername) {
+        // userId = validation.checkId(userId, "user ID");
+        if (!groupUsername) throw `Error: You must provide a groupUsername`;
+        if (typeof groupUsername !== 'string') throw `Error: groupUsername must be a string`;
+        groupUsername = groupUsername.trim();
+        if (groupUsername.length === 0)
+          throw `Error: groupUsername cannot be an empty string or just spaces`;
+  
+        // getting all the groups
+        const allGroups = await groupsCollection.find({}).toArray();
+  
+        // iterating over all the groups
+        for (const group of allGroups) {
+            // console.log(group.users);
+            // console.log(group.users[1]);
+            // console.log(new ObjectId(userId));
+  
+            // if this group's groupUsername matches groupUsername, return that group's groupId as a string
+            if (group.groupUsername === groupUsername) {
+                return group._id.toString();
+            }
+        }
+        throw `No group has a groupUsername of ${groupUsername}`;
+  
+    },
   
   async remove(groupId) {
       groupId = validation.checkId(groupId, "group ID");
