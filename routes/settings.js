@@ -37,6 +37,8 @@ router.route('/')
 
     const id = req.session.user.id;
     let userId = new ObjectId(id);
+    let userInfo = await usersData.getUser(id);
+    let admin = req.session.user.admin;
 
     console.log(req.body);
 
@@ -67,7 +69,18 @@ router.route('/')
     
 
     if (errors.length > 0) {
-      return res.status(400).render("settings", { title: "Settings", error: errors, userData: req.body });
+      return res.status(400).render("settings", {
+        title: "Settings", 
+        error: errors,
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        emailAddress: userInfo.emailAddress,
+        phoneNumber: userInfo.phoneNumber,
+        age: userInfo.age,
+        interests: userInfo.interests,
+        biography: userInfo.biography,
+        admin: admin 
+      });
     }
 
     const saltRounds = await bcrypt.genSalt(8);
@@ -90,10 +103,32 @@ router.route('/')
       if (updatedUser) {
         return res.redirect("/logout");
       } else {
-        return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error", userData: req.body });
+        return res.status(500).render("settings", { 
+          title: "Settings", 
+          error: "Internal Server Error", 
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          emailAddress: userInfo.emailAddress,
+          phoneNumber: userInfo.phoneNumber,
+          age: userInfo.age,
+          interests: userInfo.interests,
+          biography: userInfo.biography,
+          admin: admin 
+        });
       }
     } catch (e) {
-      return res.status(500).render("settings", { title: "Settings", error: e.toString(), userData: req.body });
+      return res.status(500).render("settings", { 
+        title: "Settings", 
+        error: e.toString(), 
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        emailAddress: userInfo.emailAddress,
+        phoneNumber: userInfo.phoneNumber,
+        age: userInfo.age,
+        interests: userInfo.interests,
+        biography: userInfo.biography,
+        admin: admin 
+      });
     }
   });
 
