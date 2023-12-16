@@ -99,9 +99,9 @@ try {
         "Password1"
     )
      /* Remove user2 */
-     const removedUser = await usersData.removeUser(user2._id);
-     console.log("User removed:", removedUser);
-     console.log(group1);
+     //const removedUser = await usersData.removeUser(user2._id);
+     //console.log("User removed:", removedUser);
+     //console.log(group1);
     //  console.log(group1);
 
     // create group2 with user5 in it
@@ -171,7 +171,7 @@ try {
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead
-    const removed_group2 = await groupsData.remove(group5._id.toString());
+    //const removed_group2 = await groupsData.remove(group5._id.toString());
     // console.log('Result of trying to remove group2: ', removed_group2);
 
     // groups getAll()
