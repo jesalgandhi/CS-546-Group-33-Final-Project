@@ -315,6 +315,10 @@ padding: 20px;
     flex-wrap: wrap;
     gap: 20px; 
   }
+  .no-matches-message {
+    font-size: 2em; 
+    font-weight: bold;
+}
   
   .match-card {
       border: 2px solid #0299eb;

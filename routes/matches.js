@@ -23,8 +23,6 @@ router
   }
   const userId = req.session.user.id;
 
-  console.log(req.session.user);
-
   /* Check if user is part of a group - if not, prompt to create/join */
   let groupId = undefined;
   try {
@@ -36,37 +34,45 @@ router
   /* Get matches from the group the user is a part of */
   let matches = undefined;
   try {
-    matches = await matchesData.getMatches(userId);
+    matches = await matchesData.getMatches(groupId); //list of groupids
   } catch (e) {
     return res.render('matches', {error: e});
   }
   let matchesWithConversations = [];
+  let matchedgroups = [];
+  //we need the entire group info for each match
+  if(matches && Array.isArray(matches) && matches.length > 0){
+    try {
+      matchedgroups = await Promise.all(matches.map(match => groupsData.get(match.toString())));
+    } catch (error) {
+      return res.render('matches', {error: error});
+    }
+  }
 
   //TEMPORARY TESTING PURPOSES **********************************************
   try {
     // Get all group IDs
-    matches = await groupsData.getAll();
+    //matches = await groupsData.getAll();
 
-    
     // Iterate over the matches array
-    for (let i = 0; i < matches.length; i++) {
+    for (let i = 0; i < matchedgroups.length; i++) {
         let conversationId;
         let users = [];
 
         // Get the conversation ID for the current group ID and the matched group ID
         try {
-          conversationId = await messagesData.getConversationIdByGroupIds(groupId, matches[i]._id.toString());
+          conversationId = await messagesData.getConversationIdByGroupIds(groupId, matchedgroups[i]._id.toString());
         } catch (error) {
           console.error(`Error getting conversation ID for match ${i}:`, error);
         }
 
         let otherGroupId = undefined;
-        if (!conversationId) otherGroupId = matches[i]._id.toString();
+        if (!conversationId) otherGroupId = matchedgroups[i]._id.toString();
 
         // Get user data for each userid in users array
-        for (let j = 0; j < matches[i].users.length; j++) {
+        for (let j = 0; j < matchedgroups[i].users.length; j++) {
           try {
-            let user = await usersData.getUser(matches[i].users[j].toString());
+            let user = await usersData.getUser(matchedgroups[i].users[j].toString());
             users.push(user);
           } catch (error) {
             console.error(`Error getting user data for user ${j} in match ${i}:`, error);
@@ -76,8 +82,8 @@ router
 
         //Get location data for each match
         // Get the latitude and longitude
-        let latitude = matches[i].groupLocation.coordinates[1];
-        let longitude = matches[i].groupLocation.coordinates[0];
+        let latitude = matchedgroups[i].groupLocation.coordinates[1];
+        let longitude = matchedgroups[i].groupLocation.coordinates[0];
 
         // Use cities.gpsLookup to get the city
         let city = cities.gps_lookup(latitude, longitude);
@@ -86,7 +92,7 @@ router
 
         // Create an object with the match and conversation ID
         let matchWithConversation = {
-          match: matches[i],
+          match: matchedgroups[i],
           conversationId: conversationId,
           otherGroupId: otherGroupId,
           users: users,
