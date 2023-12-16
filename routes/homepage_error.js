@@ -10,6 +10,7 @@ import {ObjectId} from 'mongodb';
 
 import { createRequire } from 'module';
 import { groups } from '../config/mongoCollections.js';
+import { users } from '../config/mongoCollections.js';
 const require = createRequire(import.meta.url);
 const cities = require('cities');
 
@@ -33,8 +34,8 @@ router
         req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
       }
 
-     
-      
+      console.log("grah");
+      console.log(req.session.user);
       
 
       //Gets location data for USER GROUPS
@@ -43,11 +44,21 @@ router
       //Empty suggestedMatches array
       var updatedInfo;
 
-      if (!req.session.user.groupInfo.suggestedMatches) req.session.user.groupInfo.suggestedMatches = [];
+    
       
-      //Pre-populate suggestedMatches array if length = 0 with Adarsh's createMatches function
+      req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
+
+
+      //console.log(req.session.user);
+
+
+
+      //PRIOR TO RENDERING HOMEPAGE
+      //GET ALL MATCHES EXCLUDING CURRENT GROUP AND SUGGESTED_MATCHES OF CURRENT GROUP
+
       if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
+        console.log("Entered here");
         let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
         //console.log(allGroups);
 
@@ -121,6 +132,7 @@ router
             {
               let userData = await usersData.getUser(suggestedMatchInfo[i].users[x].toString());
               suggestedMatchInfo[i].users[x] = userData;
+              suggestedMatchInfo[i].users[x].lastName = suggestedMatchInfo[i].users[x].lastName[0] + ".";
             }
 
             catch(e)
@@ -131,48 +143,169 @@ router
             
           }
       }
+      console.log(suggestedMatchInfo);
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatchInfo});
     }
   })
-  .post(async (req, res) => {
+  .post(async (req, res) => 
+  {
     //TODO
     let filter = req.body.filter;
 
     console.log(filter);
 
     let filteredUsers = [];
+    if (!req.session.user)
+      return res.redirect('/login');
+
+    if (req.session.user.groupInfo.suggestedMatches.length == 0)
+      return res.redirect('/');
 
       //For each filter:
       //1. Get all users 
       //2. Filter users based on user dropdown menu value
       //3. Return groups of other users based on applied filter
 
-    /*if (filter == age)
+    if (filter == "reset")
+    {
+      console.log(req.session.user)
+      return res.redirect('/');
+    }
+
+    else if (filter == "genderPreference")
+    {
+      //Get req.session.user.groupID
+      let groupID = req.session.user.groupID;
+
+      //Get req.session.user.groupInfo.genderPreference
+      let genderPreference = req.session.user.groupInfo.genderPreference;
+
+      let suggestedMatches = [];
+
+      //Get all suggestedMatches
+      for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++)
+      {
+        try
+        {
+          let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
+          suggestedMatches.push(this_group);
+        }
+        catch(e)
+        {
+          console.log(e);
+        }
+      }
+
+
+      //Check if each fulfills criteria
+      for (let match in suggestedMatches)
+      {
+        
+        if (genderPreference == suggestedMatches[match].genderPreference)
+        {
+          filteredUsers.push(suggestedMatches[match]);
+        }
+      }
+    }
+
+    else if (filter == "age")
     {
 
-    }*/
+    }
 
-    /*else if (filter = male)
+    else if (filter == "budget")
+    {
+      console.log("Entered budget filter");
+      let suggestedMatches = [];
+
+
+      for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++) 
+      {
+        try 
+        {
+          let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
+          suggestedMatches.push(this_group);
+        } 
+        catch (e) 
+        {
+            console.log(e);
+        }
+      }
+
+      console.log(suggestedMatches);
+
+        let userBudget = req.session.user.groupInfo.budget;
+
+        for (let match of suggestedMatches) 
+        {
+            let matchBudget = match.budget;
+            //console.log(userBudget);
+            //console.log(matchBudget);
+            console.log(Math.abs(userBudget - matchBudget));
+
+            if (Math.abs(userBudget - matchBudget) <= 500) 
+            {
+              filteredUsers.push(match);
+            }
+        }
+
+        console.log(filteredUsers);
+    }
+
+    else if (filter == "interests")
     {
 
-    }*/
+    }
 
-    /*else if (filter = female)
+    if (filteredUsers.length == 0)
     {
+      let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
+      return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
+    }
 
-    }*/
-
-    /*else if (filter = other)
+    else
     {
-
-    }*/
-
-    /*else if (filter = budget)
-    {
-
-    }*/
+      for (let x = 0; x < filteredUsers.length; x++) 
+      {
+        try 
+        {
+            let groupInfo = await groupsData.get(filteredUsers[x]._id.toString());
+            filteredUsers[x].groupInfo = groupInfo;
+            filteredUsers[x].this_userID = req.session.user.groupID;
+            let city = cities.gps_lookup(filteredUsers[x].groupInfo.groupLocation.coordinates[0], filteredUsers[x].groupInfo.groupLocation.coordinates[1]);
+            filteredUsers[x].groupLocation.city = city;
+            console.log(city);
+        } 
+        catch (e) 
+        {
+            console.log(e);
+        }
+    
+        for (let i = 0; i < filteredUsers[x].users.length; i++) 
+        {
+          try 
+          {
+            let this_user = await usersData.getUser(filteredUsers[x].users[i]);
+            filteredUsers[x].users[i] = this_user;
+          } 
+          catch (e) 
+          {
+            console.log(e);
+          }
+        }
+      }
+    
+    
+    
+    let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
+     return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
+     
+    }
+     
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage", suggestedMatches: filteredUsers});
+
+    return res.redirect('/');
 
   });
 

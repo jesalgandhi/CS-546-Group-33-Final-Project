@@ -89,15 +89,6 @@ const exportedMethods = {
   },
 
 
-
-
-
-  
-
-
-
-
-  
   async confirmMatch(groupId, suggestedGroupId) {
     const groupsCollection = await groups(); // this retrieves the groups collection
 
@@ -114,6 +105,13 @@ const exportedMethods = {
     if (!group || !suggestedGroup) {
       throw 'One or both groups do not exist.'
     }
+
+    //4. Ensure that you cannot match with yourself
+    if (group === suggestedGroup)
+      throw "You cannot match with yourself";
+
+
+   
 
     // 4. Check if suggestedGroupId is in the suggestedMatches of groupId.
     if (!group.suggestedMatches.includes(suggestedGroupId)) {
@@ -170,14 +168,6 @@ const exportedMethods = {
     //return true if both successful and false if failed
     return bothUpdatesSuccessful;
   },
-
-
-
-
-
-
-
-
 
 
   /**
@@ -265,7 +255,8 @@ const exportedMethods = {
 
   //This function will be called when a group is created
   //It will suggest matches for the group based on all users in our current DB with matching filters
-  async suggestAllMatches(currentGroupId){
+  async suggestAllMatches(currentGroupId)
+  {
     const groupsCollection = await groups(); // this retrieves the groups collection
 
     //Validate group ID
@@ -279,33 +270,88 @@ const exportedMethods = {
     console.log("shark 2");
     const allGroups = await data.groupsData.getAll();
 
+    console.log(currentGroup);
+
     let suggestedMatches = [];
 
     //Iterate over all groups
     for (let i = 0; i < allGroups.length; i++)
     {
-      if (allGroups[i]._id.toString() != currentGroupId)
+      if (allGroups[i]._id.toString() != currentGroupId.toString())
       {
         //Get groupData for other group
         let otherGroup = await data.groupsData.get(allGroups[i]._id.toString());
         
+
         //Gender Preference Check
         if (currentGroup.genderPreference == otherGroup.genderPreference)
-          suggestedMatches.push(otherGroup._id);
+        {
+          console.log("Gender Match");
+          suggestedMatches.push(allGroups[i]._id);
+        }
+      
 
-        //Budget Check (+/- $5000 for now)
-        /*else if (currentGroup.budget >= otherGroup.budget + 5000 || currentGroup.budget <= otherGroup.budget + 5000)
+        //Budget Check (+/- $500 for now)
+        else if (Math.abs(currentGroup.budget - otherGroup.budget) <= 500) 
+        {
+          suggestedMatches.push(allGroups[i]._id);
+        }
 
+        else 
+        {
+          // Interest Check
+          let users1 = [];
+          let users2 = [];
+
+        // Assuming currentGroup.users is an array of user IDs
+        for (let userId of currentGroup.users) 
+        {
+          try 
+          {
+            let this_user = await data.usersData.getUser(userId);
+            console.log(this_user);
+            users1.push(this_user);
+          } 
+          catch (e) 
+          {
+            console.log(e);
+          }
+}
+        for (let userObj of otherGroup.users) 
+        {
+          try 
+          {
+            let this_user = await data.usersData.getUser(userObj._id);
+            users2.push(this_user);
+          } 
+           catch (e) 
+          {
+            console.log(e);
+          }
+        }
+               
+          console.log(users1);
+          console.log(users2);
         
-        //Location Check
-        else if */
+          // Create two sets to track unique interests
+          let interests1 = new Set(users1.flatMap(user => user.interests));
+          let interests2 = new Set(users2.flatMap(user => user.interests));
         
-      }  
+          // Find the intersection of the two sets (common interests)
+          let commonInterests = [...interests1].filter(interest => interests2.has(interest));
+        
+          // If there are common interests and they are not matched, create the match
+          // If there are common interests and the groups are not already suggested or matched, suggest the match        
+          if (commonInterests.length >= 3) {
+            suggestedMatches.push(otherGroup._id);
+          }
+        }
+      }   
     }
 
-      console.log(suggestedMatches);
-      return suggestedMatches;
-
+    //Check if each group is equal to current groups' num of desiredNumRoommates
+    let uniqueArray = suggestedMatches.filter((value, index, self) => self.indexOf(value) === index);
+    return uniqueArray;
 
 
   },

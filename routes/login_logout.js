@@ -121,7 +121,8 @@ router
       groupMembers: groupMembers
     };
 
-    console.log(req.session.user);
+    //console.log("THIS USER");
+    //console.log(req.session.user);
 
     return res.redirect('/');
   });

@@ -6,19 +6,19 @@
 <form method="POST" action="/settings" id="register-form">
     <div class="input-group">
         <label for="firstNameInput">First Name</label>
-        <input type="text" id="firstNameInput" name="firstNameInput" placeholder="{{firstName}}">
+        <input type="text" id="firstNameInput" name="firstNameInput" value="{{firstName}}">
     </div>
     <div class="input-group">
         <label for="lastNameInput">Last Name</label>
-        <input type="text" id="lastNameInput" name="lastNameInput" placeholder="{{lastName}}">
+        <input type="text" id="lastNameInput" name="lastNameInput" value="{{lastName}}">
     </div>
     <div class="input-group">
         <label for="emailAddressInput">Email</label>
-        <input type="email" id="emailAddressInput" name="emailAddressInput" placeholder="{{emailAddress}}">
+        <input type="email" id="emailAddressInput" name="emailAddressInput" value="{{emailAddress}}">
     </div>
     <div class="input-group">
         <label for="phonenumberInput">Phone Number</label>
-        <input type="number" id="phonenumberInput" name="phonenumberInput" placeholder="{{phoneNumber}}">
+        <input type="number" id="phonenumberInput" name="phonenumberInput" value="{{phoneNumber}}">
     <div class="input-group">
         <label for="passwordInput">Password</label>
         <input type="password" id="passwordInput" name="passwordInput">
@@ -29,17 +29,17 @@
     </div>
     <div class="input-group">
     <label for="ageInput">Age:</label>
-    <input type="number" id="ageInput" name="ageInput" min="18" max="120" placeholder="{{age}}">
+    <input type="number" id="ageInput" name="ageInput" min="18" max="120" value="{{age}}">
 </div>
 
 <div class="input-group">
     <label for="interestsInput">Interests:</label>
-    <input type="text" id="interestsInput" name="interestsInput" placeholder="{{interests}}">
+    <input type="text" id="interestsInput" name="interestsInput" value="{{interests}}">
 </div>
 
 <div class="input-group">
     <label for="biographyInput">Biography:</label>
-    <input type="text" id="biographyInput" name="biographyInput" placeholder="{{biography}}">
+    <input type="text" id="biographyInput" name="biographyInput" value="{{biography}}">
 </div>
 
     <div class="input-group">
@@ -47,7 +47,7 @@
     </div>
 </form>
 {{#if admin}}
-<p>test</p>
+<a href="/settings/admin">Visit Admin Settings Page</a>
 {{/if}}
 <script src="../scripts/register_loginscript.js"></script>
 <p>Make any changs to your profile that you wish!</p>
