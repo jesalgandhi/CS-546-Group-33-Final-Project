@@ -13,6 +13,7 @@ import bcrypt from 'bcrypt';
 router.route('/')
   .get(async (req, res) => {
     let userId = req.session.user.id;
+    let admin = req.session.user.admin;
     userId = validation.checkId(userId, "userId");
     const userInfo = await usersData.getUser(userId);
     res.render("settings", { 
@@ -23,7 +24,8 @@ router.route('/')
       phoneNumber: userInfo.phoneNumber,
       age: userInfo.age,
       interests: userInfo.interests,
-      biography: userInfo.biography
+      biography: userInfo.biography,
+      admin: admin
     });
   })
   .post(async (req, res) => {
@@ -95,11 +97,22 @@ router.route('/')
     }
   });
 
+  
+ 
   router.route('/admin')
   .get(async (req, res) => {
-    res.render("settings", { 
-      title: "Settings",
-      admin: true
+    let userId = req.session.user.id;
+    userId = validation.checkId(userId, "userId");
+    const groupId = await groupsData.getGroupByUserId(userId);
+    const groupInfo = await groupsData.get(groupId);
+    let femalePref = groupInfo.genderPreference === 'F';
+    let malePref = groupInfo.genderPreference === 'M';
+    res.render("adminSettings", { 
+      title: "Admin Settings",
+      admin: true,
+      groupInfo: groupInfo,
+      malePref: malePref,
+      femalePref: femalePref
     });
   })
   .post(async (req, res) => {
@@ -109,12 +122,18 @@ router.route('/')
       groupDescriptionInput,
       budgetInput,
       genderPreferenceInput,
-      groupPasswordInput
+      groupPasswordInput,
+      groupConfirmPasswordInput
     }
     = req.body;
+
+    console.log(req.body)
     
-    const id = req.session.user.id;
-    let groupId = new ObjectId(id);
+    let userId = req.session.user.id;
+    userId = validation.checkId(userId, "userId");
+    const groupId = await groupsData.getGroupByUserId(userId);
+    const groupInfo = await groupsData.get(groupId);
+    budgetInput = parseInt(budgetInput);
 
     const errors = [];
     if (typeof groupNameInput !== "string") errors.push("Invalid Group Name");
@@ -123,45 +142,53 @@ router.route('/')
     if (typeof budgetInput !== "number") errors.push("Invalid Budget");
     if (typeof genderPreferenceInput !== "string") errors.push("Invalid Gender Preference")
     if (typeof groupPasswordInput !== "string") errors.push("Invalid Group Password");
+    if (groupConfirmPasswordInput !== groupPasswordInput) errors.push("Passwords do not Match");
 
-groupNameInput = groupNameInput.trim();
-groupDescriptionInput = groupDescriptionInput.trim();
-groupUsernameInput = groupUsernameInput.trim();
-groupPasswordInput = groupPasswordInput.trim();
-if (groupNameInput.length === 0) errors.push('The groupName field is empty.');
-if (groupDescriptionInput.length === 0) errors.push('The groupDescription field is empty.');
-if (groupUsernameInput.length === 0) errors.push('The groupUsername field is empty.');
-if (groupPasswordInput.length === 0) errors.push('The groupPassword field is empty.');
-let usernameSpaces = groupUsernameInput.split(" ");
-if (usernameSpaces.length > 1) errors.push(`${groupUsernameInput} contains spaces, invalid!`);
-if (groupPasswordInput.length < 8 || groupPasswordInput.length > 50) errors.push(`${groupPassword} must be > 8 characters and < 50 characters long.`);
-if (groupDescriptionInput.length > 1000) errors.push('The description has exceeded the 1000 character limit.');
-if (groupLocationInput.length !== 2) errors.push('There MUST be only 2 coordinates in the groupLocation array.');
-if (budget <= 0 || budget > 50000) errors.push('The budget must be nonnegative and below 50k.');
-genderPreferenceInput = genderPreferenceInput.toUpperCase();
-if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
+    let updatedOrOldPassword = groupPasswordInput === "" ? groupInfo.groupPassword : groupInfo.groupPassword;
+
+    groupNameInput = groupNameInput.trim();
+    groupDescriptionInput = groupDescriptionInput.trim();
+    groupUsernameInput = groupUsernameInput.trim();
+    updatedOrOldPassword = updatedOrOldPassword.trim();
+    groupConfirmPasswordInput = groupConfirmPasswordInput.trim();
+    if (groupNameInput.length === 0) errors.push('The groupName field is empty.');
+    if (groupDescriptionInput.length === 0) errors.push('The groupDescription field is empty.');
+    if (groupUsernameInput.length === 0) errors.push('The groupUsername field is empty.');
+    // if (groupPasswordInput.length === 0) errors.push('The groupPassword field is empty.');
+    // if (groupConfirmPasswordInput.length === 0) errors.push('The groupConfirmPasswordInput field is empty.');
+    let usernameSpaces = groupUsernameInput.split(" ");
+    if (usernameSpaces.length > 1) errors.push(`${groupUsernameInput} contains spaces, invalid!`);
+    if (updatedOrOldPassword.length < 8 || updatedOrOldPassword.length > 50) errors.push(`groupPasswordInput must be > 8 characters and < 50 characters long.`);
+    if (groupDescriptionInput.length > 1000) errors.push('The description has exceeded the 1000 character limit.');
+    if (budgetInput <= 0 || budgetInput > 50000) errors.push('The budget must be nonnegative and below 50k.');
+    genderPreferenceInput = genderPreferenceInput.toUpperCase();
+    if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
 
     if (errors.length > 0) {
       return res.status(400).render("settings", { title: "Settings", error: errors, userData: req.body });
     }
 
     const saltRounds = await bcrypt.genSalt(8);
-    const hashedPass = await bcrypt.hash(groupPasswordInput, saltRounds);
+    const hashedPass = await bcrypt.hash(updatedOrOldPassword, saltRounds);
 
     try {
-      const updatedFields = {
-        ...(groupNameInput && { groupName: groupNameInput }),
-        ...(groupUsernameInput && { groupUsername: groupUsernameInput }),
-        ...(groupDescriptionInput && { groupDescription: groupDescriptionInput }),
-        ...(budgetInput && { budget: budgetInput }),
-        ...(genderPreferenceInput && { genderPreference: genderPreferenceInput }),
-        ...(groupPasswordInput && { groupPassword: hashedPass }),
-      };
 
-      const updatedGroup = await groupsData.update(groupId, updatedFields);
+      const updatedGroup = await groupsData.update(
+        groupId, 
+        groupNameInput,
+        groupUsernameInput,
+        groupDescriptionInput,
+        groupInfo.groupLocation.coordinates,
+        budgetInput,
+        genderPreferenceInput,
+        groupInfo.users,
+        hashedPass,
+        groupInfo.matches,
+        groupInfo.reviews,
+      );
       
       if (updatedGroup) {
-        return res.redirect("/logout");
+        return res.redirect("/");
       } else {
         return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error", userData: req.body });
       }
