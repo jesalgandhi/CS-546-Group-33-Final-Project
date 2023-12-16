@@ -14,6 +14,8 @@ router
     res.render("register", { title: "Register" });
   })
   .post(async (req, res) => {
+    // const selectedOptions = req.body.options;
+    // console.log(selectedOptions);
     const requiredFields = ['firstNameInput', 'lastNameInput', 'emailAddressInput','phonenumberInput', 'passwordInput', 'confirmPasswordInput', 'biographyInput', 'ageInput', 'interestsInput']; //'pictureInput'];
     const missingFields = requiredFields.filter(field => !req.body[field]);
 
@@ -35,14 +37,11 @@ router
     if (!/^.{2,200}$/.test(biographyInput)) errors.push("Invalid Biography");
     let age = typeof ageInput === 'number' ? ageInput : parseInt(ageInput);
     if (!Number.isInteger(age) || age < 18 || age > 120) errors.push("Invalid Age");
-    if (typeof interestsInput === 'string') {
-      interestsInput = interestsInput.split(',').map(interest => interest.trim());
-    }
 
     // console.log(interestsInput);
     
-    if (!Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
-      errors.push("Interests must be a list of strings");
+    if (interestsInput.length !== 5 || !Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
+      errors.push("Interests must be a list of exactly 5 strings");
     }
     phonenumberInput = phone(phonenumberInput);
     if (!phonenumberInput.isValid) errors.push('Invalid phone number!');

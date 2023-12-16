@@ -57,77 +57,38 @@ router
     });
   })
   .post(async (req, res) => {
+    
   });
 
 router
-  .route('/create')
+  .route('/create/:otherGroupId')
   .get(async (req, res) => {
-    /* Retrieve userId from the session */
-    if (!(req.session.user && req.session.user.id)) {
-      return res.redirect('/login');
-    }
-    /* Get all matched group ids of the group of the current user */
-    let matchedGroupIds = undefined;
-    let groupId = undefined;
+    let userId = req.session.user.id;
+    let otherGroupId = req.params.otherGroupId;
+    let thisGroupId = await groupsData.getGroupByUserId(userId);
+    let newConversationId = undefined;
     try {
-      groupId = await groupsData.getGroupByUserId(req.session.user.id);
-      const group = await groupsData.get(groupId);
-      matchedGroupIds = group.matches;
+      userId = validation.checkId(userId, "userId");
     } catch (e) {
-      return res.status(500).render('createConversation', {error: e});
+      return res.status(400).render('error', {error: e});
     }
-
-    /* Get all groupIds of participants of conversations of group of current user (excluding current groupId) */
-    let conversations = undefined;
-    let conversationGroupIds = undefined;
     try {
-      conversations = await messagesData.getAllConversations(groupId);
+      otherGroupId = validation.checkId(otherGroupId, "otherGroupId");
     } catch (e) {
-      return res.status(500).render('createConversation', {error: e});
+      return res.status(400).render('error', {error: e});
     }
-    conversationGroupIds = conversations.map(conversation => {
-      return conversation.participants.filter(p => p.toString() !== groupId)[0].toString();
-    });
-    
-    /* conversationsAndGroupNames (from uniqueMatches) will be shown to the user for starting a new convo
-      These are ids:groupNames that exist in matches but NOT in conversations - aka they have not yet started a conversation
-    */
-
-    //TESTING
-    // conversationGroupIds = [];
-    // matchedGroupIds = [ '657559bfc9de0e7de50dd5df', '657559bfc9de0e7de50dd5de'];
-    
-    
-    let uniqueMatches = matchedGroupIds.filter(matchId => !conversationGroupIds.includes(matchId));
-    let conversationsAndGroupNames = {};
-    /* Create array of promises of conversations to be retrieved */
-    let fetchGroupNamesPromises = uniqueMatches.map(async match => {
-      let groupData = await groupsData.get(match);
-      conversationsAndGroupNames[match] = groupData.groupName;
-    });
-    /* Attempt to fulfill all promises */
     try {
-      await Promise.all(fetchGroupNamesPromises);
+      thisGroupId = validation.checkId(thisGroupId, "thisGroupId");
     } catch (e) {
-      return res.status(500).render('messages', {error: e});
+      return res.status(400).render('error', {error: e});
     }
-
-    //TESTING
-    // console.log(matchedGroupIds)
-    // console.log(conversationGroupIds)
-    // console.log(uniqueMatches)
-    // console.log(conversationsAndGroupNames)
-
-    let noUniqueMatches = (Object.keys(conversationsAndGroupNames).length === 0) ? true : false;
+    try {
+      newConversationId = await messagesData.createNewConversation(thisGroupId, otherGroupId);
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
+    }
     
-    return res.render('createConversation', {
-      title: "Create New Conversation",
-      conversationsAndGroupNames: conversationsAndGroupNames, 
-      noUniqueMatches: noUniqueMatches
-    });
-  })
-  .post(async (req, res) => {
-    return res.json("need to do!");
+    return res.redirect(`/messages/${newConversationId}`);
   });
 
 router
