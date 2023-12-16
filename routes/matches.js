@@ -34,37 +34,42 @@ router
   /* Get matches from the group the user is a part of */
   let matches = undefined;
   try {
-    matches = await matchesData.getMatches(groupId);
+    matches = await matchesData.getMatches(groupId); //list of groupids
   } catch (e) {
     return res.render('matches', {error: e});
   }
   let matchesWithConversations = [];
+  let matchedgroups = [];
+  //we need the entire group info for each match
+  if(matches && Array.isArray(matches) && matches.length > 0){
+    try {
+      matchedgroups = await Promise.all(matches.map(match => groupsData.get(match.toString())));
+    } catch (error) {
+      return res.render('matches', {error: error});
+    }
+  }
 
-  //TEMPORARY TESTING PURPOSES **********************************************
   try {
-    // Get all group IDs
-    matches = await groupsData.getAll();
 
-    
     // Iterate over the matches array
-    for (let i = 0; i < matches.length; i++) {
+    for (let i = 0; i < matchedgroups.length; i++) {
         let conversationId;
         let users = [];
 
         // Get the conversation ID for the current group ID and the matched group ID
         try {
-          conversationId = await messagesData.getConversationIdByGroupIds(groupId, matches[i]._id.toString());
+          conversationId = await messagesData.getConversationIdByGroupIds(groupId, matchedgroups[i]._id.toString());
         } catch (error) {
           console.error(`Error getting conversation ID for match ${i}:`, error);
         }
 
         let otherGroupId = undefined;
-        if (!conversationId) otherGroupId = matches[i]._id.toString();
+        if (!conversationId) otherGroupId = matchedgroups[i]._id.toString();
 
         // Get user data for each userid in users array
-        for (let j = 0; j < matches[i].users.length; j++) {
+        for (let j = 0; j < matchedgroups[i].users.length; j++) {
           try {
-            let user = await usersData.getUser(matches[i].users[j].toString());
+            let user = await usersData.getUser(matchedgroups[i].users[j].toString());
             users.push(user);
           } catch (error) {
             console.error(`Error getting user data for user ${j} in match ${i}:`, error);
@@ -74,8 +79,8 @@ router
 
         //Get location data for each match
         // Get the latitude and longitude
-        let latitude = matches[i].groupLocation.coordinates[1];
-        let longitude = matches[i].groupLocation.coordinates[0];
+        let latitude = matchedgroups[i].groupLocation.coordinates[1];
+        let longitude = matchedgroups[i].groupLocation.coordinates[0];
 
         // Use cities.gpsLookup to get the city
         let city = cities.gps_lookup(latitude, longitude);
@@ -84,7 +89,7 @@ router
 
         // Create an object with the match and conversation ID
         let matchWithConversation = {
-          match: matches[i],
+          match: matchedgroups[i],
           conversationId: conversationId,
           otherGroupId: otherGroupId,
           users: users,
@@ -137,20 +142,72 @@ try
     let confirmedMatch = await matchesData.confirmMatch(user_id, suggested_id);
   }
 
-
-
   catch(e)
   {
     console.log(e);
   }
 
-  console.log(req.session.user.groupInfo);
+  
+  let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
+  
+  /*let suggestedMatches = [];
 
+  
+  //Gets all filtered match info WITHOUT RE-RENDERING HOMEPAGE
+  for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++)
+      {
+        let thisGroup = req.session.user.groupInfo.suggestedMatches[x]
+        if (thisGroup != suggested_id)
+        {
+          try
+          {
+            let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
+            suggestedMatches.push(this_group);
+          }
+          catch(e)
+          {
+            console.log(e);
+          }
+        }
+      }
 
-
-
+  for (let x = 0; x < suggestedMatches.length; x++) 
+      {
+        try 
+        {
+            let groupInfo = await groupsData.get(suggestedMatches[x]._id.toString());
+            suggestedMatches[x].groupInfo = groupInfo;
+            suggestedMatches[x].this_userID = req.session.user.groupID;
+            let city = cities.gps_lookup(suggestedMatches[x].groupInfo.groupLocation.coordinates[0], suggestedMatches[x].groupInfo.groupLocation.coordinates[1]);
+            suggestedMatches[x].groupLocation.city = city;
+            console.log(city);
+        } 
+        catch (e) 
+        {
+            console.log(e);
+        }
+    
+        for (let i = 0; i < suggestedMatches[x].users.length; i++) 
+        {
+          try 
+          {
+            let this_user = await usersData.getUser(suggestedMatches[x].users[i]);
+            suggestedMatches[x].users[i] = this_user;
+          } 
+          catch (e) 
+          {
+            console.log(e);
+          }
+        }
+      }*/
+  
+  
+  //return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatches});
 
   return res.redirect('/');
+  
+  //return res.render()
+
 
 });
 

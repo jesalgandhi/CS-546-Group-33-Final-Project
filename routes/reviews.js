@@ -40,7 +40,6 @@ router
       let groupData = await groupsData.get(participants[0].toString());
       conversationsAndGroupNames[convo._id.toString()] = groupData.groupName;
     });
-
     /* Attempt to fulfill all promises */
     try {
       await Promise.all(fetchGroupNamesPromises);

@@ -59,11 +59,17 @@ const middleware = {
         next();
     },
 
-    /* Prevents an unauthorized user from accessing a protected route */
+    /* Prevents an unauthorized user or a user with no group from accessing a protected route */
     protectedRouteRedirect(req, res, next) {
         let authorized = false;
         if (req.cookies.AuthState) authorized = true;
-        if (!authorized) return res.redirect('/login');
+
+        // redirect when authorized user tries to access /login
+        if (req.path === '/login' && authorized) return res.redirect('/')
+        // redirect to /login for unauthorized users
+        // if (!authorized) return res.redirect('/login');
+        // redirect to home if authorized but NOT in a group
+        // if (authorized && !(req.session.user && req.session.user.groupID)) return res.redirect('/');
         next();
     }
 }

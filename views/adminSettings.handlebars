@@ -1,0 +1,64 @@
+<h1>{{title}}</h1>
+{{#if error}}
+    <p class="error-message">{{error}}</p>
+{{/if}}
+
+{{!-- <div class="notice"><p>You will be logged out after making any changes</p></div> --}}
+<form method="POST" action="/settings/admin" id="register-form">
+    <div class="input-group">
+        <label for="groupNameInput">Group Name</label>
+        <input type="text" id="groupNameInput" name="groupNameInput" value="{{groupInfo.groupName}}">
+    </div>
+    <div class="input-group">
+        <label for="groupUsernameInput">Group Username</label>
+        <input type="text" id="groupUsernameInput" name="groupUsernameInput" value="{{groupInfo.groupUsername}}">
+    </div>
+    <div class="input-group">
+        <label for="groupDescriptionInput">Group Description</label>
+        <input type="text" id="groupDescriptionInput" name="groupDescriptionInput" value="{{groupInfo.groupDescription}}">
+    </div>
+    <div class="input-group">
+        {{!-- <label for="GenderPreferenceInput">Gender Preference</label>
+        <input type="text" id="GenderPreferenceInput" name="GenderPreferenceInput" placeholder="{{groupInfo.groupPreference}}"> --}}
+        <label for="genderPreferenceInput"><b>Gender</b></label>
+        <select id="genderPreferenceInput" name="genderPreferenceInput" class="full-width-input">
+            {{#if malePref}}
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+            {{else if femalePref}}
+                <option value="F">Female</option>
+                <option value="M">Male</option>
+                <option value="O">Other</option>
+            {{else}}
+                <option value="O">Other</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            {{/if}}
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="budgetInput">Group Budget</label>
+        <input type="number" id="budgetInput" name="budgetInput" value="{{groupInfo.budget}}">
+    </div>
+    <div class="input-group">
+        <label for="groupPasswordInput">Group Password</label>
+        <input type="password" id="groupPasswordInput" name="groupPasswordInput">
+    </div>
+    <div class="input-group">
+        <label for="groupConfirmPasswordInput">Confirm Password</label>
+        <input type="password" id="groupConfirmPasswordInput" name="groupConfirmPasswordInput">
+    </div>
+
+    <div class="input-group">
+        <input type="submit" value="Make Changes">
+    </div>
+
+    <a href="/settings">Go back to user settings</a>
+    <br>
+    <a href="/">Go Home</a>
+    <br>
+    <p>Make any changes to your group profile that you wish!</p>
+</form>
+
+{{!-- <script src="../scripts/register_loginscript.js"></script> --}}

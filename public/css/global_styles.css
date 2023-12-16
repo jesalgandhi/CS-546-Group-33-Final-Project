@@ -218,6 +218,8 @@ section {
     border: 1px solid #ccc;
     width: 300px;
     float: left;
+    overflow: hidden;
+    width: 300px;
 }
 
 .homepage-section2 {
@@ -226,11 +228,14 @@ section {
     border: 1px solid #ccc;
     /*width: 500px;*/
     float:right;
+    max-height: 500vh;
+    overflow-y: auto;
 }
 
 .homepage-container {
     display: flex;
 }
+
 
 div#corner_border
 {
@@ -251,6 +256,49 @@ padding: 20px;
       
       
   }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    text-decoration: none;
+    color: white;
+    padding: 15px;
+    margin: 0 0.5em;
+    background-color:blue;
+}
+
+.homepage-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.homepage-dropdown-content label,
+.homepage-dropdown-content input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.homepage-dropdown-content button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dropdown:hover .homepage-dropdown-content {
+    display: block;
+}
   
 
 /* Matches CSS*/
@@ -272,6 +320,10 @@ padding: 20px;
     flex-wrap: wrap;
     gap: 20px; 
   }
+  .no-matches-message {
+    font-size: 2em; 
+    font-weight: bold;
+}
   
   .match-card {
       border: 2px solid #0299eb;
@@ -308,9 +360,25 @@ padding: 20px;
   }
   
   .members-list li {
+    margin-bottom: 20px;
     border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+    padding-bottom: 10px;
   }
+  
+  .user-info {
+    margin-left: 10px;
+  }
+  
+  .user-name {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  .user-contact {
+    font-size: 1em;
+    color: #666;
+  }
+  
   
   .members-list li:last-child {
     border-bottom: none;

@@ -31,7 +31,13 @@
             <h3>Members:</h3>
                 <ul class="members-list">
                     {{#each this.users}}
-                        <li>{{this.firstName}} {{this.lastName}}</li>
+                        <li>
+                            <div class="user-info">
+                            <p class="user-name">{{this.firstName}} {{this.lastName}}</p>
+                            <p class="user-contact">{{this.emailAddress}}</p>
+                            <p class="user-contact">{{this.phoneNumber}}</p>
+                            </div>
+                        </li>
                     {{/each}}
                 </ul>
             {{/if}}
@@ -44,12 +50,16 @@
             {{/if}}
 
             {{#if this.conversationId}}
-                <div class="message-button"><a href="/messages/{{this.conversationId}}">Message this group</a></div>
+                <div class="message-button"><a href="/messages/{{this.conversationId}}">Message Group</a></div>
             {{else}}
                 <div class="message-button"><a href="/messages/create/{{this.otherGroupId}}">Create New Conversation</a></div>
             {{/if}}
         </div>
     {{/each}}
+
+    {{#unless matchesWithConversations}}
+        <p class="no-matches-message">No Matches Yet!</p>
+    {{/unless}}
 
     
 </div>
