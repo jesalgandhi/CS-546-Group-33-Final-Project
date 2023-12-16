@@ -49,10 +49,7 @@ router
     }
   }
 
-  //TEMPORARY TESTING PURPOSES **********************************************
   try {
-    // Get all group IDs
-    //matches = await groupsData.getAll();
 
     // Iterate over the matches array
     for (let i = 0; i < matchedgroups.length; i++) {
