@@ -144,8 +144,11 @@ router
 
           req.session.user.groupInfo = group;
           req.session.user.groupID = group._id.toString();
-          req.session.user.admin = true;
 
+          let updatedFields = {
+            admin: true
+          };
+          await usersData.updateUser(req.session.user.id, updatedFields);
 
       } catch (e) {
           console.log('----------\n', e);
