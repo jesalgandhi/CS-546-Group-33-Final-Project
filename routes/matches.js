@@ -204,9 +204,10 @@ try
   
   //return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatches});
 
-  //return res.redirect('/');
+  return res.redirect('/');
   
   //return res.render()
+
 
 });
 
