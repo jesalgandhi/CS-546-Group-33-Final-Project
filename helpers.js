@@ -159,7 +159,30 @@ const exportedMethods = {
     }
     if (uppercaseChar && numberChar && specialChar) return true;
     else throw "Error: password must contain at least one uppercase letter, number, and special character";
+  },
+
+
+//Calculate distance between two locations in km using the Haversine formula 
+ calculateDistance(location1, location2) {
+  function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
   }
+
+  const earthRadiusKm = 6371;
+
+  const dLat = toRadians(location2.coordinates[1] - location1.coordinates[1]);
+  const dLon = toRadians(location2.coordinates[0] - location1.coordinates[0]);
+
+  const lat1 = toRadians(location1.coordinates[1]);
+  const lat2 = toRadians(location2.coordinates[1]);
+
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  console.log(earthRadiusKm * c);
+
+  return earthRadiusKm * c;
+}
 
 };
 

@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import validation from '../helpers.js';
-
+import helpers from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
@@ -212,6 +212,41 @@ router
     {
 
     }
+    //Filter for location
+    else if (filter == "location")
+    {
+      //Get req.session.user.groupID
+      let groupID = req.session.user.groupID;
+
+      //Get req.session.user.groupInfo.groupLocation
+      let groupLocation = req.session.user.groupInfo.groupLocation;
+      //console.log("GROUP LOCATION:",groupLocation);
+      let suggestedMatches = [];
+
+      //get all suggested matches
+       // Get all suggestedMatches
+      for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++) {
+        try {
+          let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
+          suggestedMatches.push(this_group);
+        } catch(e) {
+          console.log(e);
+        }
+      }
+      //console.log("SUGGESTED MATCHES:",suggestedMatches);
+
+      //calculate distance between each suggested match and current group
+      suggestedMatches = suggestedMatches.map(group => {
+        let distance = helpers.calculateDistance(groupLocation, group.groupLocation);
+        return {...group, distance};
+      }).sort((a, b) => a.distance - b.distance);
+
+      // Push the sorted matches into the filteredUsers array
+      filteredUsers = suggestedMatches;
+      //console.log("FILTERED USERS:",filteredUsers);
+
+
+    }
 
     else if (filter == "budget")
     {
@@ -363,6 +398,9 @@ router
      
 
     // return res.json("homepage", {group: req.session.user.group, title: "Homepage", suggestedMatches: filteredUsers});
+
+    //return res.redirect('/');
+
   });
 
 /* IMPORTANT:
