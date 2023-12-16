@@ -5,6 +5,7 @@ import matchesRoutes from './matches.js';
 import settingsRoutes from './settings.js';
 import groupsRoutes from './groups.js';
 import messagesRoutes from './messages.js';
+import reviewsRoutes from './reviews.js';
 
 
 /* DELETE BEFORE SUBMISSION */
@@ -41,6 +42,7 @@ const constructorMethod = (app) => {
   app.use('/settings', settingsRoutes); 
   app.use('/groups', groupsRoutes); 
   app.use('/messages', messagesRoutes); 
+  app.use('/reviews', reviewsRoutes); 
   
   /* All other routes not above are redirected to /error - make sure to set errorCode and errorMessage (as shown below) 
     EVERY TIME YOU REDIRECT TO /error */
