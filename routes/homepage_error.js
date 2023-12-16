@@ -44,19 +44,15 @@ router
       //Empty suggestedMatches array
       var updatedInfo;
 
-<<<<<<< HEAD
     
+      
       req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
 
 
-      console.log(req.session.user);
+      //console.log(req.session.user);
 
 
 
-=======
-      if (!req.session.user.groupInfo.suggestedMatches) req.session.user.groupInfo.suggestedMatches = [];
-      
->>>>>>> dev
       //Pre-populate suggestedMatches array if length = 0 with Adarsh's createMatches function
       if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
@@ -144,6 +140,7 @@ router
             
           }
       }
+      console.log(suggestedMatchInfo);
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatchInfo});
     }
   })
@@ -252,7 +249,7 @@ router
 
     if (filteredUsers.length == 0)
     {
-      let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[1], req.session.user.groupInfo.groupLocation.coordinates[0]);
+      let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
     }
 
@@ -262,7 +259,8 @@ router
         {
             let groupInfo = await groupsData.get(filteredUsers[x]._id.toString());
             filteredUsers[x].groupInfo = groupInfo;
-            let city = cities.gps_lookup(filteredUsers[x].groupInfo.groupLocation.coordinates[1], filteredUsers[x].groupInfo.groupLocation.coordinates[0]);
+            filteredUsers[x].this_userID = req.session.user.groupID;
+            let city = cities.gps_lookup(filteredUsers[x].groupInfo.groupLocation.coordinates[0], filteredUsers[x].groupInfo.groupLocation.coordinates[1]);
             filteredUsers[x].groupLocation.city = city;
             console.log(city);
         } 
@@ -287,7 +285,7 @@ router
     
     
     
-    let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[1], req.session.user.groupInfo.groupLocation.coordinates[0]);
+    let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
      return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
      
     }
