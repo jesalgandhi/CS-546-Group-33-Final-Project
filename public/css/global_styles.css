@@ -218,6 +218,8 @@ section {
     border: 1px solid #ccc;
     width: 300px;
     float: left;
+    overflow: hidden;
+    width: 300px;
 }
 
 .homepage-section2 {
@@ -226,11 +228,14 @@ section {
     border: 1px solid #ccc;
     /*width: 500px;*/
     float:right;
+    max-height: 500vh;
+    overflow-y: auto;
 }
 
 .homepage-container {
     display: flex;
 }
+
 
 div#corner_border
 {
