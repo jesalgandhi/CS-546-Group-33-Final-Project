@@ -53,7 +53,9 @@ router
 
 
 
-      //Pre-populate suggestedMatches array if length = 0 with Adarsh's createMatches function
+      //PRIOR TO RENDERING HOMEPAGE
+      //GET ALL MATCHES EXCLUDING CURRENT GROUP AND SUGGESTED_MATCHES OF CURRENT GROUP
+
       if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
         console.log("Entered here");
@@ -130,6 +132,7 @@ router
             {
               let userData = await usersData.getUser(suggestedMatchInfo[i].users[x].toString());
               suggestedMatchInfo[i].users[x] = userData;
+              suggestedMatchInfo[i].users[x].lastName = suggestedMatchInfo[i].users[x].lastName[0] + ".";
             }
 
             catch(e)
