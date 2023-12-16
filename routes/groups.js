@@ -58,13 +58,7 @@ router
         
           // ensuring inputs are there and are strings
           if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!budget) || (!genderPreference) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
-          if (typeof groupName !== "string") throw "groupName must be a string";
-          if (typeof groupUsername !== "string") throw "groupUsername must be a string";
-          if (typeof groupDescription !== "string") throw "groupDescription must be a string";
-          if (typeof Number(budget) !== "number") throw "budget must be a number";
-          if (typeof zipCode !== "string") throw "zipCode must be a string";
-          if (typeof genderPreference !== "string") throw "genderPreference must be a string";
-          if (typeof groupPassword !== "string") throw "groupPassword must be a string";
+
           budget = Number(budget);
           // zipCode = Number(zipCode);
 
@@ -273,6 +267,7 @@ router
       try
       {
         users[i] = await usersData.getUser(group.users[i].toString());
+        users[i].lastName = users[i].lastName[0] + ".";
       }
 
       catch(e)
