@@ -39,11 +39,12 @@ router
       
 
       //Gets location data for USER GROUPS
-      let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[1], req.session.user.groupInfo.groupLocation.coordinates[0]);
+      let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
       
       //Empty suggestedMatches array
       var updatedInfo;
 
+<<<<<<< HEAD
     
       req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
 
@@ -52,6 +53,10 @@ router
 
 
 
+=======
+      if (!req.session.user.groupInfo.suggestedMatches) req.session.user.groupInfo.suggestedMatches = [];
+      
+>>>>>>> dev
       //Pre-populate suggestedMatches array if length = 0 with Adarsh's createMatches function
       if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
@@ -120,7 +125,7 @@ router
       for (let i = 0; i < suggestedMatchInfo.length; i++)
       {
           suggestedMatchInfo[i].this_userID = req.session.user.groupID;
-          suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[1],suggestedMatchInfo[i].groupLocation.coordinates[0]);
+          suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
           //console.log(suggestedMatchInfo[i].city);
 
           for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)

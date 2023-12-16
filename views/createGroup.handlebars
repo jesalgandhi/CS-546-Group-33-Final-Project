@@ -3,6 +3,7 @@
 {{!-- if the user has entered anything wrong, itll show the error they had --}}
 {{#if error}}
     <div id="error"><p>{{error}}</p></div>
+    <a href="/groups/create">Try Again</a>
 
 {{else}}
     {{!-- no errors --}}
@@ -10,38 +11,59 @@
     <p>Please make sure to fill out every field!</p>
 
     {{!-- going to homepage route upon successful creation of a group --}}
-    <form action="/" method="POST">
-        <label>
+    <form action="/groups/create" method="POST">
+        <label for="groupName">
             Group Name:
-            <input type="text" name="groupPassword" id="groupPassword">
+            <input type="text" name="groupName" id="groupName">
+            <p>Name your group!</p>
         </label>
 
         <br> {{!-- need these between them to hace them show up on separate lines, can probably be removed and handled with CSS later anyway --}}
 
-        <label>
+        <label for="groupUsername">
             Group Username:
-            <input type="text" name="groupPassword" id="groupPassword">
+            <input type="text" name="groupUsername" id="groupUsername">
+            <p>This will be the username for your group. Required for people to join it.</p>
         </label>
 
         <br>
 
-        <label>
+        <label for="groupDescription">
             Group Description:
-            <input type="text" name="groupPassword" id="groupPassword">
+            <input type="text" name="groupDescription" id="groupDescription">
+            <p>Describe your group!</p>
         </label>
 
         <br>
 
-        <label>
+        <label for="zipCode">
+            Zip Code:
+            <input type="text" name="zipCode" id="zipCode">
+            <p>Enter your zipcode.</p>
+        </label>
+
+        <br>
+
+        <label for="budget">
             Budget:
-            <input type="text" name="groupPassword" id="groupPassword">
+            <input type="text" name="budget" id="budget">
+            <p>Enter any number from 0-50000.</p>
         </label>
 
         <br>
 
-        <label>
+        <label for="genderPreference">
             Gender Preference:
+            <input type="text" name="genderPreference" id="genderPreference">
+            <p>Enter M, F, or O (other).</p>
+        </label>
+
+        <br>
+
+        <label for="groupPassword">
+            Group Password:
             <input type="text" name="groupPassword" id="groupPassword">
+            <p>This will be the password for your group. Required for people to join it.</p>
         </label>
 
         <br>
@@ -51,5 +73,7 @@
 
     {{!-- upon successful group creation, implicitly add the user to the group they just made, aka they dont enter any kind of userId themselves obv --}}
 
-
+<script src="../public/js/createGroup.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 {{/if}}

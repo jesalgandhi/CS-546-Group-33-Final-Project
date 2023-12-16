@@ -60,6 +60,9 @@ router
           console.error(`Error getting conversation ID for match ${i}:`, error);
         }
 
+        let otherGroupId = undefined;
+        if (!conversationId) otherGroupId = matches[i]._id.toString();
+
         // Get user data for each userid in users array
         for (let j = 0; j < matches[i].users.length; j++) {
           try {
@@ -85,6 +88,7 @@ router
         let matchWithConversation = {
           match: matches[i],
           conversationId: conversationId,
+          otherGroupId: otherGroupId,
           users: users,
           city: city
         };

@@ -46,7 +46,7 @@
             {{#if this.conversationId}}
                 <div class="message-button"><a href="/messages/{{this.conversationId}}">Message this group</a></div>
             {{else}}
-                <div class="message-button"><a href="/messages/create">Create New Conversation</a></div>
+                <div class="message-button"><a href="/messages/create/{{this.otherGroupId}}">Create New Conversation</a></div>
             {{/if}}
         </div>
     {{/each}}

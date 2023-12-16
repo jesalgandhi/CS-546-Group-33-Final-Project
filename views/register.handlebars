@@ -27,24 +27,45 @@
         <input type="password" id="confirmPasswordInput" name="confirmPasswordInput">
     </div>
     <div class="input-group">
-    <label for="ageInput">Age:</label>
-    <input type="number" id="ageInput" name="ageInput" min="18" max="120" required>
-</div>
-
-<div class="input-group">
-    <label for="interestsInput">Interests:</label>
-    <input type="text" id="interestsInput" name="interestsInput" placeholder="Enter interests separated by commas" required>
-</div>
-
-<div class="input-group">
-    <label for="biographyInput">Biography:</label>
-    <input type="text" id="biographyInput" name="biographyInput" placeholder="Tell me about yourself" required>
-</div>
+        <label for="ageInput">Age:</label>
+        <input type="number" id="ageInput" name="ageInput" min="18" max="120" required>
+    </div>
+    <div class="input-group">
+        <h4>Please select exactly 5 interests:</h4>
+        <label for="music"><input type="checkbox" name="interestsInput" value="Music" id="music"> Music</label>
+        <label for="movies"><input type="checkbox" name="interestsInput" value="Movies" id="movies"> Movies</label>
+        <label for="reading"><input type="checkbox" name="interestsInput" value="Reading" id="reading"> Reading</label>
+        <label for="traveling"><input type="checkbox" name="interestsInput" value="Traveling" id="traveling"> Traveling</label>
+        <label for="hiking"><input type="checkbox" name="interestsInput" value="Hiking" id="hiking"> Hiking</label>
+        <label for="cooking"><input type="checkbox" name="interestsInput" value="Cooking" id="cooking"> Cooking</label>
+        <label for="baking"><input type="checkbox" name="interestsInput" value="Baking" id="baking"> Baking</label>
+        <label for="fitness"><input type="checkbox" name="interestsInput" value="Fitness" id="fitness"> Fitness</label>
+        <label for="yoga"><input type="checkbox" name="interestsInput" value="Yoga" id="yoga"> Yoga</label>
+        <label for="meditation"><input type="checkbox" name="interestsInput" value="Meditation" id="meditation"> Meditation</label>
+        <label for="gardening"><input type="checkbox" name="interestsInput" value="Gardening" id="gardening"> Gardening</label>
+        <label for="photography"><input type="checkbox" name="interestsInput" value="Photography" id="photography"> Photography</label>
+        <label for="art"><input type="checkbox" name="interestsInput" value="Art" id="art"> Art</label>
+        <label for="crafting"><input type="checkbox" name="interestsInput" value="Crafting" id="crafting"> Crafting</label>
+        <label for="diy-projects"><input type="checkbox" name="interestsInput" value="DIY Projects" id="diy-projects"> DIY Projects</label>
+        <label for="technology"><input type="checkbox" name="interestsInput" value="Technology" id="technology"> Technology</label>
+        <label for="gaming"><input type="checkbox" name="interestsInput" value="Gaming" id="gaming"> Gaming</label>
+        <label for="sports"><input type="checkbox" name="interestsInput" value="Sports" id="sports"> Sports</label>
+        <label for="cycling"><input type="checkbox" name="interestsInput" value="Cycling" id="cycling"> Cycling</label>
+        <label for="running"><input type="checkbox" name="interestsInput" value="Running" id="running"> Running</label>
+        <label for="dancing"><input type="checkbox" name="interestsInput" value="Dancing" id="dancing"> Dancing</label>
+    </div>
 
     <div class="input-group">
-        <input type="submit" value="Sign Up">
+        <label for="biographyInput">Biography:</label>
+        <input type="text" id="biographyInput" name="biographyInput" placeholder="Tell me about yourself" required>
+    </div>
+
+    <div class="input-group">
+        <label for="submitButton"></label>
+        <input name="submitButton" type="submit" value="Sign Up">
     </div>
 </form>
-<script src="../scripts/register_loginscript.js"></script>
+
 <p>Do you already have an existing account? Click <a href="/login">here</a> to log-in</p>
 
+<script src="../public/js/register_loginscript.js"></script>

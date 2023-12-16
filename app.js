@@ -6,6 +6,7 @@ import exphbs from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import middleware from './middleware.js';
 import session from 'express-session';
+// import bodyParser from 'body-parser';
 import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 
@@ -27,6 +28,7 @@ app.use(session({
 }))
 
 /* Call Middleware here: */
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({extended: true}));
 app.use('/public', staticDir);
 app.use(express.json());
