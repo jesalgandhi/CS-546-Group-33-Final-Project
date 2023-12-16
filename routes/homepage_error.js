@@ -197,7 +197,8 @@ router
       //Check if each fulfills criteria
       for (let match in suggestedMatches)
       {
-        if (genderPreference = suggestedMatches[match].genderPreference)
+        
+        if (genderPreference == suggestedMatches[match].genderPreference)
         {
           filteredUsers.push(suggestedMatches[match]);
         }
@@ -215,31 +216,37 @@ router
       let suggestedMatches = [];
 
 
-    for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++) 
-    {
-      try 
+      for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++) 
       {
-        let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
-        suggestedMatches.push(this_group);
-      } 
-      catch (e) 
-      {
-          console.log(e);
+        try 
+        {
+          let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
+          suggestedMatches.push(this_group);
+        } 
+        catch (e) 
+        {
+            console.log(e);
+        }
       }
-    }
 
-      let userBudget = req.session.user.groupInfo.budget;
-      let filteredUsers = [];
+      console.log(suggestedMatches);
 
-      for (let match of suggestedMatches) 
-      {
-          let matchBudget = match.budget;
+        let userBudget = req.session.user.groupInfo.budget;
 
-          if (Math.abs(userBudget - matchBudget) <= 500) 
-          {
+        for (let match of suggestedMatches) 
+        {
+            let matchBudget = match.budget;
+            //console.log(userBudget);
+            //console.log(matchBudget);
+            console.log(Math.abs(userBudget - matchBudget));
+
+            if (Math.abs(userBudget - matchBudget) <= 500) 
+            {
               filteredUsers.push(match);
-          }
-      }
+            }
+        }
+
+        console.log(filteredUsers);
     }
 
     else if (filter == "interests")
@@ -253,6 +260,8 @@ router
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
     }
 
+    else
+    {
       for (let x = 0; x < filteredUsers.length; x++) 
       {
         try 
@@ -281,7 +290,7 @@ router
             console.log(e);
           }
         }
-    
+      }
     
     
     
