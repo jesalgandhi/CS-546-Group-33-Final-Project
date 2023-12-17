@@ -1,34 +1,32 @@
 <title> {{title}} </title>
 
+<h1 id="join-h1">Join a Group!</h1>
+
 {{!-- if the user has entered anything wrong, itll show the error they had --}}
-{{#if error}}
-    <div id="error"><p>{{error}}</p></div>
-    <a href="/groups/join">Try Again</a>
-
-{{else}}
-    {{!-- no errors --}}
-    <h1>Join a Group!</h1>
-    <p>Please enter a group username and group password that you know of in order to join that group!</p>
-
-    {{!-- going to homepage route upon successful joining of a group --}}
-    <form action="/groups/join" method="POST">
-
-        <label for="groupUsername">
-            Group Username:
-            <input type="text" name="groupUsername" id="groupUsername">
-        </label>
-
-        <br>
-
-        <label for="groupPassword">
-            Group Password:
-            <input type="text" name="groupPassword" id="groupPassword">
-        </label>
-
-        <br>
-
-        <input type="submit">
-    </form>
-
-
+{{#if hasErrors}}
+    <p id="create-join-error">{{error}}</p>
 {{/if}}
+
+<p id="join-p">Please enter a group username and group password that you know of in order to join that group!</p>
+
+{{!-- going to homepage route upon successful joining of a group --}}
+<form action="/groups/join" method="POST" id="join-form">
+
+    <label for="groupUsername">
+        Group Username:
+        <input type="text" name="groupUsername" id="groupUsername" value="{{groupInfo.groupUsername}}">
+    </label>
+
+    <br>
+
+    <label for="groupPassword">
+        Group Password:
+        <input type="password" name="groupPassword" id="groupPassword" value="{{groupInfo.groupPassword}}">
+    </label>
+
+    <br>
+
+    <input type="submit">
+</form>
+
+<a href="/" id="join-a">Go Back</a>
