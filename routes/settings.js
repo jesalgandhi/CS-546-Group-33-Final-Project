@@ -127,6 +127,19 @@ router.route('/')
         admin: admin 
       });
     }
+    
+  }
+  
+  )
+  .delete(async (req, res) => {
+    let userId = req.session.user.id;
+    userId = validation.checkId(userId, "userId");
+    const deletedUser = await usersData.removeUser(userId);
+    if (deletedUser) {
+      return res.redirect("/logout");
+    } else {
+      return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error" });
+    }
   });
 
   
@@ -279,6 +292,20 @@ router.route('/')
     }
     catch (e) {
       return res.status(500).render("adminSettings", { title: "Admin Settings", error: e.toString(), groupInfo: groupInfo });
+    }
+  }
+  
+  )
+  .delete(async (req, res) => {
+    let userId = req.session.user.id;
+    userId = validation.checkId(userId, "userId");
+    const groupId = await groupsData.getGroupByUserId(userId);
+    const groupInfo = await groupsData.get(groupId);
+    const deletedGroup = await groupsData.remove(groupId);
+    if (deletedGroup) {
+      return res.redirect("/logout");
+    } else {
+      return res.status(500).render("adminSettings", { title: "Admin Settings", error: "Internal Server Error", groupInfo: groupInfo });
     }
   }
   );
