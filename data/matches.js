@@ -263,14 +263,17 @@ const exportedMethods = {
     let groupId = helpers.checkId(currentGroupId.toString(), 'groupId');
 
     // Get the current group
-    console.log("shark");
     const currentGroup = await data.groupsData.get(currentGroupId.toString());
     
     //Get all groups
-    console.log("shark 2");
-    const allGroups = await data.groupsData.getAll();
+    let allGroups = await data.groupsData.getAll();
 
-    console.log(currentGroup);
+    let excludedValues = currentGroup.matches;
+    allGroups = allGroups.filter(group => !excludedValues.includes(group._id));
+
+
+    //console.log(currentGroup);
+
 
     let suggestedMatches = [];
 
@@ -294,6 +297,7 @@ const exportedMethods = {
         //Budget Check (+/- $500 for now)
         else if (Math.abs(currentGroup.budget - otherGroup.budget) <= 500) 
         {
+          console.log("Budget Match");
           suggestedMatches.push(allGroups[i]._id);
         }
 
@@ -316,7 +320,8 @@ const exportedMethods = {
           {
             console.log(e);
           }
-}
+        } 
+        console.log(otherGroup);
         for (let userObj of otherGroup.users) 
         {
           try 

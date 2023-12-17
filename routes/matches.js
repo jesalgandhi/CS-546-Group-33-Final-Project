@@ -177,6 +177,7 @@ try
 
   if (confirmedMatch)
   {
+    //console.log(confirmedMatch);
     let suggestedMatches = [];
 
     //Gets all filtered match info WITHOUT RE-RENDERING HOMEPAGE
@@ -197,36 +198,37 @@ try
       }
     }
 
-  for (let x = 0; x < suggestedMatches.length; x++) 
-    {
-      try 
-      {
-          let groupInfo = await groupsData.get(suggestedMatches[x]._id.toString());
-          suggestedMatches[x].groupInfo = groupInfo;
-          suggestedMatches[x].this_userID = req.session.user.groupID;
-          let city = cities.gps_lookup(suggestedMatches[x].groupInfo.groupLocation.coordinates[0], suggestedMatches[x].groupInfo.groupLocation.coordinates[1]);
-          suggestedMatches[x].groupLocation.city = city;
-          //console.log(city);
-      } 
-      catch (e) 
-      {
-          console.log(e);
-      }
-
-      for (let i = 0; i < suggestedMatches[x].users.length; i++) 
+    for (let x = 0; x < suggestedMatches.length; x++) 
       {
         try 
         {
-          let this_user = await usersData.getUser(suggestedMatches[x].users[i]);
-          suggestedMatches[x].users[i] = this_user;
+            let groupInfo = await groupsData.get(suggestedMatches[x]._id.toString());
+            suggestedMatches[x].groupInfo = groupInfo;
+            suggestedMatches[x].this_userID = req.session.user.groupID;
+            let city = cities.gps_lookup(suggestedMatches[x].groupInfo.groupLocation.coordinates[0], suggestedMatches[x].groupInfo.groupLocation.coordinates[1]);
+            suggestedMatches[x].groupLocation.city = city;
+            //console.log(city);
         } 
         catch (e) 
         {
-          console.log(e);
+            console.log(e);
+        }
+
+        for (let i = 0; i < suggestedMatches[x].users.length; i++) 
+        {
+          try 
+          {
+            let this_user = await usersData.getUser(suggestedMatches[x].users[i]);
+            suggestedMatches[x].users[i] = this_user;
+          } 
+          catch (e) 
+          {
+            console.log(e);
+          }
         }
       }
-    }
     
+    console.log("Hit end of matches post route");
     return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatches});
   
   }
