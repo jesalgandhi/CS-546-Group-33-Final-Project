@@ -42,11 +42,19 @@
                 </ul>
             {{/if}}
 
-            {{#if this.match.reviews}}
-                <h3>Reviews:</h3>
-                {{#each this.reviews}}
-                    <p>Review by {{this.firstName}} {{this.lastName}}: {{this.review}}</p>
-                {{/each}}
+           {{#if this.match.reviews}}
+            <h3>Reviews:</h3>
+            <div class="review-button">
+                <form action="/reviews/{{this.match.groupId}}" method="get">
+                    <button type="submit">See Reviews</button>
+                </form>
+            </div>
+            {{else}}
+            <div class="review-button">
+                <form action="/reviews/create/{{this.match.groupId}}" method="get">
+                    <button type="submit">Create Review</button>
+                </form>
+            </div>
             {{/if}}
 
             {{#if this.conversationId}}
