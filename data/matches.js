@@ -138,8 +138,8 @@ const exportedMethods = {
       { _id: new ObjectId(suggestedGroupId) },
       { 
         $pull: { suggestedMatches: new ObjectId(groupId.toString()) },
-       $addToSet: { matches: new ObjectId(groupId) }, 
-      }
+/*        $addToSet: { matches: new ObjectId(groupId) }, 
+ */      }
     );
 
     const confirmMatch3 = await groupsCollection.updateOne(
