@@ -53,6 +53,11 @@ router
 
     // Iterate over the matches array
     for (let i = 0; i < matchedgroups.length; i++) {
+        //check othergroups matches
+        let otherGroupMatches = await matchesData.getMatches(matchedgroups[i]._id.toString());
+        let otherGroupMatchesString = otherGroupMatches.map(match => match.toString());
+        if (!otherGroupMatchesString.includes(groupId.toString())) continue;
+
         let conversationId;
         let users = [];
 
