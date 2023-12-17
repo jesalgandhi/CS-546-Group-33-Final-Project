@@ -1,9 +1,10 @@
 <h1>{{title}}</h1>
-{{#if error}}
-    <p class="error-message">{{error}}</p>
-{{/if}}
-<div class="notice"><p>You will be logged out after making any changes</p></div>
 <form method="POST" action="/settings" id="register-form">
+    {{#if error}}
+        <p class="error-message">{{error}}</p>
+    {{/if}}
+    <div class="notice"><p>You will be logged out after making any changes</p></div>
+    <div class="notice"><p>Phone Number, Password, and Interests will remain the same unless changed below</p></div>
     <div class="input-group">
         <label for="firstNameInput">First Name</label>
         <input type="text" id="firstNameInput" name="firstNameInput" value="{{firstName}}">
@@ -72,13 +73,13 @@
     </div>
    
 </form>
-{{#if admin}}
-<a href="/settings/admin">Visit Admin Settings Page</a>
-{{/if}}
+
 <div class="input-group">
     <input id="deleteButton" type="submit" value="Delete User">
 </div>
+{{#if admin}}
+<div id="adminSettings" ><a href="/settings/admin">Visit Admin Settings Page</a></div>
+{{/if}}
 <br>
 <a href="/">Go Home</a>
 <script src="../public/js/register_loginscript.js"></script>
-<p>Make any changs to your profile that you wish!</p>
