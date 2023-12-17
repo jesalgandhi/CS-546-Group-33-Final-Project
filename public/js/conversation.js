@@ -11,6 +11,7 @@ $(document).ready(function() {
             type: 'GET',
             success: function(messages) {
                 $('#messageContainer').empty();
+
                 messages.forEach(message => {
                     if (message.senderId === senderId) {
                         $('#messageContainer').append(
@@ -43,31 +44,41 @@ $(document).ready(function() {
     /* Attempt to send message to button click */
     $('#messageForm').submit(function(e) {
         e.preventDefault();
-        const messageText = $('#messageText').val();
         let messageSendError = $('#messageSendError');
-        $.ajax({
-            url: `/messages/${conversationId}`,
-            type: 'POST',
-            data: { 
-                text: messageText, 
-                conversationId: conversationId,
-                senderId: senderId
-            },
-            success: function(response) {
-                messageSendError.hide();
-                $('#messageText').val(''); 
-                fetchMessages(); 
-            },
-            error: function() {
-                messageSendError.show();
-                console.error("Error sending message");
-            }
-        });
+        let messageText = $('#messageText').val();
+        messageText = messageText.trim();
+
+        if (typeof messageText !== 'string' || messageText.length <= 0 || messageText.length > 1024) {
+            messageSendError.show();
+        }
+        
+        else {
+            $.ajax({
+                url: `/messages/${conversationId}`,
+                type: 'POST',
+                data: { 
+                    text: messageText, 
+                    conversationId: conversationId,
+                    senderId: senderId
+                },
+                success: function(response) {
+                    messageSendError.hide();
+                    $('#messageText').val(''); 
+                    fetchMessages(); 
+                },
+                error: function() {
+                    messageSendError.show();
+                    console.error("Error sending message");
+                }
+            });
+        }
+
+        
+        
     });
 
-    // Fetch messages every 10 seconds
+    // fetch messages every 10 seconds
     setInterval(fetchMessages, 10000);
 
-    // Initial fetch
     fetchMessages();
 });
