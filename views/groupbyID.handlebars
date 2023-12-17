@@ -30,17 +30,21 @@
               {{/each}}
              </ol>
             </p>
-            <!-- {{#if group.reviews.length}}
-              <p>Reviews:</p>
-              {{#each group.reviews}}
-                <h3>{{groupId}}</h3>
-                <h3>{{firstName}} {{lastName}}</h3>
-                <h3>{{review}}</h3>
-              {{/each}}
-              {{/if}}-->
         </div>
     </div>
     {{/each}}
+
+    {{#if group.reviews}}
+              <h1>Reviews:</h1>
+              {{#each group.reviews}}
+               <div class="review-container">
+                
+                <h3>Group Name: {{groupName}}</h3>
+                <h3>Rating: {{score}}/5</h3>
+                <h3>Review: {{review}}</h3>
+              </div>
+              {{/each}}
+              {{/if}}
 
   </div>
   </div>

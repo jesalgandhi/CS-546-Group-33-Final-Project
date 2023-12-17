@@ -101,15 +101,29 @@
                             {{/each}}
                         </div>
                     </ol>
+
+                    {{#if reviews.length}}
                     <br>
+                    <h2>Group Reviews: </h2>
+                    {{#each reviews}}
+                        <h4>Group ID:{{_id}}</h4>
+                        <h4>Rating: {{score}}/5</h4>
+                        <h4>Review: {{review}}</h4>
+                        <br>
+                    {{/each}}
+                    {{/if}}
+
                     <form action="/matches" method="post">
                         <input type="hidden" id="user_id" name="user_id" value={{this_userID}}>
                         <input type="hidden" id="suggested_id" name="suggested_id" value={{_id}}>
                         <button type="submit">Add Match</button>
                     </form>
+                    <button>
                     <a href="/groups/{{_id}}"> View Profile on a new tab</a>
+                    </button>
                 </div>
                 <br>
+
             {{/each}}
         {{else}}
             <h1>No Suggested Groups for you at the moment. Either use the Show All groups filter 
