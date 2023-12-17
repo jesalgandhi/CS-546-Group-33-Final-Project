@@ -257,29 +257,30 @@ else
 
 
 router
-  .route('/suggestedMatches')
-  .get(async (req, res) => {
+  .route('/unmatch/:id')
+  .post(async (req, res) => {
+    console.log('Unmatch route hit'); 
     if (!(req.session.user && req.session.user.id)) {
       return res.redirect('/login');
     }
+    const firstGroupId = req.session.user.groupID
+    const secondGroupId = req.params.id;
 
-    const userId = req.session.user.id;
-
-    // Get the group ID for the current user
-    let groupId;
-    try {
-      groupId = await groupsData.getGroupByUserId(userId);
-    } catch (e) {
-      return res.render('matches', {error: "Please Create or Join a group first!"});
+    // Validate group IDs
+    if (!firstGroupId || !secondGroupId) {
+      console.error('Invalid group IDs');
+      return res.redirect('/matches');
     }
 
-    // Call suggestAllMatches for the current group
+    // Call your function to unmatch the groups
     try {
-      await matchesData.suggestAllMatches(groupId);
-      res.redirect('/'); // Redirect to the homepage or wherever you want
+      const result = await matchesData.unmatchGroups(firstGroupId, secondGroupId);
+      if (result) {
+        res.redirect('/matches');
+      } 
     } catch (e) {
       console.error(e);
-      res.status(500).send('An error occurred while suggesting matches.');
+      res.redirect('/matches')
     }
   });
 
