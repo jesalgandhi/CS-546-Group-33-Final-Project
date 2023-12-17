@@ -42,6 +42,7 @@ router
       let zipCode = groupInfo.zipCode;
       let radius = groupInfo.radius;
       let budget = groupInfo.budget;
+      let numRoommates = groupInfo.numRoommates;
       let genderPreference = groupInfo.genderPreference;
       let groupPassword = groupInfo.groupPassword;
 
@@ -52,6 +53,7 @@ router
       console.log(zipCode)
       console.log(radius)
       console.log(budget)
+      console.log(numRoommates)
       console.log(genderPreference)
       console.log(groupPassword);
 
@@ -59,10 +61,11 @@ router
       try {
         
           // ensuring inputs are there and are strings
-          if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!radius) || (!budget) || (!genderPreference) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+          if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
 
           radius = Number(radius);
           budget = Number(budget);
+          numRoommates = Number(numRoommates);
           // zipCode = Number(zipCode);
 
           // radius
@@ -71,6 +74,9 @@ router
 
           // budget
           if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
+
+          // numRoommates
+          if (numRoommates < 1 || numRoommates > 4) throw 'The numRoommates must be 1-4.';
 
           let coordinates = undefined; // will be in the form [latitude, longitude]
 
@@ -141,7 +147,7 @@ router
           // ensuring the length of password follows protocol
           if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
 
-          let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, radius, budget, genderPreference, [new ObjectId(req.session.user.id)], groupPassword);
+          let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, radius, budget, numRoommates, genderPreference, [new ObjectId(req.session.user.id)], groupPassword);
 
           req.session.user.groupInfo = group;
           req.session.user.groupID = group._id.toString();

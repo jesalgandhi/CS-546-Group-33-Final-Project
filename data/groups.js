@@ -18,18 +18,20 @@ const exportedMethods = {
     groupLocation,
     radius,
     budget,
+    numRoommates,
     genderPreference,
     users,
     groupPassword
   ) {
 
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!radius) || (!budget) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "groupName must be a string";
         if (typeof groupUsername !== "string") throw "groupUsername must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
         if (typeof radius !== "number") throw "radius must be a number";
         if (typeof budget !== "number") throw "budget must be a number";
+        if (typeof numRoommates !== "number") throw "numRoommates must be a number";
         if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
@@ -56,6 +58,9 @@ const exportedMethods = {
       // radius
       let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
       if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
+
+      // numRoommates
+      if (numRoommates < 1 || numRoommates > 4) throw 'The numRoommates must be 1-4.';
 
       // making it uppercase just to avoid cases where it's lowercase 
       genderPreference = genderPreference.toUpperCase();
@@ -122,6 +127,7 @@ const exportedMethods = {
         },
         'radius': radius,
         'budget': budget,
+        'numRoommates': numRoommates,
         'genderPreference': genderPreference, 
         'users': users,
         'groupPassword': hashedPass,
@@ -263,6 +269,7 @@ const exportedMethods = {
     groupLocation,
     radius,
     budget,
+    numRoommates,
     genderPreference,
     users,
     groupPassword,
@@ -272,12 +279,13 @@ const exportedMethods = {
   ) {
       groupId = validation.checkId(groupId, "group ID");
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "groupName must be a string";
         if (typeof groupUsername !== "string") throw "groupUsername must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
-        if (typeof radius !== "number") throw "radius must be a number";
+        // if (typeof radius !== "number") throw "radius must be a number";
         if (typeof budget !== "number") throw "budget must be a number";
+        if (typeof numRoommates !== "number") throw "numRoommates must be a number";
         if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
@@ -356,6 +364,9 @@ const exportedMethods = {
       let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
       if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
 
+      // numRoommates
+      if (numRoommates < 1 || numRoommates > 4) throw 'The numRoommates must be 1-4.';
+
       // making it uppercase just to avoid cases where it's lowercase 
       genderPreference = genderPreference.toUpperCase();
       // if genderPreference is neither M, F, or O, throw error
@@ -409,6 +420,7 @@ const exportedMethods = {
         'groupLocation': {type: 'Point', coordinates: groupLocation}, 
         'radius': radius,
         'budget': budget, 
+        'numRoommates': numRoommates,
         'genderPreference': genderPreference, 
         'users': users, 
         'groupPassword': hashedPass,
