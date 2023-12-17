@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function isValidEmail(email) {
-        return validate(email);  // Assuming 'validate' is available from 'email-validator'
+        return/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
 
     function isValidPassword(password) {

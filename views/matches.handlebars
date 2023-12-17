@@ -61,6 +61,11 @@
             {{else}}
                 <div class="message-button"><a href="/messages/create/{{this.otherGroupId}}">Create New Conversation</a></div>
             {{/if}}
+            <div class="unmatch-button">
+                <form action="/matches/unmatch/{{this.match._id}}" method="post">
+                    <button type="submit">Unmatch Group</button>
+                </form>
+            </div>
         </div>
     {{/each}}
 

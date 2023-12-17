@@ -15,6 +15,7 @@ const { lookUpRaw } = require("geojson-places");
 const cities = require('cities');
 
 import { ObjectId } from 'mongodb';
+import xss from 'xss';
 
 
 router
@@ -36,15 +37,15 @@ router
       
       // all the input fields
       const groupInfo = req.body;
-      let groupName = groupInfo.groupName;
-      let groupUsername = groupInfo.groupUsername;
-      let groupDescription = groupInfo.groupDescription;
-      let zipCode = groupInfo.zipCode;
-      let radius = groupInfo.radius;
-      let budget = groupInfo.budget;
-      let numRoommates = groupInfo.numRoommates;
-      let genderPreference = groupInfo.genderPreference;
-      let groupPassword = groupInfo.groupPassword;
+      let groupName = xss(groupInfo.groupName);
+      let groupUsername = xss(groupInfo.groupUsername);
+      let groupDescription = xss(groupInfo.groupDescription);
+      let zipCode = xss(groupInfo.zipCode);
+      let radius = xss(groupInfo.radius);
+      let budget = xss(groupInfo.budget);
+      let numRoommates = xss(groupInfo.numRoommates);
+      let genderPreference = xss(groupInfo.genderPreference);
+      let groupPassword = xss(groupInfo.groupPassword);
 
       console.log('printing stuff');
       console.log(groupName)
@@ -197,10 +198,10 @@ router
       console.log('we in /join post mayne');
 
       const groupInfo = req.body;
-      let groupUsername = groupInfo.groupUsername;
+      let groupUsername = xss(groupInfo.groupUsername);
       console.log(groupUsername);
 
-      let groupPassword = groupInfo.groupPassword;
+      let groupPassword = xss(groupInfo.groupPassword);
       console.log(groupPassword);
       // // let errors = [];
 
@@ -227,13 +228,15 @@ router
 
         console.log('-----');
         console.log(group.groupName);
-        console.log(group.groupUsername);
+        console.log(groupUsername);
         console.log(group.groupDescription);
         console.log(group.groupLocation.coordinates);
+        console.log(group.radius);
         console.log(group.budget);
+        console.log(group.numRoommates);
         console.log(group.genderPreference);
         console.log(group.users.concat(new ObjectId(req.session.user.id)));
-        console.log(group.groupPassword);
+        console.log(groupPassword);
         console.log(group.matches);
         console.log(group.reviews);
         console.log('-----');
@@ -242,7 +245,7 @@ router
         let addedGroup = await groupsData.update(
           groupId,
           group.groupName,
-          group.groupUsername,
+          groupUsername,
           group.groupDescription,
           group.groupLocation.coordinates,
           group.radius,
@@ -250,7 +253,7 @@ router
           group.numRoommates,
           group.genderPreference,
           group.users.concat( new ObjectId(req.session.user.id)),
-          group.groupPassword,
+          groupPassword,
           group.matches,
           group.suggestedMatches,
           group.reviews
@@ -258,7 +261,7 @@ router
 
 
       } catch (e) {
-          // console.log(e);
+          console.log('--------\n', e);
           return res.render('joinGroup', {
             error: e,
             hasErrors: true,
@@ -353,7 +356,10 @@ router
 router
   .route('/create/coords')
   .post(async (req, res) => {
-    let coords = [req.body.latitude, req.body.longitude];
+    let groupInfo = req.body;
+    let latitude = xss(groupInfo.latitude);
+    let longitude = xss(groupInfo.longitude);
+    let coords = [latitude, longitude];
     req.session.user.coords = coords;
     console.log(coords);
   });
