@@ -76,4 +76,19 @@ $(document).ready(function () {
     previousInterests.forEach(function (interest) {
         $(`input[name="interestsInput"][value="${interest}"]`).prop('checked', true);
     });
+
+    $('#deleteButton').click(function(event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: '/settings', 
+            type: 'DELETE',
+            success: function(response) {
+                if (response.success) window.location.href = response.redirectTo;
+            },
+            error: function() {
+                console.log('Error deleting user');
+            }
+        });
+    });
 });

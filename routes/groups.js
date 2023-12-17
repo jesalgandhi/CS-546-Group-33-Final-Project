@@ -151,6 +151,7 @@ router
 
           req.session.user.groupInfo = group;
           req.session.user.groupID = group._id.toString();
+          req.session.user.admin = true; // updating user's session to reflect their new admin status
 
           let updatedFields = {
             admin: true
