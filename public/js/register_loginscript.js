@@ -88,6 +88,7 @@ $(document).ready(function () {
             },
             error: function() {
                 console.log('Error deleting user');
+                window.location.href = response.redirectTo;
             }
         });
     });

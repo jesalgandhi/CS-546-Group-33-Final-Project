@@ -136,26 +136,27 @@ router.route('/')
     let userId = req.session.user.id;
     userId = validation.checkId(userId, "userId");
     let groupId;
-    
-    /* If the user is an admin, we delete the group then the user */
-    if (req.session.user.admin) {
-      try {
-        groupId = await groupsData.getGroupByUserId(userId);
-      } catch (e) {
-        return res.status(500).render('error', {error: e});
-      }
-      try {
-        await groupsData.remove(groupId);
-      } catch (e) {
-        return res.status(500).render('error', {error: e});
-      }
+    try {
+      groupId = await groupsData.getGroupByUserId(userId);
+    } catch (e) {
+      return res.status(500).render('error', {error: e});
     }
+    
 
     let deletedUser;
     try {
       deletedUser = await usersData.removeUser(userId);
     } catch (e) {
       return res.status(500).render('error', {error: e});
+    }
+
+    /* If the user is an admin, we delete the user first (which removes them from their group), then delete the group */
+    if (req.session.user.admin) {
+      try {
+        await groupsData.remove(groupId);
+      } catch (e) {
+        return res.status(500).render('error', {error: e});
+      }
     }
     
     if (deletedUser) {
