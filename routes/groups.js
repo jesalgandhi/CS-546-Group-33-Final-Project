@@ -321,6 +321,16 @@ router
 
     console.log(city);
 
+    if (group.reviews.length > 0)
+    {
+      for (let x = 0; x < group.reviews.length; x++)
+      {
+        let thisGroup = await groupsData.get(group.reviews[x]._id.toString());
+        
+        group.reviews[x].groupName = thisGroup.groupName;
+      }
+    }
+
     //let city2 = cities.gps_lookup(14.5995, 120.9842);
 
     //console.log(city2);
