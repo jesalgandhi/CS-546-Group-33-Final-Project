@@ -57,13 +57,26 @@ router
 router
   .route('/create/:groupId')
   .get(async (req, res) => {
-    const groupId = req.params.groupId;
-    let groupExists;
+    const receivingGroupId = req.params.groupId;
+    const userId = req.session.user.id;
+    let thisGroupId;
     try {
-      groupExists = await groupsData.get(groupId);
+      thisGroupId = await groupsData.getGroupByUserId(userId);
     } catch (e) {
       return res.status(400).render('error', {error: e});
     }
+    let groupExists;
+    try {
+      groupExists = await groupsData.get(thisGroupId);
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
+    }
+    try {
+      await reviewsData.checkForDuplicateReview(thisGroupId, receivingGroupId)
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
+    }
+
     return res.render('addReview');
   })
   .post(async (req, res) => {

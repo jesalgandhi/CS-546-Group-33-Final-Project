@@ -104,11 +104,7 @@ try {
         [user2._id, user3._id, user4._id],
         "Password1"
     )
-     /* Remove user2 */
-     const removedUser = await usersData.removeUser(user2._id);
-     console.log("User removed:", removedUser);
-     console.log(group1);
-    //  console.log(group1);
+     
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(
@@ -136,7 +132,7 @@ try {
         "Password3"
     )
 
-    // create group3 with users 8-11
+    // create group4 with users 8-11
     const group4 = await groupsData.create(
         "Garden State Explorers", 
         "Username4",
@@ -161,6 +157,12 @@ try {
         [user12._id],
         "Password5"
     )
+
+    /* Remove user9 */
+    const removedUser = await usersData.removeUser(user9._id.toString());
+    console.log("User removed:", removedUser);
+    console.log(group1);
+   //  console.log(group1);
 
     // console.log('HEREEEE');
     // groups getGroupByUserId()

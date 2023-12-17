@@ -57,6 +57,16 @@ const exportedMethods = {
     
   }, 
 
+  async checkForDuplicateReview(currentGroupId, receivingGroupId) {
+    if (!currentGroupId || !receivingGroupId) throw 'Both parameters are required';
+    currentGroupId = validation.checkId(currentGroupId);
+    receivingGroupId  = validation.checkId(receivingGroupId);
+    const reviews = await this.getAllReviews(receivingGroupId);
+    for (let review of reviews) {
+      if (review._id.toString() === currentGroupId) throw "You have already left a review for this group!";
+    }
+  },
+
   async getAllReviews(groupId) {
     groupId = validation.checkId(groupId, 'group ID');
     const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 

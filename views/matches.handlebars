@@ -45,17 +45,16 @@
            {{#if this.match.reviews}}
             <h3>Reviews:</h3>
             <div class="review-button">
-                <form action="/reviews/{{this.match.groupId}}" method="get">
+                <form action="/reviews/{{this.match._id}}" method="get">
                     <button type="submit">See Reviews</button>
                 </form>
-            </div>
-            {{else}}
+            </div>            
+            {{/if}}
             <div class="review-button">
-                <form action="/reviews/create/{{this.match.groupId}}" method="get">
+                <form action="/reviews/create/{{this.match._id}}" method="get">
                     <button type="submit">Create Review</button>
                 </form>
             </div>
-            {{/if}}
 
             {{#if this.conversationId}}
                 <div class="message-button"><a href="/messages/{{this.conversationId}}">Message Group</a></div>
