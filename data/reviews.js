@@ -4,13 +4,13 @@ import {ObjectId} from 'mongodb';
 
 import validation from '../helpers.js';
 
-const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 
 const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
   async createReview(groupId, reviewerId, reviewer, review, score) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     // groupId is the group ID of the person they're leaving a review on
     if ( (!groupId) || (!reviewerId) || (!reviewer) || (!review) || (!score)) throw 'All the required inputs were not given';
 
@@ -58,6 +58,7 @@ const exportedMethods = {
   }, 
 
   async checkForDuplicateReview(currentGroupId, receivingGroupId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     if (!currentGroupId || !receivingGroupId) throw 'Both parameters are required';
     currentGroupId = validation.checkId(currentGroupId);
     receivingGroupId  = validation.checkId(receivingGroupId);
@@ -68,6 +69,7 @@ const exportedMethods = {
   },
 
   async getAllReviews(groupId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     groupId = validation.checkId(groupId, 'group ID');
     const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 
     if (!group) { throw `No group with groupId ${groupId}`; }
@@ -79,6 +81,7 @@ const exportedMethods = {
   },
 
   async getReview(reviewId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     reviewId = validation.checkId(reviewId, 'review ID');
     // getting all the groups
     const allGroups = await groupsCollection.find({}).toArray();
@@ -95,6 +98,7 @@ const exportedMethods = {
   },
   
   async removeReview(reviewId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     reviewId = validation.checkId(reviewId, 'review ID');
 
     // getting all the groups
