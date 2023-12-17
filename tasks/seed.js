@@ -1,7 +1,7 @@
 import { groups } from '../config/mongoCollections.js';
 import { users } from '../config/mongoCollections.js';
 import {dbConnection, closeConnection} from '../config/mongoConnection.js';
-import {groupsData, usersData, messagesData} from '../data/index.js';
+import {groupsData, usersData, messagesData, reviewsData} from '../data/index.js';
 import {ObjectId} from 'mongodb';
 
 let usersCollection = await users();
@@ -106,7 +106,6 @@ try {
         "Password1"
     )
      
-    //  console.log(group1);
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(
@@ -136,7 +135,7 @@ try {
         "Password3"
     )
 
-    // create group3 with users 8-11
+    // create group4 with users 8-11
     const group4 = await groupsData.create(
         "Garden State Explorers", 
         "Username4",
@@ -163,6 +162,12 @@ try {
         [user12._id],
         "Password5"
     )
+
+    /* Remove user9 */
+    const removedUser = await usersData.removeUser(user9._id.toString());
+    console.log("User removed:", removedUser);
+    console.log(group1);
+   //  console.log(group1);
 
     // console.log('HEREEEE');
     // groups getGroupByUserId()
@@ -195,29 +200,9 @@ try {
     // console.log('All groups after deleting group5:\n', allGroups);
 
     
-    // MESSAGES
-    /* Create a conversation between group 1 and 2 */
-    // const conversation1 = await messagesData.createNewConversation(group1._id.toString(), group2._id.toString());
-
-    /* Create a conversation between group 3 and 4 */
-    // const conversation2 = await messagesData.createNewConversation(group3._id.toString(), group4._id.toString());
-
-    /* Create a conversation between group 1 and 3 */
-    // const conversation3 = await messagesData.createNewConversation(group1._id.toString(), group3._id.toString());
-
-    /* Create messages among groups */
-    // await messagesData.createMessage(conversation1.toString(), group1._id.toString(), "Yo how ya doing ?     ");
-    // await messagesData.createMessage(conversation1.toString(), group2._id.toString(), "      How u doing gang?");
-    // await messagesData.createMessage(conversation1.toString(), group1._id.toString(), " im well brody thx  ");
-
-    // await messagesData.createMessage(conversation2.toString(), group3._id.toString(), "   do you want to meet up? ");
-    // await messagesData.createMessage(conversation2.toString(), group4._id.toString(), "   ya im down");
-    // await messagesData.createMessage(conversation2.toString(), group4._id.toString(), "   btw bring cookies...    ");
-
-    // await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   what u upto gng?    ");
-    // await messagesData.createMessage(conversation3.toString(), group1._id.toString(), "   nm hbu    ");
-    // await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
-
+    // Reviews
+    const review1 = await reviewsData.createReview(group3._id.toString(), group4._id.toString(), group4.groupName, "Great rooommate experience", 5);
+    const review2 = await reviewsData.createReview(group3._id.toString(), group2._id.toString(), group2.groupName, "Terrible roommate experience", 1);
 
 // ... (your existing code)
 let generatedPhoneNumbers = new Set();
