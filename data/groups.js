@@ -5,6 +5,8 @@ import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
 import bcrypt from 'bcrypt';
 
+import {usersData} from './index.js';
+
 const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 
 const exportedMethods = {
@@ -21,11 +23,12 @@ const exportedMethods = {
     numRoommates,
     genderPreference,
     users,
-    groupPassword
+    groupPassword,
+    groupPicture
   ) {
 
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword)) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "Group name must be a string";
         if (typeof groupUsername !== "string") throw "Group username must be a string";
         if (typeof groupDescription !== "string") throw "Group description must be a string";
@@ -36,6 +39,7 @@ const exportedMethods = {
         if (!Array.isArray(groupLocation)) throw "Group location must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "Users must be a list of up to 4 users";
         if (typeof groupPassword !== "string") throw "Group password must be a string";
+        // if (typeof groupPicture !== "string") throw "Group picture must be a string";
 
 
         // check that groupLocation is a valid list of exactly 2 coordinates ....
@@ -76,6 +80,7 @@ const exportedMethods = {
       }
       
       
+      
       // trimming as necessary
       groupName = groupName.trim();
       groupDescription = groupDescription.trim();
@@ -109,6 +114,26 @@ const exportedMethods = {
       // ensuring the length of password follows protocol
       if (groupPassword.length < 8 || groupPassword.length > 75) throw `Group password must be > 8 characters and < 50 characters long.`;
 
+
+      const defaultImages = [
+        'https://cdn.ecommercedns.uk/files/0/251420/6/27315606/c6241w2.jpg',
+        'https://lookintonature.files.wordpress.com/2016/07/landscape-1456483171-pokemon2.jpg',
+        'https://pbs.twimg.com/media/Ewky_WZVgAEFVlM.jpg:large', 
+        'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/388555c9-52a2-4541-857a-27a37bc2a83d/dba5qjk-dc2f0c5e-7f59-4e19-ac47-357d60be8d0f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzM4ODU1NWM5LTUyYTItNDU0MS04NTdhLTI3YTM3YmMyYTgzZFwvZGJhNXFqay1kYzJmMGM1ZS03ZjU5LTRlMTktYWM0Ny0zNTdkNjBiZThkMGYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.qmcuIIivi9p3WFZ9UDCXDRHngxRxNaga10IMpFh-0SM',
+        'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cefe8db8-531a-4c46-94d9-181b154d4d87/dedgrkf-cc6d1506-d984-41cc-9053-f22b8581d46c.png/v1/fill/w_1280,h_830,q_80,strp/pokemon_25__my_gen_4_team_by_1meengreenie_dedgrkf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODMwIiwicGF0aCI6IlwvZlwvY2VmZThkYjgtNTMxYS00YzQ2LTk0ZDktMTgxYjE1NGQ0ZDg3XC9kZWRncmtmLWNjNmQxNTA2LWQ5ODQtNDFjYy05MDUzLWYyMmI4NTgxZDQ2Yy5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.GlXW2Xzr2LH0dN3ASUe_R6e-cWRCtRloGAJbN8eK87Q'
+        // ... more image URLs ...
+      ];
+
+      // Validate or assign default picture URL
+      let pictureUrl = groupPicture;
+      const pictureUrlIsValid = groupPicture && await usersData.isImageUrl(groupPicture);
+      if (!pictureUrlIsValid) {
+          // If no valid picture is provided, select a random one from the default list
+          const randomIndex = Math.floor(Math.random() * defaultImages.length);
+          pictureUrl = defaultImages[randomIndex];
+      }
+
+
       // CHANGE SALT TO 16 BEFORE SUBMITTING (might not have to for group password)
       const saltRounds = await bcrypt.genSalt(8);
       const hashedPass = await bcrypt.hash(groupPassword, saltRounds);
@@ -131,6 +156,7 @@ const exportedMethods = {
         'genderPreference': genderPreference, 
         'users': users,
         'groupPassword': hashedPass,
+        'groupPicture': pictureUrl.trim(),
         'matches': [], 
         'suggestedMatches': [],
         'reviews': []
@@ -273,13 +299,14 @@ const exportedMethods = {
     genderPreference,
     users,
     groupPassword,
+    groupPicture,
     matches,
     suggestedMatches,
     reviews, 
   ) {
       groupId = validation.checkId(groupId, "group ID");
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword)) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "Group name must be a string";
         if (typeof groupUsername !== "string") throw "Group username must be a string";
         if (typeof groupDescription !== "string") throw "Group description must be a string";
@@ -290,6 +317,7 @@ const exportedMethods = {
         if (!Array.isArray(groupLocation)) throw "Group location must be a list of 2 coordinates";
         if (!Array.isArray(users)) throw "Users must be a list of up to 4 users";
         if (typeof groupPassword !== "string") throw "Group password must be a string";
+        // if (typeof groupPicture !== "string") throw "Group picture must be a string";
         if (!Array.isArray(matches)) throw "Matches must be a list of object Id's";
         if (!Array.isArray(suggestedMatches)) throw "Suggested matches must be a list of object Id's";
 
@@ -327,6 +355,25 @@ const exportedMethods = {
 
       // ensuring the length of password follows protocol
       if (groupPassword.length < 8 || groupPassword.length > 75) throw `Group password must be > 8 characters and < 50 characters long.`;
+
+
+      const defaultImages = [
+        'https://cdn.ecommercedns.uk/files/0/251420/6/27315606/c6241w2.jpg',
+        'https://lookintonature.files.wordpress.com/2016/07/landscape-1456483171-pokemon2.jpg',
+        'https://pbs.twimg.com/media/Ewky_WZVgAEFVlM.jpg:large', 
+        'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/388555c9-52a2-4541-857a-27a37bc2a83d/dba5qjk-dc2f0c5e-7f59-4e19-ac47-357d60be8d0f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzM4ODU1NWM5LTUyYTItNDU0MS04NTdhLTI3YTM3YmMyYTgzZFwvZGJhNXFqay1kYzJmMGM1ZS03ZjU5LTRlMTktYWM0Ny0zNTdkNjBiZThkMGYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.qmcuIIivi9p3WFZ9UDCXDRHngxRxNaga10IMpFh-0SM',
+        'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cefe8db8-531a-4c46-94d9-181b154d4d87/dedgrkf-cc6d1506-d984-41cc-9053-f22b8581d46c.png/v1/fill/w_1280,h_830,q_80,strp/pokemon_25__my_gen_4_team_by_1meengreenie_dedgrkf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODMwIiwicGF0aCI6IlwvZlwvY2VmZThkYjgtNTMxYS00YzQ2LTk0ZDktMTgxYjE1NGQ0ZDg3XC9kZWRncmtmLWNjNmQxNTA2LWQ5ODQtNDFjYy05MDUzLWYyMmI4NTgxZDQ2Yy5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.GlXW2Xzr2LH0dN3ASUe_R6e-cWRCtRloGAJbN8eK87Q'
+        // ... more image URLs ...
+      ];
+
+      // Validate or assign default picture URL
+      let pictureUrl = groupPicture;
+      const pictureUrlIsValid = groupPicture && await usersData.isImageUrl(groupPicture);
+      if (!pictureUrlIsValid) {
+          // If no valid picture is provided, select a random one from the default list
+          const randomIndex = Math.floor(Math.random() * defaultImages.length);
+          pictureUrl = defaultImages[randomIndex];
+      }
 
 
       let curr_group = await this.get(groupId);  
@@ -424,6 +471,7 @@ const exportedMethods = {
         'genderPreference': genderPreference, 
         'users': users, 
         'groupPassword': hashedPass,
+        'groupPicture': pictureUrl.trim(),
         'matches': matches, 
         'suggestedMatches': suggestedMatches,
         'reviews': reviews};

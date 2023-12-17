@@ -103,7 +103,8 @@ try {
         2,
         "M",
         [user2._id, user3._id, user4._id],
-        "Password1"
+        "Password1",
+        "https://cdn.vox-cdn.com/thumbor/eedDQFqtRSUQhAZlNxTE10aS-7o=/1400x788/filters:format(png)/cdn.vox-cdn.com/uploads/chorus_asset/file/22882538/Pokemon_UNITE___Team_Up._Take_Down.___Screenshot_1.png"
     )
 
     await usersCollection.updateOne(
@@ -123,7 +124,8 @@ try {
         4,
         "F",
         [user5._id],
-        "Password2"
+        "Password2",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0yQb6ofWaXMdTabtUKu3T8nfCVmHPOcn4eA&usqp=CAU"
     )
 
    await usersCollection.updateOne(
@@ -142,7 +144,8 @@ try {
         1,
         "O",
         [user6._id, user7._id],
-        "Password3"
+        "Password3",
+        "https://www.pockettactics.com/wp-content/sites/pockettactics/2023/09/pokemon-games-in-order-16-550x309.jpeg"
     )
 
     await usersCollection.updateOne(
@@ -161,7 +164,8 @@ try {
         2,
         "F",
         [user8._id, user9._id, user10._id, user11._id],
-        "Password4"
+        "Password4",
+        "https://cdn.vox-cdn.com/thumbor/TpSR9XxMkMsxNE5i25oTkWoBV0U=/0x0:2257x1320/1200x628/filters:focal(1129x660:1130x661)/cdn.vox-cdn.com/uploads/chorus_asset/file/6839749/pokemon.0.png"
     )
 
     await usersCollection.updateOne(
@@ -180,7 +184,8 @@ try {
         4,
         "O",
         [user12._id],
-        "Password5"
+        "Password5",
+        "https://m.media-amazon.com/images/M/MV5BNDcwZDc2NTEtMzU0Ni00YTQyLWIyYTQtNTI3YjM0MzhmMmI4XkEyXkFqcGdeQXVyNTgyNTA4MjM@._V1_FMjpg_UX1000_.jpg"
     )
 
     await usersCollection.updateOne(
@@ -209,7 +214,7 @@ try {
 
     // groups update()
     // console.log('HEREEE');
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [40.924945, -74.278195], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [40.924945, -74.278195], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.groupPicture, group1.matches, group1.suggestedMatches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead
@@ -400,6 +405,18 @@ const generateRandomGroupData = () => {
 
     const numRoommates = valid_numRoommates[randomIndex2]; // randomly choosing a radius out of the valid_numRoommates options
 
+    var random_number = Math.floor(Math.random() * 1011);
+    //console.log(random_number);
+
+    if (random_number < 100)
+        random_number = "0" + random_number;
+
+    else if (random_number < 10)
+        random_number = "00" + random_number;
+
+     
+    let pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/" + random_number + ".png";
+
 
 // Usage example:
     const budget = getRandomBudget(500, 5000);
@@ -414,6 +431,7 @@ const generateRandomGroupData = () => {
         numRoommates: numRoommates,
         genderPreference: genderPreference,
         groupPassword: groupPassword,
+        groupPicture: pictureUrl.trim()
     };
 };
 
@@ -497,7 +515,8 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
             groupData.numRoommates,
             groupData.genderPreference, // Update to use groupGender property
             userIds,
-            groupData.groupPassword
+            groupData.groupPassword,
+            groupData.groupPicture
         );
     }
     catch(e)
