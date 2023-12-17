@@ -5,6 +5,7 @@ import validation from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import {reviewsData} from '../data/index.js';
 import {matchesData} from '../data/index.js';
 import {phone} from 'phone';
 import { ObjectId } from 'mongodb';
@@ -144,26 +145,27 @@ router.route('/')
     let userId = req.session.user.id;
     userId = validation.checkId(userId, "userId");
     let groupId;
-    
-    /* If the user is an admin, we delete the group then the user */
-    if (req.session.user.admin) {
-      try {
-        groupId = await groupsData.getGroupByUserId(userId);
-      } catch (e) {
-        return res.status(500).render('error', {error: e});
-      }
-      try {
-        await groupsData.remove(groupId);
-      } catch (e) {
-        return res.status(500).render('error', {error: e});
-      }
+    try {
+      groupId = await groupsData.getGroupByUserId(userId);
+    } catch (e) {
+      return res.status(500).render('error', {error: e});
     }
+    
 
     let deletedUser;
     try {
       deletedUser = await usersData.removeUser(userId);
     } catch (e) {
       return res.status(500).render('error', {error: e});
+    }
+
+    /* If the user is an admin, we delete the user first (which removes them from their group), then delete the group */
+    if (req.session.user.admin) {
+      try {
+        await groupsData.remove(groupId);
+      } catch (e) {
+        return res.status(500).render('error', {error: e});
+      }
     }
     
     if (deletedUser) {
@@ -350,8 +352,10 @@ router.route('/')
     await matchesData.deleteGroupIdFromMatches(groupId);
 
     //todo: delete convos associated with group
+    await messagesData.removeAllConversationsByGroup(groupId);
 
     //todo: delete reviews associated with group
+    await reviewsData.removeAllReviewsByGroup(groupId);
 
     //update user to not be an admin anymore
     let updatedUser;

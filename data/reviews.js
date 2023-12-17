@@ -130,7 +130,30 @@ const exportedMethods = {
     if (!removed_review) throw `Failed to remove review with reviewId ${reviewId}`;
 
     return removed_review;
+  },
+
+  async removeAllReviewsByGroup(groupId) {
+    const groupsCollection = await groups();
+    groupId = validation.checkId(groupId, 'group ID');
+  
+    const groupsWithReview = await groupsCollection.find({
+      'reviews._id': new ObjectId(groupId)
+    }).toArray();
+  
+    // if (groupsWithReview.length === 0) {
+    //   throw `No reviews found from group with ID ${groupId}`;
+    // }
+  
+    for (const group of groupsWithReview) {
+      await groupsCollection.updateOne(
+        { _id: group._id },
+        { $pull: { reviews: { _id: new ObjectId(groupId) } } }
+      );
+    }
+  
+    return `All reviews removed for group with ID ${groupId}`;
   }
+  
 };
 
 export default exportedMethods;
