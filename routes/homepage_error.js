@@ -121,6 +121,12 @@ router
               suggestedMatchInfo[i].this_userID = req.session.user.groupID;
               suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
               //console.log(suggestedMatchInfo[i].city);
+              // Calculate distance for each suggestedMatchInfo from the current group location
+              let curLocation = req.session.user.groupInfo.groupLocation;
+              suggestedMatchInfo[i] = {
+                  ...suggestedMatchInfo[i],
+                  distance: Number((validation.calculateDistance(curLocation, suggestedMatchInfo[i].groupLocation) * 0.621371).toFixed(2))
+              };
     
               for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)
               {
@@ -389,7 +395,7 @@ router
 
       let groupLocation = req.session.user.groupInfo.groupLocation;
 
-      let allGroups = []
+      let allGroups = [];
       for (let group in filteredGroups)
       {
         let curGroup = await groupsData.get(filteredGroups[group]._id.toString());
@@ -528,8 +534,10 @@ router
     let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
     
     console.log("Hit this statement");
+
+    return res.redirect('/');
     
-    return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
+    //return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
      
     }
      
