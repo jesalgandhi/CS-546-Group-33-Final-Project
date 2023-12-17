@@ -117,7 +117,7 @@ try {
         "The Lame Adults",
         "Username2",  
         "We're the WORST ADULTS on O'block!", 
-        [-74.043181, 40.883850], // 17-1 Mercer St, Hackensack, NJ 07601
+        [40.883850, -74.043181], // 17-1 Mercer St, Hackensack, NJ 07601
         50,
         5000,
         4,
@@ -136,7 +136,7 @@ try {
         "The Boring Fellas", 
         "Username3", 
         "We're the most boring fellas on the planet", 
-        [-74.184897, 40.732781], // 186-158 Howard St, Newark, NJ 07103
+        [40.732781, -74.184897], // 186-158 Howard St, Newark, NJ 07103
         5,
         25000,
         1,
@@ -155,7 +155,7 @@ try {
         "Garden State Explorers", 
         "Username4",
         "Looking for roommates in NJ Hit us up", 
-        [-74.278195, 40.924945],  // 118 Whitmore Ave, Wayne, NJ 07470
+        [40.924945, -74.278195],  // 118 Whitmore Ave, Wayne, NJ 07470
         1,
         5000,
         2,
@@ -174,7 +174,7 @@ try {
         "Jersey Jazz Enthusiasts", 
         "Username5",
         "Jazz lovers sharing who love music and need roommates", 
-        [-74.0713, 40.7357],  // 73 Broadway, Jersey City, NJ 07306
+        [40.7357, -74.0713],  // 73 Broadway, Jersey City, NJ 07306
         1000,
         50000,
         4,
@@ -209,7 +209,7 @@ try {
 
     // groups update()
     // console.log('HEREEE');
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [40.924945, -74.278195], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead
