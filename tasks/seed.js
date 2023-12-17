@@ -14,22 +14,22 @@ try {
     /* Create 12 users - user1 will be deleted for demonstration */
     const user1 = await usersData.createUser(
         "John", "Smith", "johnsmith@example.com", "Test123$", "2015554516", "I am eager to make and meet new roommates", 23, 
-        ["Biking", "Movies", "Painting"], "picture url with be here i guess"
+        ["Biking", "Movies", "Painting"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user2 = await usersData.createUser(
         "Emily", "Johnson", "emilyjohnson@example.com", "Test123$", "2015557845", "Love hiking and outdoor adventures", 27, 
-        ["Hiking", "Photography", "Cooking"], "picture url goes here"
+        ["Hiking", "Photography", "Cooking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user3 = await usersData.createUser(
         "Miguel", "Hernandez", "miguelhernandez@example.com", "Test123$", "2015558964", "A tech enthusiast and bookworm", 30, 
-        ["Technology", "Reading", "Chess"], "picture url will be inserted here"
+        ["Technology", "Reading", "Chess"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user4 = await usersData.createUser(
         "Sara", "Khan", "sarakhan@example.com", "Test123$", "2015556732", "Passionate about music and traveling", 25, 
-        ["Music", "Traveling", "Yoga"], "image url will be here"
+        ["Music", "Traveling", "Yoga"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user5 = await usersData.createUser(
@@ -39,37 +39,37 @@ try {
 
     const user6 = await usersData.createUser(
         "Miguel", "Garcia", "miguelgarcia@example.com", "Test123$", "2015557890", "Avid reader and history buff", 28,
-        ["Reading", "History", "Hiking"], "URL for the picture here"
+        ["Reading", "History", "Hiking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user7 = await usersData.createUser(
         "Aisha", "Patel", "aishapatel@example.com", "Test123$", "2015551234", "Tech enthusiast and amateur photographer", 24,
-        ["Technology", "Photography", "Blogging"], "URL for the picture here"
+        ["Technology", "Photography", "Blogging"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
     const user8 = await usersData.createUser(
         "Elena", "Rodriguez", "elenarodriguez@example.com", "Test123$", "2015552468", "Fitness lover and outdoor enthusiast", 26,
-        ["Fitness", "Hiking", "Kayaking"], "URL for the picture here"
+        ["Fitness", "Hiking", "Kayaking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user9 = await usersData.createUser(
         "Liam", "Nguyen", "liamnguyen@example.com", "Test123$", "2015551357", "Movie fanatic and amateur playwright", 30,
-        ["Movies", "Theater", "Writing"], "URL for the picture here"
+        ["Movies", "Theater", "Writing"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user10 = await usersData.createUser(
         "Zoe", "Smith", "zoesmith@example.com", "Test123$", "2015558642", "Passionate about sustainable living and gardening", 27,
-        ["Sustainability", "Gardening", "Cooking"], "URL for the picture here"
+        ["Sustainability", "Gardening", "Cooking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
     const user11 = await usersData.createUser(
         "Noah", "Lee", "noahlee@example.com", "Test123$", "2015559473", "Enthusiastic about digital art and animation", 23,
-        ["Digital Art", "Animation", "Video Games"], "URL for the picture here"
+        ["Digital Art", "Animation", "Video Games"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user12 = await usersData.createUser(
         "Emma", "Johnson", "emmajohnson@example.com", "Test123$", "2015557621", "Lover of classical music and playing the violin", 29,
-        ["Classical Music", "Violin", "Reading"], "URL for the picture here"
+        ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
     
@@ -117,7 +117,7 @@ try {
         "The Lame Adults",
         "Username2",  
         "We're the WORST ADULTS on O'block!", 
-        [-74.043181, 40.883850], // 17-1 Mercer St, Hackensack, NJ 07601
+        [40.883850, -74.043181], // 17-1 Mercer St, Hackensack, NJ 07601
         50,
         5000,
         4,
@@ -136,7 +136,7 @@ try {
         "The Boring Fellas", 
         "Username3", 
         "We're the most boring fellas on the planet", 
-        [-74.184897, 40.732781], // 186-158 Howard St, Newark, NJ 07103
+        [40.732781, -74.184897], // 186-158 Howard St, Newark, NJ 07103
         5,
         25000,
         1,
@@ -155,7 +155,7 @@ try {
         "Garden State Explorers", 
         "Username4",
         "Looking for roommates in NJ Hit us up", 
-        [-74.278195, 40.924945],  // 118 Whitmore Ave, Wayne, NJ 07470
+        [40.924945, -74.278195],  // 118 Whitmore Ave, Wayne, NJ 07470
         1,
         5000,
         2,
@@ -174,7 +174,7 @@ try {
         "Jersey Jazz Enthusiasts", 
         "Username5",
         "Jazz lovers sharing who love music and need roommates", 
-        [-74.0713, 40.7357],  // 73 Broadway, Jersey City, NJ 07306
+        [40.7357, -74.0713],  // 73 Broadway, Jersey City, NJ 07306
         1000,
         50000,
         4,
@@ -209,7 +209,7 @@ try {
 
     // groups update()
     // console.log('HEREEE');
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [40.924945, -74.278195], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead

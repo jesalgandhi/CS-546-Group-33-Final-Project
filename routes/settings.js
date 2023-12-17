@@ -43,7 +43,7 @@ router.route('/')
     let userInfo = await usersData.getUser(id);
     let admin = req.session.user.admin;
 
-    console.log(req.body);
+    // console.log(req.body);
 
     const errors = [];
     if (firstNameInput && !/^[a-zA-Z]{2,25}$/.test(firstNameInput)) errors.push("Invalid First Name");

@@ -566,6 +566,34 @@ padding: 20px;
 p {
     margin-top: 20px;
 }
+#deleteButton {
+    background-color: rgb(245, 96, 96);
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+#deleteButton:hover {
+    background-color: rgb(241, 76, 76); 
+}
+#adminSettings {
+    display: inline-block; 
+}
+#adminSettings a {
+    display: inline-block; 
+    background-color: #43bd76; /* Green background */
+    color: white; /* White text for contrast */
+    padding: 10px 20px; /* Padding around the text */
+    text-align: center; /* Center the text inside the button */
+    text-decoration: none; /* Remove underline from the link */
+    font-weight: bold; /* Bold text */
+    border-radius: 5px; /* Rounded corners */
+}
+#adminSettings a:hover {
+    background-color: rgb(63, 136, 80); 
+}
 
 
 /* STYLING THE CREATE/JOIN/LOGOUT SCREEN */
