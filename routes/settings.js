@@ -371,10 +371,10 @@ router.route('/')
     // delete matches associated with group
     await matchesData.deleteGroupIdFromMatches(groupId);
 
-    //todo: delete convos associated with group
+    // delete convos associated with group
     await messagesData.removeAllConversationsByGroup(groupId);
 
-    //todo: delete reviews associated with group
+    // delete reviews associated with group
     await reviewsData.removeAllReviewsByGroup(groupId);
 
     //update user to not be an admin anymore

@@ -278,6 +278,10 @@ router
   .route('/:groupId')
   .get(async (req, res) => 
   {
+    if (!(req.session.user && req.session.user.id)) {
+      return res.redirect('/login');
+    }
+    
     let group;
     
     try
