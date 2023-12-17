@@ -57,7 +57,7 @@ router
 
   // Validate or assign default picture URL
   let pictureUrl = pictureInput;
-  const pictureUrlIsValid = pictureInput && await this.isImageUrl(pictureInput);
+  const pictureUrlIsValid = pictureInput && await usersData.isImageUrl(pictureInput);
   if (!pictureUrlIsValid) {
       // If no valid picture is provided, select a random one from the default list
       const randomIndex = Math.floor(Math.random() * defaultImages.length);
