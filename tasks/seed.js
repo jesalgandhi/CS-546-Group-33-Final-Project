@@ -214,12 +214,11 @@ try {
     // await messagesData.createMessage(conversation3.toString(), group3._id.toString(), "   jus chillin    ");
 
 
-// ... (your existing code)
 let generatedPhoneNumbers = new Set();
 
 
 const generateUniquePhoneNumber = () => {
-    const maxAttempts = 1000000; // To avoid infinite loop in case of duplicates
+    const maxAttempts = 1000000; 
     let phoneNumber;
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -266,7 +265,7 @@ const randomBioText = randomWords.join(' ');
     const bio = randomBioText
     const age = Math.floor(Math.random() * 20) + 20; // Random age between 20 and 39
     const interests = ["Music", "Movies", "Reading", "Traveling", "Hiking", "Cooking", "Baking", "Fitness", "Yoga", "Meditation", "Gardening", "Photography", "Art", "Crafting", "DIY Projects", "Technology", "Gaming", "Sports", "Cycling", "Running", "Dancing"];
- // Update with actual URL or logic
+
 
     var random_number = Math.floor(Math.random() * 1011);
     //console.log(random_number);
@@ -332,7 +331,7 @@ const generateRandomGroupData = () => {
         const njLongitude = -74.4057; // Approximate center of New Jersey
         const njLatitude = 40.0583;
     
-        // Define a range (adjust as needed)
+    
         const range = 0.5;
     
         // Generate random coordinates within the range
@@ -386,9 +385,9 @@ const usedEmails = [];
 const usedPhoneNumbers = [];
 
 let user_ids = [];
-// Create 50 more users
+// Create 120 more users
 console.log("Generating user data");
-for (let i = 1; i <= 60; i++) {
+for (let i = 1; i <= 120; i++) {
     let userData = generateRandomUserData();
     let phone = generateUniquePhoneNumber();
     generatedPhoneNumbers.add(phone);
@@ -409,19 +408,16 @@ for (let i = 1; i <= 60; i++) {
             admin
         );
         user_ids.push(user._id);
-        //console.log(user);
-        //console.log(`User ${i} created: ${user._id}`);
+
     } catch (e) {
         console.log(e);
     }
 }
 
-// Create 20 more groups
 console.log("Generating group data");
 const groupSize = 3;
 
 for (let i = 0; i < user_ids.length; i += groupSize) {
- // Replace with your actual function
 
     // Extract user IDs for the current group
     let userIds = user_ids.slice(i, i + groupSize);
@@ -438,11 +434,9 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
         }
     }));
 
-    //console.log("Users!");
-    //console.log(users);
 
     let groupData = generateRandomGroupData();
-    //console.log("Group Data:" + groupData.groupUsername); // Log the groupData
+
 
     let getUser = await usersData.getUser(userIds[0]);
    
@@ -461,8 +455,8 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
             groupData.groupDescription,
             groupData.groupLocation.coordinates,
             groupData.radius,
-            groupData.budget, // Update to use groupBudget property
-            groupData.genderPreference, // Update to use groupGender property
+            groupData.budget, 
+            groupData.genderPreference, 
             userIds,
             groupData.groupPassword
         );
