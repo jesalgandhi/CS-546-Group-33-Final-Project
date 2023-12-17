@@ -1,6 +1,10 @@
 <h1>{{title}}</h1>
 <div class="errorContainer">
+    {{#if error}}
     <p>{{error}}</p>
+    {{else}}
+    <p>An error has occurred</p>
+    {{/if}}
 </div>
 
 <p><a href="/">Go back home here</a></p>
