@@ -10,6 +10,7 @@ import {messagesData} from '../data/index.js';
 import {matchesData} from '../data/index.js';
 import {groups} from '../config/mongoCollections.js'
 import { ObjectId } from 'mongodb';
+import helpers from '../helpers.js'
 
 
 router
@@ -22,13 +23,22 @@ router
     return res.redirect('/login');
   }
   const userId = req.session.user.id;
+    // Check if the userId is valid
+  try {
+    helpers.checkId(userId, 'userId');
+  } catch (e) {
+    // If the userId is not valid, redirect to the login page
+    return res.redirect('/login');
+  }
+
+
 
   /* Check if user is part of a group - if not, prompt to create/join */
   let groupId = undefined;
   try {
     groupId = await groupsData.getGroupByUserId(userId);
   } catch (e) {
-    return res.render('matches', {error: "Please Create or Join a group first!"});
+    return res.render('createGroup', {hasErrors: e});
   }
 
   /* Get matches from the group the user is a part of */
