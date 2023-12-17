@@ -21,9 +21,9 @@
         <form action="/" method="POST">
         <label for="filter">Filters:</label>
             <button type="submit" name="filter" value="genderPreference">Gender Preference</button>
-            <button type="submit" name="filter" value="budget">Budget</button>
-            <button type="submit" name="filter" value="interests">Interests</button>
-            <button type="submit" name="filter" value="location">Location</button>
+            <button type="submit" name="filter" value="budget">Budget(+/- $500)</button>
+            <button type="submit" name="filter" value="interests">Interests (3+ Common Interests)</button>
+            <button type="submit" name="filter" value="location">Location (Closest → Furthest)</button>
             <button type="submit" name="filter" value="reset">Reset Page</button>
         </form>
     </div>
@@ -73,6 +73,9 @@
                     <h4>Group Location: {{groupLocation.city.city}}, {{groupLocation.city.state}} {{groupLocation.city.zipcode}}</h4>
                     <h4>Group Budget: ${{budget}}</h4>
                     <h4>Gender Preference: {{genderPreference}}</h4>
+                     {{#if distance}}
+                        <h4>Distance: {{distance}} miles</h4>
+                     {{/if}}
                     <h4>Group Members:</h4>
                     <ol>
                         <div class="container">

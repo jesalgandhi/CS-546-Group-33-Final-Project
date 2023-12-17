@@ -241,6 +241,8 @@ router
         return {...group, distance};
       }).sort((a, b) => a.distance - b.distance);
 
+      console.log(suggestedMatches);
+
       // Push the sorted matches into the filteredUsers array
       filteredUsers = suggestedMatches;
       //console.log("FILTERED USERS:",filteredUsers);
@@ -367,6 +369,11 @@ router
             filteredUsers[x].this_userID = req.session.user.groupID;
             let city = cities.gps_lookup(filteredUsers[x].groupInfo.groupLocation.coordinates[0], filteredUsers[x].groupInfo.groupLocation.coordinates[1]);
             filteredUsers[x].groupLocation.city = city;
+            if (filteredUsers[x].distance)
+            {
+              filteredUsers[x].distance = filteredUsers[x].distance * 0.621371;
+              filteredUsers[x].distance = filteredUsers[x].distance.toFixed(2);
+            }
             console.log(city);
         } 
         catch (e) 
@@ -380,6 +387,7 @@ router
           {
             let this_user = await usersData.getUser(filteredUsers[x].users[i]);
             filteredUsers[x].users[i] = this_user;
+            filteredUsers[x].users[i].lastName = filteredUsers[x].users[i].lastName[0] + ".";
           } 
           catch (e) 
           {
