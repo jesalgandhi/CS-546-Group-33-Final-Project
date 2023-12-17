@@ -285,14 +285,27 @@ const randomBioText = randomWords.join(' ');
     var random_number = Math.floor(Math.random() * 1011);
     //console.log(random_number);
 
+    var pictureUrl;
+
     if (random_number < 100)
+    {  
         random_number = "0" + random_number;
+        pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/0" + random_number + ".png";
+    }
+
+    
 
     else if (random_number < 10)
+    {
         random_number = "00" + random_number;
+        pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/00" + random_number + ".png";
+    }
 
-     
-    let pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/" + random_number + ".png";
+    else
+    {
+        pictureUrl = "https://assets.pokemon.com/assets/cms2/img/pokedex/detail/" + random_number + ".png";
+    }
+    
 
 
 

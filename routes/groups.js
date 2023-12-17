@@ -307,7 +307,8 @@ router
       {
         // calvin made the bottom line of code, i commented it out atm and im keeping it here for my memory
         // return res.render('error', {title: "Error", error: e});
-        console.log(e);
+        return res.render('error', {title: "Error", error: e});
+        //console.log(e);
       }
     }
 
@@ -325,8 +326,16 @@ router
     {
       for (let x = 0; x < group.reviews.length; x++)
       {
-        let thisGroup = await groupsData.get(group.reviews[x]._id.toString());
-        
+        var thisGroup;
+        try
+        {
+         thisGroup = await groupsData.get(group.reviews[x]._id.toString());
+        }
+        catch(e)
+        {
+          return res.render('error', {title: "Error", error: e});
+        }
+               
         group.reviews[x].groupName = thisGroup.groupName;
       }
     }

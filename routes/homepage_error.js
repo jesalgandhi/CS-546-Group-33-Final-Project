@@ -43,19 +43,10 @@ router
         }
       }
 
-     
-      //console.log("grah");
-      //console.log(req.session.user);
-      
-
       //Gets location data for USER GROUPS
       let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
-      
-      //Empty suggestedMatches array
-      var updatedInfo;
-
-    
-      
+  
+      //Gets INFO of current user group
       req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
 
 
@@ -71,17 +62,13 @@ router
             let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
             //console.log(allGroups);
     
-    
+         
+
             let groupsDataCollection = await groups();
-    
-            //let allGroups = await groupsData.getAll();
-    
-    
-      
-    
-            //
+
               try 
               {
+                 //Gets groupIDs of arrays that met suggestAllMatches function criteria
                 let groupIDs = [];
     
                 for (let i = 0; i < allGroups.length; i++)
@@ -168,9 +155,6 @@ router
     if (!req.session.user)
       return res.redirect('/login');
 
-    if (req.session.user.groupInfo.suggestedMatches.length == 0)
-      return res.redirect('/');
-
       //For each filter:
       //1. Get all users 
       //2. Filter users based on user dropdown menu value
@@ -183,22 +167,32 @@ router
 
       let allGroups = await matchesData.suggestAllMatches(req.session.user.groupID);
 
+      let excludedValues = [];
+      let cursuggestedMatches = req.session.user.groupInfo.suggestedMatches;
+      let curMatches = req.session.user.groupInfo.matches;
 
-      let suggestedMatches = [];
-      try 
-      {    
-        for (let i = 0; i < allGroups.length; i++)
+      // Concatenate the arrays to create a single array of excluded values
+      excludedValues = excludedValues.concat(cursuggestedMatches, curMatches);
+
+        let suggestedMatches = [];
+        try 
         {
-          let this_group = await groupsData.get(allGroups[i].toString());
-          suggestedMatches.push(this_group);
-        }
-      }                   
-       catch(e)
-       {
+          for (let i = 0; i < allGroups.length; i++) 
+          {
+            if (!excludedValues.includes(allGroups[i])) 
+            {
+              let this_group = await groupsData.get(allGroups[i].toString());
+              suggestedMatches.push(this_group);
+            }
+          }
+        } 
+  
+    catch (e) 
+    {
         console.log(e);
-      }     
+    }
 
-      filteredUsers = suggestedMatches;
+        filteredUsers = suggestedMatches;
 
 
     } 
@@ -473,7 +467,6 @@ router
       let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
     }
-
 
 
     else

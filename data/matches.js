@@ -268,8 +268,9 @@ const exportedMethods = {
     //Get all groups
     let allGroups = await data.groupsData.getAll();
 
-    let excludedValues = currentGroup.matches;
-    allGroups = allGroups.filter(group => !excludedValues.includes(group._id));
+    let excludedValues = currentGroup.matches.map(match => match.toString()); 
+    allGroups = allGroups.filter(group => !excludedValues.includes(group._id.toString())); 
+
 
 
     //console.log(currentGroup);
