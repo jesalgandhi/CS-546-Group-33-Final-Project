@@ -403,6 +403,15 @@ const exportedMethods = {
         if (index > -1) {
           group.matches.splice(index, 1);
         }
+
+      //Check if the group's suggestedMatches array includes the groupId
+      if(group.suggestedMatches.includes(groupId.toString())){
+        // If it does, remove the groupId from the suggestedMatches array
+        const index = group.suggestedMatches.indexOf(groupId.toString());
+        if (index > -1) {
+          group.suggestedMatches.splice(index, 1);
+        }
+      }
         //update the group in database
         await data.groupsData.update(group._id,
           group.groupName,
