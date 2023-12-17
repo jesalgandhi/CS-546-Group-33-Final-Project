@@ -71,6 +71,31 @@
 
     
 </div>
+
+<div class="PendingMatches-header">
+    <h1>Pending Matches</h1>
+</div>
+
+<div class="pending-matches-container">
+    {{#each pendingMatches}}
+        <div class="pending-match-card">
+            {{#if this.groupName}}
+                <div class="group-name-box">
+                    <h2>Group Name: {{this.groupName}}</h2>
+                </div>
+            {{/if}}
+        </div>
+    {{/each}}
+
+    {{#unless pendingMatches}}
+        <p class="no-pending-matches-message">No Pending Matches Yet!</p>
+    {{/unless}}
+</div>
+
+
+
+
+
 <div class="home-button-container">
     <a href="/" class="home-button">Go Home</a>
 </div>
