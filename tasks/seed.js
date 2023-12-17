@@ -100,6 +100,7 @@ try {
         [40.850708, -73.971623 ],
         25,
         1500,
+        2,
         "M",
         [user2._id, user3._id, user4._id],
         "Password1"
@@ -118,6 +119,7 @@ try {
         [-74.043181, 40.883850], // 17-1 Mercer St, Hackensack, NJ 07601
         50,
         5000,
+        4,
         "F",
         [user5._id],
         "Password2"
@@ -131,6 +133,7 @@ try {
         [-74.184897, 40.732781], // 186-158 Howard St, Newark, NJ 07103
         5,
         25000,
+        1,
         "O",
         [user6._id, user7._id],
         "Password3"
@@ -144,6 +147,7 @@ try {
         [-74.278195, 40.924945],  // 118 Whitmore Ave, Wayne, NJ 07470
         1,
         5000,
+        2,
         "F",
         [user8._id, user9._id, user10._id, user11._id],
         "Password4"
@@ -157,6 +161,7 @@ try {
         [-74.0713, 40.7357],  // 73 Broadway, Jersey City, NJ 07306
         1000,
         50000,
+        4,
         "O",
         [user12._id],
         "Password5"
@@ -177,7 +182,7 @@ try {
 
     // groups update()
     // console.log('HEREEE');
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], group1.radius, 1265, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], group1.radius, 1265, group1.numRoommates, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead
@@ -365,6 +370,14 @@ const generateRandomGroupData = () => {
 
     const radius = valid_radii[randomIndex]; // randomly choosing a radius out of the valid_radii options
 
+    
+    // numRoommates - the number of roommates they are searching for
+    const valid_numRoommates = [1, 2, 3, 4]
+
+    // random index out of the valid_numRoommates
+    const randomIndex2 = Math.floor(Math.random() * valid_numRoommates.length);
+
+    const numRoommates = valid_numRoommates[randomIndex2]; // randomly choosing a radius out of the valid_numRoommates options
 
 
 // Usage example:
@@ -377,6 +390,7 @@ const generateRandomGroupData = () => {
         groupLocation: groupLocation,
         radius: radius,
         budget: budget,
+        numRoommates: numRoommates,
         genderPreference: genderPreference,
         groupPassword: groupPassword,
     };
@@ -462,6 +476,7 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
             groupData.groupLocation.coordinates,
             groupData.radius,
             groupData.budget, // Update to use groupBudget property
+            groupData.numRoommates,
             groupData.genderPreference, // Update to use groupGender property
             userIds,
             groupData.groupPassword
