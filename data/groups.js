@@ -26,16 +26,16 @@ const exportedMethods = {
 
         // ensuring inputs are there and are strings
         if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
-        if (typeof groupName !== "string") throw "groupName must be a string";
-        if (typeof groupUsername !== "string") throw "groupUsername must be a string";
-        if (typeof groupDescription !== "string") throw "groupDescription must be a string";
-        if (typeof radius !== "number") throw "radius must be a number";
-        if (typeof budget !== "number") throw "budget must be a number";
-        if (typeof numRoommates !== "number") throw "numRoommates must be a number";
-        if (typeof genderPreference !== "string") throw "genderPreference must be a string";
-        if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
-        if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
-        if (typeof groupPassword !== "string") throw "groupPassword must be a string";
+        if (typeof groupName !== "string") throw "Group name must be a string";
+        if (typeof groupUsername !== "string") throw "Group username must be a string";
+        if (typeof groupDescription !== "string") throw "Group description must be a string";
+        if (typeof radius !== "number") throw "Radius must be a number";
+        if (typeof budget !== "number") throw "Budget must be a number";
+        if (typeof numRoommates !== "number") throw "Number of roommates must be a number";
+        if (typeof genderPreference !== "string") throw "Gender preference must be a string";
+        if (!Array.isArray(groupLocation)) throw "Group location must be a list of 2 coordinates";
+        if (!Array.isArray(users)) throw "Users must be a list of up to 4 users";
+        if (typeof groupPassword !== "string") throw "Group password must be a string";
 
 
         // check that groupLocation is a valid list of exactly 2 coordinates ....
@@ -60,12 +60,12 @@ const exportedMethods = {
       if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
 
       // numRoommates
-      if (numRoommates < 1 || numRoommates > 4) throw 'The numRoommates must be 1-4.';
+      if (numRoommates < 1 || numRoommates > 4) throw 'The number of roommates must be 1-4.';
 
       // making it uppercase just to avoid cases where it's lowercase 
       genderPreference = genderPreference.toUpperCase();
       // if genderPreference is neither M, F, or O, throw error
-      if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The genderPreference must be either M, F, or O';
+      if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The gender preference must be either M, F, or O';
 
       // ensuring there are MAX 4 users in the group
       if (users.length > 4) throw 'There are more than 4 users in this group. Not allowed.';
@@ -83,10 +83,10 @@ const exportedMethods = {
       groupPassword = groupPassword.trim();
 
       // ensure groupName/groupDescription/groupUsername/groupPassword is nonempty
-      if (groupName.length === 0) throw 'The groupName field is empty.';
-      if (groupDescription.length === 0) throw 'The groupDescription field is empty.';
-      if (groupUsername.length === 0) throw 'The groupUsername field is empty.';
-      if (groupPassword.length === 0) throw 'The groupPassword field is empty.';
+      if (groupName.length === 0) throw 'The group name field is empty.';
+      if (groupDescription.length === 0) throw 'The group description field is empty.';
+      if (groupUsername.length === 0) throw 'The group username field is empty.';
+      if (groupPassword.length === 0) throw 'The group password field is empty.';
 
       // seeing if the groupName already exists in the database, meaning a diff group already has the name
       const usedGroupName = await groupsCollection.findOne({ groupName: groupName });
@@ -107,7 +107,7 @@ const exportedMethods = {
         }
 
       // ensuring the length of password follows protocol
-      if (groupPassword.length < 8 || groupPassword.length > 75) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+      if (groupPassword.length < 8 || groupPassword.length > 75) throw `Group password must be > 8 characters and < 50 characters long.`;
 
       // CHANGE SALT TO 16 BEFORE SUBMITTING (might not have to for group password)
       const saltRounds = await bcrypt.genSalt(8);
@@ -180,11 +180,11 @@ const exportedMethods = {
     // returns the groupId of the group that has a groupPassword of groupPassword. throws error if nothing was found
     async getGroupByGroupPassword(groupPassword) {
       // userId = validation.checkId(userId, "user ID");
-      if (!groupPassword) throw `Error: You must provide a groupPassword`;
-      if (typeof groupPassword !== 'string') throw `Error: groupPassword must be a string`;
+      if (!groupPassword) throw `Error: You must provide a group password`;
+      if (typeof groupPassword !== 'string') throw `Error: group password must be a string`;
       groupPassword = groupPassword.trim();
       if (groupPassword.length === 0)
-        throw `Error: groupPassword cannot be an empty string or just spaces`;
+        throw `Error: group password cannot be an empty string or just spaces`;
 
       // getting all the groups
       const allGroups = await groupsCollection.find({}).toArray();
@@ -203,18 +203,18 @@ const exportedMethods = {
               return group._id.toString();
           }
       }
-      throw `No group has a groupPassword of ${groupPassword}`;
+      throw 'Invalid group username or group password.';
 
   },
 
       // returns the groupId of the group that has a groupUsername of groupUsername. throws error if nothing was found
       async getGroupByGroupUsername(groupUsername) {
         // userId = validation.checkId(userId, "user ID");
-        if (!groupUsername) throw `Error: You must provide a groupUsername`;
-        if (typeof groupUsername !== 'string') throw `Error: groupUsername must be a string`;
+        if (!groupUsername) throw `Error: You must provide a group username`;
+        if (typeof groupUsername !== 'string') throw `Error: group username must be a string`;
         groupUsername = groupUsername.trim();
         if (groupUsername.length === 0)
-          throw `Error: groupUsername cannot be an empty string or just spaces`;
+          throw `Error: group username cannot be an empty string or just spaces`;
   
         // getting all the groups
         const allGroups = await groupsCollection.find({}).toArray();
@@ -230,7 +230,7 @@ const exportedMethods = {
                 return group._id.toString();
             }
         }
-        throw `No group has a groupUsername of ${groupUsername}`;
+        throw 'Invalid group username or group password.';
   
     },
   
@@ -280,18 +280,18 @@ const exportedMethods = {
       groupId = validation.checkId(groupId, "group ID");
         // ensuring inputs are there and are strings
         if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!numRoommates) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
-        if (typeof groupName !== "string") throw "groupName must be a string";
-        if (typeof groupUsername !== "string") throw "groupUsername must be a string";
-        if (typeof groupDescription !== "string") throw "groupDescription must be a string";
-        // if (typeof radius !== "number") throw "radius must be a number";
-        if (typeof budget !== "number") throw "budget must be a number";
-        if (typeof numRoommates !== "number") throw "numRoommates must be a number";
-        if (typeof genderPreference !== "string") throw "genderPreference must be a string";
-        if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
-        if (!Array.isArray(users)) throw "users must be a list of up to 4 users";
-        if (typeof groupPassword !== "string") throw "groupPassword must be a string";
-        if (!Array.isArray(matches)) throw "matches must be a list of object Id's";
-        if (!Array.isArray(suggestedMatches)) throw "suggestedMatches must be a list of object Id's";
+        if (typeof groupName !== "string") throw "Group name must be a string";
+        if (typeof groupUsername !== "string") throw "Group username must be a string";
+        if (typeof groupDescription !== "string") throw "Group description must be a string";
+        if (typeof radius !== "number") throw "Radius must be a number";
+        if (typeof budget !== "number") throw "Budget must be a number";
+        if (typeof numRoommates !== "number") throw "Number of roommates must be a number";
+        if (typeof genderPreference !== "string") throw "Gender preference must be a string";
+        if (!Array.isArray(groupLocation)) throw "Group location must be a list of 2 coordinates";
+        if (!Array.isArray(users)) throw "Users must be a list of up to 4 users";
+        if (typeof groupPassword !== "string") throw "Group password must be a string";
+        if (!Array.isArray(matches)) throw "Matches must be a list of object Id's";
+        if (!Array.isArray(suggestedMatches)) throw "Suggested matches must be a list of object Id's";
 
 
       // trimming as necessary
@@ -302,10 +302,10 @@ const exportedMethods = {
       // groupLocation = groupLocation.trim();
 
       // ensure groupName/groupDescription/groupUsername/groupPassword is nonempty
-      if (groupName.length === 0) throw 'The groupName field is empty.';
-      if (groupDescription.length === 0) throw 'The groupDescription field is empty.';
-      if (groupUsername.length === 0) throw 'The groupUsername field is empty.';
-      if (groupPassword.length === 0) throw 'The groupPassword field is empty.';
+      if (groupName.length === 0) throw 'The group name field is empty.';
+      if (groupDescription.length === 0) throw 'The group description field is empty.';
+      if (groupUsername.length === 0) throw 'The group username field is empty.';
+      if (groupPassword.length === 0) throw 'The group password field is empty.';
 
       const checkGroup = await this.get(groupId);
       if (checkGroup.groupName !== groupName) {
@@ -326,7 +326,7 @@ const exportedMethods = {
 
 
       // ensuring the length of password follows protocol
-      if (groupPassword.length < 8 || groupPassword.length > 75) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+      if (groupPassword.length < 8 || groupPassword.length > 75) throw `Group password must be > 8 characters and < 50 characters long.`;
 
 
       let curr_group = await this.get(groupId);  
@@ -365,12 +365,12 @@ const exportedMethods = {
       if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
 
       // numRoommates
-      if (numRoommates < 1 || numRoommates > 4) throw 'The numRoommates must be 1-4.';
+      if (numRoommates < 1 || numRoommates > 4) throw 'The number of roommates must be 1-4.';
 
       // making it uppercase just to avoid cases where it's lowercase 
       genderPreference = genderPreference.toUpperCase();
       // if genderPreference is neither M, F, or O, throw error
-      if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The genderPreference must be either M, F, or O';
+      if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The gender preference must be either M, F, or O';
 
 
       // ensuring there are MAX 4 users in the group
