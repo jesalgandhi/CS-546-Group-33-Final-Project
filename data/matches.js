@@ -356,6 +356,37 @@ const exportedMethods = {
 
   },
 
+  //gets pending matches for a group (matches that have not been confirmed or rejected)
+  async getPendingMatches(groupId) {
+    const groupsCollection = await groups(); // this retrieves the groups collection
+
+    //Validate group ID
+    groupId = helpers.checkId(groupId, 'groupId');
+
+    //Retrieve group from database
+    const group = await data.groupsData.get(groupId);
+
+    //check if group exists
+    if (!group) {
+      throw 'Group does not exist.'
+    }
+
+    const pendingMatches = []
+
+    for(const matchId of group.matches){
+      const matchGroup = await data.groupsData.get(matchId.toString());
+      if(!matchGroup.matches.includes(groupId)){
+        pendingMatches.push(matchId); 
+      }
+      
+    }
+    console.log('pending matches: ', pendingMatches)
+    //Return matches array
+    return pendingMatches;
+  },
+
+
+
   /**
    * Handles the superlike feature, where one group can superlike another, possibly notifying them.
    * @param {string} groupId - The ID of the group giving the superlike.

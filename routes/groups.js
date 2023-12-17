@@ -40,6 +40,7 @@ router
       let groupUsername = groupInfo.groupUsername;
       let groupDescription = groupInfo.groupDescription;
       let zipCode = groupInfo.zipCode;
+      let radius = groupInfo.radius;
       let budget = groupInfo.budget;
       let genderPreference = groupInfo.genderPreference;
       let groupPassword = groupInfo.groupPassword;
@@ -49,6 +50,7 @@ router
       console.log(groupUsername)
       console.log(groupDescription)
       console.log(zipCode)
+      console.log(radius)
       console.log(budget)
       console.log(genderPreference)
       console.log(groupPassword);
@@ -57,10 +59,15 @@ router
       try {
         
           // ensuring inputs are there and are strings
-          if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!budget) || (!genderPreference) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+          if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!radius) || (!budget) || (!genderPreference) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
 
+          radius = Number(radius);
           budget = Number(budget);
           // zipCode = Number(zipCode);
+
+          // radius
+          let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
+          if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
 
           // budget
           if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
@@ -134,7 +141,7 @@ router
           // ensuring the length of password follows protocol
           if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
 
-          let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, budget, genderPreference, [new ObjectId(req.session.user.id)], groupPassword);
+          let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, radius, budget, genderPreference, [new ObjectId(req.session.user.id)], groupPassword);
 
           req.session.user.groupInfo = group;
           req.session.user.groupID = group._id.toString();
@@ -227,6 +234,7 @@ router
           group.users.concat( new ObjectId(req.session.user.id)),
           group.groupPassword,
           group.matches,
+          group.suggestedMatches,
           group.reviews
           );
 

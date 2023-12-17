@@ -324,7 +324,55 @@ padding: 20px;
     font-size: 2em; 
     font-weight: bold;
 }
+
+.PendingMatches-header {
+    text-align: center;
+    background-color: #0299eb;
+    color: white;
+    padding: 20px 0;
+}
+
+.PendingMatches-header h1 {
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.pending-matches-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; 
+}
+
+
+.no-pending-matches-message {
+    font-size: 2em; 
+    font-weight: bold;
+}
+
+.review-button button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  }
   
+  .review-button button:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+
+
+
+
   .match-card {
       border: 2px solid #0299eb;
       border-radius: 25px;
@@ -386,28 +434,38 @@ padding: 20px;
 
   .message-button {
     display: inline-block;
-    border: 1px solid #0299eb;
+    border: none;
     border-radius: 25px;
     padding: 10px 20px;
     margin-top: 10px;
     background-color: rgb(11, 193, 11);
     color: white;
     text-decoration: none;
-}
-
-.message-button a {
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .message-button:hover {
+    background-color: rgb(7, 145, 7);
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+  
+  .message-button a {
     color: white;
     text-decoration: none;
-}
+  }
 
 
 
   .home-button-container {
     width: 100%;
     text-align: center;
-}
-
-.home-button {
+  }
+  
+  .home-button {
     display: inline-block;
     padding: 20px 35px;
     font-size: 22px;
@@ -416,8 +474,18 @@ padding: 20px;
     text-decoration: none;
     border-radius: 20px;
     margin-top: 20px;
-}
+    font-weight: bold;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .home-button:hover {
+    background-color: #0279b2;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
 
+  
 /* Style for register/settings */
 #register-form {
     background-color: #ffffff;
