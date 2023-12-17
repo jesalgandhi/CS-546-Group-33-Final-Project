@@ -1,5 +1,6 @@
 import {ObjectId} from 'mongodb';
 import {validate} from 'email-validator';
+import fetch from 'node-fetch';
 
 const exportedMethods = {
   checkId(id, varName) {
@@ -182,7 +183,8 @@ const exportedMethods = {
   console.log(earthRadiusKm * c);
 
   return earthRadiusKm * c;
-}
+},
+
 
 };
 

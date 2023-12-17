@@ -26,6 +26,7 @@ router.route('/')
       age: userInfo.age,
       interests: userInfo.interests,
       biography: userInfo.biography,
+      picture: userInfo.picture,
       admin: admin
     });
   })
@@ -33,7 +34,7 @@ router.route('/')
     let { 
       firstNameInput, lastNameInput, emailAddressInput, 
       phonenumberInput, passwordInput, confirmPasswordInput, 
-      biographyInput, ageInput, interestsInput 
+      biographyInput, ageInput, interestsInput, pictureInput
     } = req.body;
 
     const id = req.session.user.id;
@@ -64,7 +65,10 @@ router.route('/')
       if (!phonenumberInput.isValid) errors.push('Invalid phone number!');
       phonenumberInput = phonenumberInput.phoneNumber;
     }
-    
+    const pictureUrlIsValid = await usersData.isImageUrl(pictureInput);
+        if (!pictureUrlIsValid) {
+            errors.push('Picture must be a valid image URL');
+        }
 
     if (errors.length > 0) {
       return res.status(400).render("settings", {
@@ -77,6 +81,7 @@ router.route('/')
         age: userInfo.age,
         interests: userInfo.interests,
         biography: userInfo.biography,
+        picture: userInfo.picture,
         admin: admin 
       });
     }
@@ -94,6 +99,7 @@ router.route('/')
         ...(biographyInput && { biography: biographyInput }),
         ...(ageInput && { age: parseInt(ageInput) }),
         ...(interestsInput && { interests: interestsInput }),
+        ...(pictureInput && { picture: pictureInput })
       };
 
       const updatedUser = await usersData.updateUser(userId, updatedFields);
@@ -111,6 +117,7 @@ router.route('/')
           age: userInfo.age,
           interests: userInfo.interests,
           biography: userInfo.biography,
+          picture: userInfo.picture,
           admin: admin 
         });
       }
@@ -125,6 +132,7 @@ router.route('/')
         age: userInfo.age,
         interests: userInfo.interests,
         biography: userInfo.biography,
+        picture: userInfo.picture,
         admin: admin 
       });
     }
@@ -363,6 +371,7 @@ router.route('/')
       return res.json({ success: true, redirectTo: '/logout' });
     } else {
       return res.status(500).json({ success: false, redirectTo: '/error' });
+
     }
   }
   );

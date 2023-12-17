@@ -10,6 +10,8 @@ import {usersData} from './index.js';
 import {messagesData} from './index.js';
 import bcrypt from 'bcrypt';
 import validation from '../helpers.js';
+import fetch from 'node-fetch';
+import * as helpers from '../helpers.js';
 
 // const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 // const usersCollection = await users();
@@ -22,6 +24,19 @@ import validation from '../helpers.js';
 //   }
 // };
 const exportedMethods = {
+
+
+    async isImageUrl(url) {
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            const contentType = response.headers.get('content-type');
+            return contentType.startsWith('image/');
+        } catch (error) {
+            console.error('Error fetching image:', error);
+            return false;
+        }
+      },
+
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
@@ -67,6 +82,24 @@ const exportedMethods = {
     if (existingPhone) {
         throw `User with phone number ${number} already exists`;
     }
+    const defaultImages = [
+        'https://pistolsfiringblog.com/wp-content/uploads/2016/07/Screen-Shot-2016-07-12-at-10.04.40-PM.png',//diglett
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRWZ5AWNBwejH7qrNaM00Vio-oIhSYjUr8Wg&usqp=CAU',//squirtle
+        'https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg', //gengar
+        'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/hostedimages/1379727070i/3130.png',// the little penguin
+        'https://c02.purpledshub.com/uploads/sites/62/2022/05/psyduck-249ddf6.jpg?webp=1'//some duck idek
+        // ... more image URLs ...
+    ];
+
+    // Validate or assign default picture URL
+    let pictureUrl = picture;
+    const pictureUrlIsValid = picture && await this.isImageUrl(picture);
+    if (!pictureUrlIsValid) {
+        // If no valid picture is provided, select a random one from the default list
+        const randomIndex = Math.floor(Math.random() * defaultImages.length);
+        pictureUrl = defaultImages[randomIndex];
+    }
+
 
     let newUser = { 
       _id: new ObjectId(),
@@ -78,7 +111,7 @@ const exportedMethods = {
       biography: biography.trim(),
       age: age,
       interests: interests,
-      picture: picture, 
+      picture: pictureUrl.trim(), 
       admin: false
     };
 
@@ -124,24 +157,20 @@ async removeUser(userId) {
       throw 'You must provide a valid user ID';
   }
 
-  // Fetch the group where the user is a member
   const groupId = await groupsData.getGroupByUserId(userIdString);
   if (!groupId) {
       throw 'User not found in any group';
   }
-
-  const group = await groupsData.get(groupId); // Fetch the group by its ID
+  const group = await groupsData.get(groupId);
   if (!group) {
       throw 'Group not found';
   }
 
   const updatedUsers = group.users.filter(user => user.toString() !== userIdString);
   if (group.users.length !== updatedUsers.length) {
-      // Update the group's user list without creating a new group
       await groupsData.updateGroupUsers(groupId, updatedUsers);
   }
 
-  // Delete the user from the users collection
   const usersCollection = await users();
   const deletionResult = await usersCollection.deleteOne({ _id: new ObjectId(userIdString) });
 
