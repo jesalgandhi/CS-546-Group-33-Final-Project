@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let errorCheck = document.getElementById('error');
     let formLabel = document.getElementById('formLabel');
 
-    // Client-side validation functions
     function isValidName(name) {
         return /^[a-zA-Z]{2,25}$/.test(name);
     }
@@ -43,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return /^(http(s)?:\/\/)?([w|W]{3}\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/.*)?$/.test(picture);
     }
 
-    // Update selected interests
     function updateSelectedInterests() {
         let selectedOptions = Array.from(interestsInput.options)
                                   .filter(option => option.selected)
@@ -51,12 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedInterestsDiv.innerHTML = selectedOptions.join(', ');
     }
 
-    // Event listeners for interest selection
     interestsInput.addEventListener('change', function() {
         updateSelectedInterests();
     });
 
-    // Login form submission event listener
     if (myForm) {
         myForm.addEventListener('submit', (event) => {
             if (emailAddress.value.trim().length === 0 || password.value.trim().length === 0) {
@@ -71,12 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Registration form submission event listener with validation
     if (myForm2) {
         myForm2.addEventListener('submit', (event) => {
             let errors = [];
 
-            // Validate each field
             let firstNameInput = document.getElementById('firstNameInput');
             let lastNameInput = document.getElementById('lastNameInput');
             let emailAddressInput = document.getElementById('emailAddressInput');
@@ -120,7 +114,6 @@ $(document).ready(function () {
         previousInterests.push($(this).val());
     });
 
-    // Disable other checkboxes if the limit is reached
     $('input[name="interestsInput"]').on('change', function () {
         let checkedCount = $('input[name="interestsInput"]:checked').length;
 
@@ -131,7 +124,6 @@ $(document).ready(function () {
         }
     });
 
-    // Set the checked attribute based on the values in previousInterests
     previousInterests.forEach(function (interest) {
         $(`input[name="interestsInput"][value="${interest}"]`).prop('checked', true);
     });
