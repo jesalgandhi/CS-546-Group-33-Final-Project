@@ -214,6 +214,15 @@ try {
 
     // groups remove() - Removing group5 instead
     const removed_group2 = await groupsData.remove(group5._id.toString());
+
+    // since we deleted group 5, we have to set user12 (emma johnson)'s admin status back to false her group is now gone
+    // with this, error i had with "Could not update user" should be fixed since her admin status will be changed from FALSE to true
+    // upon creating a group instead of modifiedCount being 0 in updateUser since her admin status was previously already set to true
+    await usersCollection.updateOne(
+        { _id: user12._id },
+        { $set: { admin: false } }
+    );
+
     // console.log('Result of trying to remove group2: ', removed_group2);
     // const removedUser = await usersData.removeUser(user9._id);
     //  console.log("User removed:", removedUser);

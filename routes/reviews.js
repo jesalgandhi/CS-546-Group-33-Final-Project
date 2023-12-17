@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import validation from '../helpers.js';
+import xss from 'xss';
 
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
@@ -57,6 +58,9 @@ router
 router
   .route('/create/:groupId')
   .get(async (req, res) => {
+    if (!req.session.user || !req.session.user.id) {
+      return res.redirect('/login');
+    }
     const receivingGroupId = req.params.groupId;
     const userId = req.session.user.id;
     let thisGroupId;
@@ -94,6 +98,7 @@ router
     }
     let {ratingInput, reviewInput} = req.body;
     reviewInput = reviewInput.trim();
+    reviewInput = xss(reviewInput);
     ratingInput = ratingInput.trim();
     ratingInput = parseInt(ratingInput);
     const userId = req.session.user.id;

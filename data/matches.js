@@ -176,42 +176,45 @@ const exportedMethods = {
    * @param {string} secondGroupId - The ID of the second group.
    * @returns {Promise<boolean>} - Promise resolving to true if the operation was successful.
    */
-  async unmatchGroups(firstGroupId, secondGroupId) {
-    const groupsCollection = await groups(); // this retrieves the groups collection
+ 
+async unmatchGroups(firstGroupId, secondGroupId) {
+  const groupsCollection = await groups(); // this retrieves the groups collection
 
-    // 1. Validate group IDs.
-    firstGroupId = helpers.checkId(firstGroupId, 'firstGroupId');
-    secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
+  // 1. Validate group IDs.
+  firstGroupId = helpers.checkId(firstGroupId, 'firstGroupId');
+  secondGroupId = helpers.checkId(secondGroupId, 'secondGroupId');
 
-    // 2. Retrieve both groups from the database.
-    const group1 = await data.groupsData.get(firstGroupId);
-    const group2 = await data.groupsData.get(secondGroupId);
+  // 2. Retrieve both groups from the database.
+  const group1 = await data.groupsData.get(firstGroupId.toString());
+  const group2 = await data.groupsData.get(secondGroupId.toString());
 
-    // 3. Check if both groups exist.
-    if (!group1 || !group2) {
-      throw 'One or both groups do not exist.'
-    } 
+  // 3. Check if both groups exist.
+  if (!group1 || !group2) {
+    throw 'One or both groups do not exist.'
+  } 
 
-    // 4. Check if the groups are currently matched.
-    if (!group1.confirmedMatches.includes(secondGroupId) || !group2.confirmedMatches.includes(firstGroupId)) {
-    // Groups are not matched, so no need to unmatch. You could return false or throw an error, depending on your preference.
-    return false;
-    }
+  // 4. Check if the groups are currently matched.
+  if (!group1.matches.map(String).includes(secondGroupId) || !group2.matches.map(String).includes(firstGroupId)) {
+  // Groups are not matched, so no need to unmatch. You could return false or throw an error, depending on your preference.
+    throw 'Groups are not matched.'
+  }
 
-    // 5. Remove the match from each group's confirmedMatches array.
-    const unmatchGroup1 = groupsCollection.updateOne(
-      { _id: new ObjectId(firstGroupId) },
-      { $pull: { confirmedMatches: new ObjectId(secondGroupId) } }
-    );
-    const unmatchGroup2 = groupsCollection.updateOne(
-      { _id: new ObjectId(secondGroupId) },
-      { $pull: { confirmedMatches: new ObjectId(firstGroupId) } }
-    );
+  // 5. Remove the match from each group's confirmedMatches array.
+  const unmatchGroup1 = await groupsCollection.updateOne(
+    { _id: new ObjectId(firstGroupId) },
+    { $pull: { matches: new ObjectId(secondGroupId) } }
+  );
+  const unmatchGroup2 = await groupsCollection.updateOne(
+    { _id: new ObjectId(secondGroupId) },
+    { $pull: { matches: new ObjectId(firstGroupId) } }
+  );
+  console.log(unmatchGroup1);
+  console.log(unmatchGroup2);
 
-    const bothUpdatesSuccessful = unmatchGroup1.modifiedCount === 1 && unmatchGroup2.modifiedCount === 1;
-    
-    //return true if both successful and false if failed
-    return bothUpdatesSuccessful;
+  const bothUpdatesSuccessful = unmatchGroup1.modifiedCount === 1 && unmatchGroup2.modifiedCount === 1;
+  
+  //return true if both successful and false if failed
+  return bothUpdatesSuccessful;
 
   },
 

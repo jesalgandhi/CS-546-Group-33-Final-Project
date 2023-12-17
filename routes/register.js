@@ -6,6 +6,7 @@ import fetch from 'node-fetch';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import xss from 'xss';
 
 
 router
@@ -18,6 +19,17 @@ router
     // console.log(selectedOptions);
     
     let { firstNameInput, lastNameInput, emailAddressInput, phonenumberInput, passwordInput, confirmPasswordInput, biographyInput, ageInput, interestsInput, pictureInput} = req.body;
+    firstNameInput = xss(firstNameInput);
+    lastNameInput = xss(lastNameInput);
+    emailAddressInput = xss(emailAddressInput);
+    phonenumberInput = xss(phonenumberInput);
+    passwordInput = xss(passwordInput); 
+    confirmPasswordInput = xss(confirmPasswordInput);
+    biographyInput = xss(biographyInput);
+    ageInput = xss(ageInput);
+    interestsInput = interestsInput.map(interest => xss(interest));
+    pictureInput = xss(pictureInput);
+
     const requiredFields = ['firstNameInput', 'lastNameInput', 'emailAddressInput','phonenumberInput', 'passwordInput', 'confirmPasswordInput', 'biographyInput', 'ageInput', 'interestsInput'];
     const missingFields = requiredFields.filter(field => !req.body[field]);
 

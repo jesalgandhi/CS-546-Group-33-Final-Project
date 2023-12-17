@@ -32,21 +32,31 @@ const middleware = {
     homepageRedirect(req, res, next)
     {
         
-        let authorized = false;
+        // let authorized = false;
 
-        if (req.cookies.AuthState) 
-            authorized = true;
+        // if (req.cookies.AuthState) 
+        //     authorized = true;
 
-        if (!authorized && req.path == "/") 
-            return res.redirect('/login');
+        // if (!authorized && req.path == "/") 
+        //     return res.redirect('/login');
 
-        else if (authorized && req.path == "/")
+        // else if (authorized && req.path == "/")
             
-            next();
+        //     next();
 
 
-        else if (req.path != "/")
-            next();
+        // else if (req.path != "/")
+        //     next();
+
+        let authorized = false;
+        if (req.cookies.AuthState) authorized = true;
+
+        // Redirect only if trying to access home and not authorized
+        if (!authorized && req.path === "/") {
+            return res.redirect('/login');
+        }
+        next();
+
 
   
     },
@@ -67,7 +77,7 @@ const middleware = {
         // redirect when authorized user tries to access /login
         if (req.path === '/login' && authorized) return res.redirect('/')
         // redirect to /login for unauthorized users
-        // if (!authorized) return res.redirect('/login');
+        // if (!authorized) return res.redirect('/');
         // redirect to home if authorized but NOT in a group
         // if (authorized && !(req.session.user && req.session.user.groupID)) return res.redirect('/');
         next();

@@ -10,6 +10,7 @@ import {messagesData} from '../data/index.js';
 import {matchesData} from '../data/index.js';
 import {groups} from '../config/mongoCollections.js'
 import { ObjectId } from 'mongodb';
+import helpers from '../helpers.js'
 
 
 
@@ -23,13 +24,22 @@ router
     return res.redirect('/login');
   }
   const userId = req.session.user.id;
+    // Check if the userId is valid
+  try {
+    helpers.checkId(userId, 'userId');
+  } catch (e) {
+    // If the userId is not valid, redirect to the login page
+    return res.redirect('/login');
+  }
+
+
 
   /* Check if user is part of a group - if not, prompt to create/join */
   let groupId = undefined;
   try {
     groupId = await groupsData.getGroupByUserId(userId);
   } catch (e) {
-    return res.render('matches', {error: "Please Create or Join a group first!"});
+    return res.render('createGroup', {hasErrors: e});
   }
 
   /* Get matches from the group the user is a part of */
@@ -267,29 +277,30 @@ try
 
 
 router
-  .route('/suggestedMatches')
-  .get(async (req, res) => {
+  .route('/unmatch/:id')
+  .post(async (req, res) => {
+    console.log('Unmatch route hit'); 
     if (!(req.session.user && req.session.user.id)) {
       return res.redirect('/login');
     }
+    const firstGroupId = req.session.user.groupID
+    const secondGroupId = req.params.id;
 
-    const userId = req.session.user.id;
-
-    // Get the group ID for the current user
-    let groupId;
-    try {
-      groupId = await groupsData.getGroupByUserId(userId);
-    } catch (e) {
-      return res.render('matches', {error: "Please Create or Join a group first!"});
+    // Validate group IDs
+    if (!firstGroupId || !secondGroupId) {
+      console.error('Invalid group IDs');
+      return res.redirect('/matches');
     }
 
-    // Call suggestAllMatches for the current group
+    // Call your function to unmatch the groups
     try {
-      await matchesData.suggestAllMatches(groupId);
-      res.redirect('/'); // Redirect to the homepage or wherever you want
+      const result = await matchesData.unmatchGroups(firstGroupId, secondGroupId);
+      if (result) {
+        res.redirect('/matches');
+      } 
     } catch (e) {
       console.error(e);
-      res.status(500).send('An error occurred while suggesting matches.');
+      res.redirect('/matches')
     }
   });
 

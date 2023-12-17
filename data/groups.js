@@ -203,7 +203,7 @@ const exportedMethods = {
               return group._id.toString();
           }
       }
-      throw 'Invalid group username or group password.';
+      throw 'Invalid group username or group password. GROUP PASS!';
 
   },
 
@@ -230,7 +230,7 @@ const exportedMethods = {
                 return group._id.toString();
             }
         }
-        throw 'Invalid group username or group password.';
+        throw 'Invalid group username or group password. GROUP USERNAME!';
   
     },
   
