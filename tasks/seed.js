@@ -105,6 +105,11 @@ try {
         [user2._id, user3._id, user4._id],
         "Password1"
     )
+
+    await usersCollection.updateOne(
+        { _id: user2._id },
+        { $set: { admin: true } }
+    );
      
 
     // create group2 with user5 in it
@@ -121,6 +126,11 @@ try {
         "Password2"
     )
 
+   await usersCollection.updateOne(
+        { _id: user5._id },
+        { $set: { admin: true } }
+    );
+
     // create group3 with user6 and user7
     const group3 = await groupsData.create(
         "The Boring Fellas", 
@@ -135,6 +145,11 @@ try {
         "Password3"
     )
 
+    await usersCollection.updateOne(
+        { _id: user6._id },
+        { $set: { admin: true } }
+    );
+
     // create group4 with users 8-11
     const group4 = await groupsData.create(
         "Garden State Explorers", 
@@ -148,6 +163,11 @@ try {
         [user8._id, user9._id, user10._id, user11._id],
         "Password4"
     )
+
+    await usersCollection.updateOne(
+        { _id: user8._id },
+        { $set: { admin: true } }
+    );
     
     // create group5 with user12
     const group5 = await groupsData.create(
@@ -162,6 +182,11 @@ try {
         [user12._id],
         "Password5"
     )
+
+    await usersCollection.updateOne(
+        { _id: user12._id },
+        { $set: { admin: true } }
+    );
 
     /* Remove user9 */
     // const removedUser = await usersData.removeUser(user9._id.toString());
@@ -444,9 +469,11 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
    
 
     const updateResult = await usersCollection.updateOne(
-        { _id: new ObjectId(userIds[0]) },
+        { _id: userIds[0] },
         { $set: { admin: true } }
     );
+    
+    //console.log('Update Result:', updateResult);
     
     
     try
