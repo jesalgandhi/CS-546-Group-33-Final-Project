@@ -165,9 +165,6 @@ router
 
     let filteredUsers = [];
 
-    console.log("Suggested Matches Length: " + req.session.user.groupInfo.suggestedMatches.length);
-    console.log("Filter Applied: " + filter);
-
     if (!req.session.user)
       return res.redirect('/login');
 
@@ -182,8 +179,29 @@ router
     if (filter == "reset")
     {
       //console.log(req.session.user)
-      return res.redirect('/');
-    }
+      //RUN SUGGESTALLMATCHES ARRAY TO MAKE IT LIKE BEGINNING W/O RE-RENDERING HOMEPAGE
+
+      let allGroups = await matchesData.suggestAllMatches(req.session.user.groupID);
+
+
+      let suggestedMatches = [];
+      try 
+      {    
+        for (let i = 0; i < allGroups.length; i++)
+        {
+          let this_group = await groupsData.get(allGroups[i].toString());
+          suggestedMatches.push(this_group);
+        }
+      }                   
+       catch(e)
+       {
+        console.log(e);
+      }     
+
+      filteredUsers = suggestedMatches;
+
+
+    } 
 
     else if (filter == "genderPreference")
     {
@@ -369,7 +387,6 @@ router
         excludedValues.push(req.session.user.groupInfo.matches[match].toString());
       }
 
-      //console.log(excludedValues);
       
 
 
@@ -399,7 +416,54 @@ router
 
     else if (filter == "radius")
     {
-      let excludedValues = [];
+      let radius = req.session.user.groupInfo.radius;
+
+      //get all suggested matches
+       // Get all suggestedMatches
+       let allGroups = await matchesData.suggestAllMatches(req.session.user.groupID);
+
+
+
+      let suggestedMatches = [];
+      try 
+      {    
+        for (let i = 0; i < allGroups.length; i++)
+        {
+          let this_group = await groupsData.get(allGroups[i].toString());
+          suggestedMatches.push(this_group);
+        }
+      }                   
+       catch(e)
+       {
+        console.log(e);
+      }     
+
+      //console.log("SUGGESTED MATCHES:",suggestedMatches);
+
+      let groupLocation = req.session.user.groupInfo.groupLocation;
+      //calculate distance between each suggested match and current group
+      suggestedMatches = suggestedMatches.map(group => {
+        let distance = helpers.calculateDistance(groupLocation, group.groupLocation);
+        return {...group, distance};
+      }).sort((a, b) => a.distance - b.distance);
+
+      //console.log(suggestedMatches);
+
+      let finalizedMatches = [];
+
+      for (let match in suggestedMatches)
+      {
+        let distance = suggestedMatches[match].distance * 0.621371;
+        
+        if (distance <= radius)
+        {
+          finalizedMatches.push(suggestedMatches[match]);
+        }
+      }
+
+      // Push the groups with distance less than group's radius into the filteredUsers array
+      filteredUsers = finalizedMatches;
+      //console.log("FILTERED USERS:",filteredUsers);
       
     }
 
@@ -411,11 +475,10 @@ router
     }
 
 
-    
 
     else
     {
-      //console.log(filteredUsers);
+      //Gets
       for (let x = 0; x < filteredUsers.length; x++) 
       {
         try 
