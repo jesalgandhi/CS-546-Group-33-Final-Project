@@ -98,6 +98,7 @@ try {
         "We're the coolest kids on the block!", 
         //[-73.971623, 40.850708], // 1615-1593 Gerome Ave, Fort Lee, NJ 07024
         [40.850708, -73.971623 ],
+        25,
         1500,
         "M",
         [user2._id, user3._id, user4._id],
@@ -115,6 +116,7 @@ try {
         "Username2",  
         "We're the WORST ADULTS on O'block!", 
         [-74.043181, 40.883850], // 17-1 Mercer St, Hackensack, NJ 07601
+        50,
         5000,
         "F",
         [user5._id],
@@ -127,6 +129,7 @@ try {
         "Username3", 
         "We're the most boring fellas on the planet", 
         [-74.184897, 40.732781], // 186-158 Howard St, Newark, NJ 07103
+        5,
         25000,
         "O",
         [user6._id, user7._id],
@@ -139,6 +142,7 @@ try {
         "Username4",
         "Looking for roommates in NJ Hit us up", 
         [-74.278195, 40.924945],  // 118 Whitmore Ave, Wayne, NJ 07470
+        1,
         5000,
         "F",
         [user8._id, user9._id, user10._id, user11._id],
@@ -151,6 +155,7 @@ try {
         "Username5",
         "Jazz lovers sharing who love music and need roommates", 
         [-74.0713, 40.7357],  // 73 Broadway, Jersey City, NJ 07306
+        1000,
         50000,
         "O",
         [user12._id],
@@ -172,7 +177,7 @@ try {
 
     // groups update()
     // console.log('HEREEE');
-    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], 1265, "O", [user1._id, user2._id], group1.groupPassword, group1.matches, group1.suggestedMatches, group1.reviews);
+    const updated_group1 = await groupsData.update(group1._id.toString(), 'The Sleepy Joes', group1.groupUsername, 'Sleeping on the job', [2.124872, 13.239743], group1.radius, 1265, "O", [user1._id, user2._id], "Password1", group1.matches, group1.suggestedMatches, group1.reviews);
     // console.log('UPDATED group1:\n', updated_group1);
 
     // groups remove() - Removing group5 instead
@@ -352,6 +357,16 @@ const generateRandomGroupData = () => {
     const groupPassword = "RandomPassword"; // Update with actual logic or generate a random password
     const getRandomBudget = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+    // radius
+    const valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
+
+    // random index out of the valid_radii
+    const randomIndex = Math.floor(Math.random() * valid_radii.length);
+
+    const radius = valid_radii[randomIndex]; // randomly choosing a radius out of the valid_radii options
+
+
+
 // Usage example:
     const budget = getRandomBudget(500, 5000);
 
@@ -360,6 +375,7 @@ const generateRandomGroupData = () => {
         groupUsername: groupUsername,
         groupDescription: groupDescription,
         groupLocation: groupLocation,
+        radius: radius,
         budget: budget,
         genderPreference: genderPreference,
         groupPassword: groupPassword,
@@ -444,6 +460,7 @@ for (let i = 0; i < user_ids.length; i += groupSize) {
             groupData.groupUsername,
             groupData.groupDescription,
             groupData.groupLocation.coordinates,
+            groupData.radius,
             groupData.budget, // Update to use groupBudget property
             groupData.genderPreference, // Update to use groupGender property
             userIds,

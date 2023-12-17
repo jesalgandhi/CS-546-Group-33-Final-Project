@@ -3,6 +3,7 @@ import {conversations} from '../config/mongoCollections.js'
 import {validate} from 'email-validator'; // for emails
 import {ObjectId} from 'mongodb';
 import validation from '../helpers.js';
+import bcrypt from 'bcrypt';
 
 const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 
@@ -15,6 +16,7 @@ const exportedMethods = {
     groupUsername,
     groupDescription,
     groupLocation,
+    radius,
     budget,
     genderPreference,
     users,
@@ -22,10 +24,11 @@ const exportedMethods = {
   ) {
 
         // ensuring inputs are there and are strings
-        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!budget) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
+        if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!groupLocation) || (!radius) || (!budget) || (!genderPreference) || (!users) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
         if (typeof groupName !== "string") throw "groupName must be a string";
         if (typeof groupUsername !== "string") throw "groupUsername must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
+        if (typeof radius !== "number") throw "radius must be a number";
         if (typeof budget !== "number") throw "budget must be a number";
         if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
@@ -49,6 +52,10 @@ const exportedMethods = {
 
       // budget
       if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
+
+      // radius
+      let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
+      if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
 
       // making it uppercase just to avoid cases where it's lowercase 
       genderPreference = genderPreference.toUpperCase();
@@ -95,8 +102,11 @@ const exportedMethods = {
         }
 
       // ensuring the length of password follows protocol
-      if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+      if (groupPassword.length < 8 || groupPassword.length > 75) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
 
+      // CHANGE SALT TO 16 BEFORE SUBMITTING (might not have to for group password)
+      const saltRounds = await bcrypt.genSalt(8);
+      const hashedPass = await bcrypt.hash(groupPassword, saltRounds);
 
       /* Reviews is initialized to an empty list like you suggested */
       let group = {
@@ -110,10 +120,11 @@ const exportedMethods = {
           type: "Point", 
           coordinates: groupLocation
         },
+        'radius': radius,
         'budget': budget,
         'genderPreference': genderPreference, 
         'users': users,
-        'groupPassword': groupPassword,
+        'groupPassword': hashedPass,
         'matches': [], 
         'suggestedMatches': [],
         'reviews': []
@@ -179,7 +190,10 @@ const exportedMethods = {
           // console.log(new ObjectId(userId));
 
           // if this group's groupPassword matches groupPassword, return that group's groupId as a string
-          if (group.groupPassword === groupPassword) {
+          let same_pass = await bcrypt.compare(groupPassword, group.groupPassword);
+
+
+          if (same_pass) {
               return group._id.toString();
           }
       }
@@ -247,6 +261,7 @@ const exportedMethods = {
     groupUsername,
     groupDescription,
     groupLocation,
+    radius,
     budget,
     genderPreference,
     users,
@@ -261,6 +276,7 @@ const exportedMethods = {
         if (typeof groupName !== "string") throw "groupName must be a string";
         if (typeof groupUsername !== "string") throw "groupUsername must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
+        if (typeof radius !== "number") throw "radius must be a number";
         if (typeof budget !== "number") throw "budget must be a number";
         if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";
@@ -302,7 +318,21 @@ const exportedMethods = {
 
 
       // ensuring the length of password follows protocol
-      if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+      if (groupPassword.length < 8 || groupPassword.length > 75) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+
+
+      let curr_group = await this.get(groupId);  
+      let same_pass = await bcrypt.compare(groupPassword, curr_group.groupPassword);
+      let hashedPass = undefined;
+      if (!same_pass) {
+          // CHANGE SALT TO 16 BEFORE SUBMITTING (might not have to for group password)
+          const saltRounds = await bcrypt.genSalt(8);
+          hashedPass = await bcrypt.hash(groupPassword, saltRounds);
+      }
+      else {
+          hashedPass = curr_group.groupPassword;
+      }
+
 
 
       if (groupDescription.length > 1000) throw 'The description has exceeded the 1000 character limit.';
@@ -321,6 +351,10 @@ const exportedMethods = {
 
       // budget
       if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
+
+      // radius
+      let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
+      if ( !valid_radii.includes(radius) ) throw 'Invalid radius.';
 
       // making it uppercase just to avoid cases where it's lowercase 
       genderPreference = genderPreference.toUpperCase();
@@ -373,10 +407,11 @@ const exportedMethods = {
         'groupUsername': groupUsername,
         'groupDescription': groupDescription, 
         'groupLocation': {type: 'Point', coordinates: groupLocation}, 
+        'radius': radius,
         'budget': budget, 
         'genderPreference': genderPreference, 
         'users': users, 
-        'groupPassword': groupPassword,
+        'groupPassword': hashedPass,
         'matches': matches, 
         'suggestedMatches': suggestedMatches,
         'reviews': reviews};
