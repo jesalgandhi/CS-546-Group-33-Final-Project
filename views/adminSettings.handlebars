@@ -118,6 +118,38 @@
         </select>
     </div>
     <div class="input-group">
+        <label for="budgetInput">Group Budget</label>
+        <input type="number" id="budgetInput" name="budgetInput" value="{{groupInfo.budget}}">
+    </div>
+     <div class="input-group">
+        <label for="numRoommatesInput"><b>Number of Roomates</b></label>
+        <select id="numRoommatesInput" name="numRoommatesInput" class="full-width-input">
+            {{#if oneRoommate}}
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            {{else if twoRoommates}}
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            {{else if threeRoommates}}
+                <option value="3">3</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+            {{else}}
+                <option value="4">4</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            {{/if}}
+        </select>
+    </div>
+
+
+    <div class="input-group">
         <label for="genderPreferenceInput"><b>Gender</b></label>
         <select id="genderPreferenceInput" name="genderPreferenceInput" class="full-width-input">
             {{#if malePref}}
@@ -134,10 +166,6 @@
                 <option value="F">Female</option>
             {{/if}}
         </select>
-    </div>
-    <div class="input-group">
-        <label for="budgetInput">Group Budget</label>
-        <input type="number" id="budgetInput" name="budgetInput" value="{{groupInfo.budget}}">
     </div>
     <div class="input-group">
         <label for="groupPasswordInput">Group Password</label>

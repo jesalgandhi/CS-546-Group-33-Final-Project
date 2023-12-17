@@ -161,6 +161,10 @@ router.route('/')
     let largerRadius = groupInfo.radius === 250;
     let evenLargerRadius = groupInfo.radius === 500;
     let largestRadius = groupInfo.radius === 1000;
+    let oneRoommate = groupInfo.numRoommates === 1;
+    let twoRoommates = groupInfo.numRoommates === 2;
+    let threeRoommates = groupInfo.numRoommates === 3;
+    let fourRoommates = groupInfo.numRoommates === 4;
 
     res.render("adminSettings", { 
       title: "Admin Settings",
@@ -176,8 +180,11 @@ router.route('/')
       largeRadius: largeRadius,
       largerRadius: largerRadius,
       evenLargerRadius: evenLargerRadius,
-      largestRadius: largestRadius
-
+      largestRadius: largestRadius,
+      oneRoommate: oneRoommate,
+      twoRoommates: twoRoommates,
+      threeRoommates: threeRoommates,
+      fourRoommates: fourRoommates
     });
   })
   .post(async (req, res) => {
@@ -187,6 +194,7 @@ router.route('/')
       groupDescriptionInput,
       radiusInput,
       budgetInput,
+      numRoommatesInput,
       genderPreferenceInput,
       groupPasswordInput,
       groupConfirmPasswordInput
@@ -201,6 +209,7 @@ router.route('/')
     const groupInfo = await groupsData.get(groupId);
     budgetInput = parseInt(budgetInput);
     radiusInput = parseInt(radiusInput);
+    numRoommatesInput = parseInt(numRoommatesInput);
 
     const errors = [];
     let newPassword = true;
@@ -243,6 +252,7 @@ router.route('/')
     genderPreferenceInput = genderPreferenceInput.toUpperCase();
     if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
     if (radiusInput <= 0 || radiusInput > 1000) errors.push('The radius must be nonnegative and below 1000.');
+    if (numRoommatesInput <= 0 || numRoommatesInput > 4) errors.push('The numRoommates must be nonnegative and below 10.');
 
     // // Check if the conversion was successful
     // if (isNaN(radiusValue)) {
@@ -276,6 +286,7 @@ router.route('/')
         groupInfo.groupLocation.coordinates,
         radiusInput,
         budgetInput,
+        numRoommatesInput,
         genderPreferenceInput,
         groupInfo.users,
         hashedPass,
