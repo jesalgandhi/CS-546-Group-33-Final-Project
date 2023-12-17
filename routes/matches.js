@@ -33,11 +33,34 @@ router
 
   /* Get matches from the group the user is a part of */
   let matches = undefined;
+  let pendingMatches = undefined;
   try {
     matches = await matchesData.getMatches(groupId); //list of groupids
+    pendingMatches = await matchesData.getPendingMatches(groupId); //list of pending groupids
   } catch (e) {
     return res.render('matches', {error: e});
   }
+  //Pending matches Data
+  let pendingMatchesData = [];
+  if(pendingMatches && Array.isArray(pendingMatches) && pendingMatches.length > 0){
+    try {
+      pendingMatchesData = await Promise.all(pendingMatches.map(match => groupsData.get(match.toString())));
+    } catch (error) {
+      return res.render('matches', {error: error});
+    }
+  }
+
+  //filter the pending matches
+  let filteredPendingMatchesData = [];
+  for (let match of pendingMatchesData) {
+    let otherGroupMatches = await matchesData.getMatches(match._id.toString());
+    let otherGroupMatchesString = otherGroupMatches.map(match => match.toString());
+    if (!otherGroupMatchesString.includes(groupId.toString())) {
+      filteredPendingMatchesData.push(match);
+    }
+  }
+
+
   let matchesWithConversations = [];
   let matchedgroups = [];
   //we need the entire group info for each match
@@ -112,11 +135,7 @@ router
   }
 
   
-
-  
-
- 
-  return res.render('matches', {matchesWithConversations});
+  return res.render('matches', {matchesWithConversations, pendingMatches: filteredPendingMatchesData});
   // *************************************************************************
 
   //return res.render('matches', { matches });
