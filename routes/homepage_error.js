@@ -19,7 +19,7 @@ router
   .route('/')
   .get(async (req, res) => {
 
-    //console.log(req.session.user);
+    //(req.session.user);
 
     if (!req.session.user)
       return res.render('login');
@@ -34,8 +34,8 @@ router
         req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
       }
 
-      console.log("grah");
-      console.log(req.session.user);
+      //console.log("grah");
+      //console.log(req.session.user);
       
 
       //Gets location data for USER GROUPS
@@ -58,7 +58,7 @@ router
 
       if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
       {
-        console.log("Entered here");
+       // console.log("Entered here");
         let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
         //console.log(allGroups);
 
@@ -143,7 +143,7 @@ router
             
           }
       }
-      console.log(suggestedMatchInfo);
+      //console.log(suggestedMatchInfo);
       return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatchInfo});
     }
   })
@@ -152,7 +152,7 @@ router
     //TODO
     let filter = req.body.filter;
 
-    console.log(filter);
+    //console.log(filter);
 
     let filteredUsers = [];
     if (!req.session.user)
@@ -168,7 +168,7 @@ router
 
     if (filter == "reset")
     {
-      console.log(req.session.user)
+      //console.log(req.session.user)
       return res.redirect('/');
     }
 
@@ -208,10 +208,6 @@ router
       }
     }
 
-    else if (filter == "age")
-    {
-
-    }
     //Filter for location
     else if (filter == "location")
     {
@@ -241,7 +237,7 @@ router
         return {...group, distance};
       }).sort((a, b) => a.distance - b.distance);
 
-      console.log(suggestedMatches);
+      //console.log(suggestedMatches);
 
       // Push the sorted matches into the filteredUsers array
       filteredUsers = suggestedMatches;
@@ -252,7 +248,7 @@ router
 
     else if (filter == "budget")
     {
-      console.log("Entered budget filter");
+      //console.log("Entered budget filter");
       let suggestedMatches = [];
 
 
@@ -269,7 +265,7 @@ router
         }
       }
 
-      console.log(suggestedMatches);
+      //console.log(suggestedMatches);
 
         let userBudget = req.session.user.groupInfo.budget;
 
@@ -278,7 +274,7 @@ router
             let matchBudget = match.budget;
             //console.log(userBudget);
             //console.log(matchBudget);
-            console.log(Math.abs(userBudget - matchBudget));
+            //console.log(Math.abs(userBudget - matchBudget));
 
             if (Math.abs(userBudget - matchBudget) <= 500) 
             {
@@ -286,7 +282,7 @@ router
             }
         }
 
-        console.log(filteredUsers);
+        //console.log(filteredUsers);
     }
 
     else if (filter == "interests")
@@ -296,7 +292,7 @@ router
           //Get groupData for other group
           let currentGroup = req.session.user.groupInfo;
           let otherGroup = await groupsData.get(req.session.user.groupInfo.suggestedMatches[i]);
-          console.log(otherGroup);
+          //console.log(otherGroup);
         
       
       
@@ -309,7 +305,7 @@ router
             try 
             {
               let this_user = await usersData.getUser(userId);
-              console.log(this_user);
+              //console.log(this_user);
               users1.push(this_user);
             } 
             catch (e) 
@@ -330,8 +326,8 @@ router
             }
           }
                
-          console.log(users1);
-          console.log(users2);
+          //console.log(users1);
+          //console.log(users2);
         
           // Create two sets to track unique interests
           let interests1 = new Set(users1.flatMap(user => user.interests));
@@ -349,6 +345,46 @@ router
       }   
     }
 
+    else if (filter == "all")
+    {
+      console.log("Entered all function");
+      let excludedValues = [];
+      excludedValues.push(req.session.user.groupInfo._id.toString());
+
+      for (let match in req.session.user.groupInfo.matches)
+      {
+        excludedValues.push(req.session.user.groupInfo.matches[match].toString());
+      }
+
+      //console.log(excludedValues);
+
+
+      let groups = await groupsData.getAll();
+      let filteredGroups = groups.filter(group => !excludedValues.includes(group._id.toString()));
+
+      let groupLocation = req.session.user.groupInfo.groupLocation;
+
+      let allGroups = []
+      for (let group in filteredGroups)
+      {
+        let curGroup = await groupsData.get(filteredGroups[group]._id.toString());
+        allGroups.push(curGroup);
+      }
+
+      allGroups = allGroups.map(group => {
+        let distance = helpers.calculateDistance(groupLocation, group.groupLocation);
+        return {...group, distance};
+      }).sort((a, b) => a.distance - b.distance);
+
+      filteredUsers = allGroups;
+    }
+
+    else if (filter == "radius")
+    {
+      let excludedValues = [];
+      
+    }
+
     if (filteredUsers.length == 0)
     {
       let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
@@ -359,7 +395,7 @@ router
 
     else
     {
-      console.log(filteredUsers);
+      //console.log(filteredUsers);
       for (let x = 0; x < filteredUsers.length; x++) 
       {
         try 
@@ -374,7 +410,7 @@ router
               filteredUsers[x].distance = filteredUsers[x].distance * 0.621371;
               filteredUsers[x].distance = filteredUsers[x].distance.toFixed(2);
             }
-            console.log(city);
+            //console.log(city);
         } 
         catch (e) 
         {

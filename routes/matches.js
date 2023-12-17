@@ -125,7 +125,7 @@ router
 .post(async(req,res) =>
 {
   console.log("In matches post route");
-  console.log(req.body);
+  //console.log(req.body);
   let user_id = req.body.user_id;
   let suggested_id = req.body.suggested_id;
 
@@ -145,7 +145,7 @@ var confirmedMatch;
 try
   {
     confirmedMatch = await matchesData.confirmMatch(user_id, suggested_id);
-    console.log(confirmedMatch);
+    //console.log(confirmedMatch);
   }
 
   catch(e)
@@ -187,7 +187,7 @@ try
           suggestedMatches[x].this_userID = req.session.user.groupID;
           let city = cities.gps_lookup(suggestedMatches[x].groupInfo.groupLocation.coordinates[0], suggestedMatches[x].groupInfo.groupLocation.coordinates[1]);
           suggestedMatches[x].groupLocation.city = city;
-          console.log(city);
+          //console.log(city);
       } 
       catch (e) 
       {

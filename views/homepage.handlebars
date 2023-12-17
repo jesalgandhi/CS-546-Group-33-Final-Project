@@ -4,7 +4,7 @@
     <h4>Gender Preference: {{group.genderPreference}}</h4>
     <h4>Group Budget: ${{group.budget}}</h4>
     <h4>Location: {{location.city}}, {{location.state}} {{location.zipcode}}</h4>
-    <H4>Radius: {{location.radius}}</H4>
+    <H4>Radius: {{group.radius}}</H4>
 </header>
 
 <nav id="homepage">
@@ -24,6 +24,8 @@
             <button type="submit" name="filter" value="budget">Budget(+/- $500)</button>
             <button type="submit" name="filter" value="interests">Interests (3+ Common Interests)</button>
             <button type="submit" name="filter" value="location">Location (Closest → Furthest)</button>
+            <button type="submit" name="filter" value="radius">Location (Within Group Radius)</button>
+              <button type="submit" name="filter" value="all">Show All Groups</button>
             <button type="submit" name="filter" value="reset">Reset Page</button>
         </form>
     </div>
@@ -36,7 +38,16 @@
     <div class="homepage-section1">
         <h2>Welcome {{user.firstName}} {{user.lastName}}</h2>
         <img src="{{user.picture}}" alt="{{user.firstName}}" width="300" height="300">
+        <h4>Age: {{user.age}}</h4>
+                <h4>Biography: {{user.biography}}</h4>
+                <h4>Interests:
+                    {{#each user.interests}}
+                        {{this}}, 
+                    {{/each}}
+
         {{#if groupMembers.length}}
+        <br>
+        <br>
             <h2>Other Group Members:</h2>
             {{#each groupMembers}}
                 <h3>{{firstName}} {{lastName}} </h3>
@@ -51,13 +62,7 @@
                 <br>
             {{/each}}
         {{else}}
-            <!-- Handle the case when there are no group members -->
-            <h4>Age: {{user.age}}</h4>
-                <h4>Biography: {{user.biography}}</h4>
-                <h4>Interests:
-                    {{#each user.interests}}
-                        {{this}}, 
-                    {{/each}}
+            
         {{/if}}
     </div>
 
@@ -105,7 +110,8 @@
                 <br>
             {{/each}}
         {{else}}
-            <h1>No Suggested Groups for you at the moment, check your matches page to message all your current matches.</h1>
+            <h1>No Suggested Groups for you at the moment. Either use the Show All groups filter 
+                or check your matches page to message all your current matches.</h1>
         {{/if}}
     </div>
 </div>
