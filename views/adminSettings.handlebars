@@ -17,9 +17,107 @@
         <label for="groupDescriptionInput">Group Description</label>
         <input type="text" id="groupDescriptionInput" name="groupDescriptionInput" value="{{groupInfo.groupDescription}}">
     </div>
+    {{!-- <div class="input-group">
+        <label for="radiusInput">Radius</label>
+        <input type="number" id="radiusInput" name="radiusInput" value="{{groupInfo.radius}}">
+    </div> --}}
     <div class="input-group">
-        {{!-- <label for="GenderPreferenceInput">Gender Preference</label>
-        <input type="text" id="GenderPreferenceInput" name="GenderPreferenceInput" placeholder="{{groupInfo.groupPreference}}"> --}}
+        <label for="radiusInput"><b>Radius</b></label>
+        <select id="radiusInput" name="radiusInput" class="full-width-input">
+            {{#if smallestRadius}}
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if smallRadius}}
+                <option value="5">5</option>
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if mediumRadius}}
+                <option value="10">10</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if moremediumRadius}}
+                <option value="25">25</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if evenMoremediumRadius}}
+                <option value="50">50</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if largeRadius}}
+                <option value="100">100</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if largerRadius}}
+                <option value="250">250</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if evenlargerRadius}}
+                <option value="500">500</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="1000">1000</option>
+            {{else if largestRadius}}
+                <option value="1000">1000</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+            {{/if}}
+        </select>
+    </div>
+    <div class="input-group">
         <label for="genderPreferenceInput"><b>Gender</b></label>
         <select id="genderPreferenceInput" name="genderPreferenceInput" class="full-width-input">
             {{#if malePref}}
@@ -61,4 +159,6 @@
     <p>Make any changes to your group profile that you wish!</p>
 </form>
 
-{{!-- <script src="../scripts/register_loginscript.js"></script> --}}
+<script src="../scripts/register_loginscript.js"></script>
+
+

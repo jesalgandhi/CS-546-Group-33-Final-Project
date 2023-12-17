@@ -276,7 +276,7 @@ const exportedMethods = {
         if (typeof groupName !== "string") throw "groupName must be a string";
         if (typeof groupUsername !== "string") throw "groupUsername must be a string";
         if (typeof groupDescription !== "string") throw "groupDescription must be a string";
-        if (typeof radius !== "number") throw "radius must be a number";
+        // if (typeof radius !== "number") throw "radius must be a number";
         if (typeof budget !== "number") throw "budget must be a number";
         if (typeof genderPreference !== "string") throw "genderPreference must be a string";
         if (!Array.isArray(groupLocation)) throw "groupLocation must be a list of 2 coordinates";

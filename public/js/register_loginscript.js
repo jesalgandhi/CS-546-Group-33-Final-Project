@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateSelectedInterests() {
         let selectedOptions = Array.from(interestsInput.options)
                                   .filter(option => option.selected)
-                                  .map(option => option.value);
+                                  .map(option => parseInt(option.value));
         selectedInterestsDiv.innerHTML = selectedOptions.join(', ');
     }
 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         myForm2.addEventListener('submit', (event) => {
             console.log('Registration form submission fired');
             
-            let selectedInterests = getSelectedInterests();
+            let selectedInterests = updateSelectedInterests();
             console.log('Selected Interests: ', selectedInterests);
 
             // Add your validation or processing for registration form here

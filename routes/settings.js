@@ -139,12 +139,32 @@ router.route('/')
     const groupInfo = await groupsData.get(groupId);
     let femalePref = groupInfo.genderPreference === 'F';
     let malePref = groupInfo.genderPreference === 'M';
+    let smallestRadius = groupInfo.radius === 1;
+    let smallRadius = groupInfo.radius === 5;
+    let mediumRadius = groupInfo.radius === 10;
+    let moremediumRadius = groupInfo.radius === 25;
+    let evenMoremediumRadius = groupInfo.radius === 50;
+    let largeRadius = groupInfo.radius === 100;
+    let largerRadius = groupInfo.radius === 250;
+    let evenLargerRadius = groupInfo.radius === 500;
+    let largestRadius = groupInfo.radius === 1000;
+
     res.render("adminSettings", { 
       title: "Admin Settings",
       admin: true,
       groupInfo: groupInfo,
       malePref: malePref,
-      femalePref: femalePref
+      femalePref: femalePref,
+      smallestRadius: smallestRadius,
+      smallRadius: smallRadius,
+      mediumRadius: mediumRadius,
+      moremediumRadius: moremediumRadius,
+      evenMoremediumRadius: evenMoremediumRadius,
+      largeRadius: largeRadius,
+      largerRadius: largerRadius,
+      evenLargerRadius: evenLargerRadius,
+      largestRadius: largestRadius
+
     });
   })
   .post(async (req, res) => {
@@ -152,6 +172,7 @@ router.route('/')
       groupNameInput,
       groupUsernameInput,
       groupDescriptionInput,
+      radiusInput,
       budgetInput,
       genderPreferenceInput,
       groupPasswordInput,
@@ -166,6 +187,7 @@ router.route('/')
     const groupId = await groupsData.getGroupByUserId(userId);
     const groupInfo = await groupsData.get(groupId);
     budgetInput = parseInt(budgetInput);
+    radiusInput = parseInt(radiusInput);
 
     const errors = [];
     let newPassword = true;
@@ -207,10 +229,23 @@ router.route('/')
     if (budgetInput <= 0 || budgetInput > 50000) errors.push('The budget must be nonnegative and below 50k.');
     genderPreferenceInput = genderPreferenceInput.toUpperCase();
     if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
+    if (radiusInput <= 0 || radiusInput > 1000) errors.push('The radius must be nonnegative and below 1000.');
 
+    // // Check if the conversion was successful
+    // if (isNaN(radiusValue)) {
+    //     errors.push('Radius input is not a valid number');
+    // } else {
+    //     // Perform validation on the numeric value
+    //     let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
+    //     if (!valid_radii.includes(radiusValue)) {
+    //         errors.push('Invalid radius. Please provide a radius from the following list: [1, 5, 10, 25, 50, 100, 250, 500, 1000]');
+    //     }
+    // }
     if (errors.length > 0) {
-      return res.status(400).render("adminSettings", { title: "Admin Settings", error: errors, groupInfo: groupInfo });
+      return res.status(400).render("settings", { title: "Admin Settings", error: errors });
     }
+
+
 
     let hashedPass = groupInfo.groupPassword;
     if (newPassword) {
@@ -226,6 +261,7 @@ router.route('/')
         groupUsernameInput,
         groupDescriptionInput,
         groupInfo.groupLocation.coordinates,
+        radiusInput,
         budgetInput,
         genderPreferenceInput,
         groupInfo.users,
