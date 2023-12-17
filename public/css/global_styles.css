@@ -540,6 +540,168 @@ padding: 20px;
 p {
     margin-top: 20px;
 }
+
+
+/* STYLING THE CREATE/JOIN/LOGOUT SCREEN */
+
+.add-group {
+    display: block;
+    margin: 50px auto; 
+    padding: 10px 15px; 
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 200px;
+}
+
+.add-group:hover {
+    background-color: #45a049;
+}
+
+
+/* GROUP CREATE AND JOIN STYLING !!! */
+
+
+#create-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* input labels */
+#create-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* input fields */
+#create-form input,
+#create-form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* submit button */
+#create-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#create-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* "Go Back" link */
+#create-a {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px; 
+    padding: 10px 20px; 
+    text-align: center;
+    text-decoration: none;
+    color: #a22a2a; 
+    background-color: #ffffff; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#create-a:hover {
+    color: #812121; 
+}
+
+/* error messages */
+#create-join-error {
+    color: #e74c3c;
+    text-align: center;
+    font-weight: bold;
+}
+
+#create-h1 {
+    color: #333;
+}
+
+#create-p {
+    color: #555;
+    text-align: center;
+}
+
+
+#join-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* input labels (again, but for join this time) */
+#join-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* input fields (again, but for join this time) */
+#join-form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* submit button */
+#join-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#join-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* "Go Back" link */
+#join-a {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px; 
+    padding: 10px 20px; 
+    text-align: center;
+    text-decoration: none;
+    color: #a22a2a; 
+    background-color: #ffffff; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#join-a:hover {
+    color: #812121; 
+}
+
+#join-h1 {
+    color: #333;
+}
+
+#join-p {
+    color: #555;
+    text-align: center;
+}
+
+
+
+
 /* Style for log in */
 /* Center the login form vertically and horizontally */
 /* .user-login-container {

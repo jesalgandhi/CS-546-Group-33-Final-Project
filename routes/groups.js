@@ -63,6 +63,11 @@ router
           // ensuring inputs are there and are strings
           if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!groupPassword) ) throw 'Please provide all of the required inputs.';
 
+          if (!Number(zipCode)) throw 'Zipcode must be a number.';
+          if (!Number(radius)) throw 'Radius must be a number.';
+          if (!Number(budget)) throw 'Budget must be a number.';
+          if (!Number(numRoommates)) throw 'Number of roommates must be a number.';
+
           radius = Number(radius);
           budget = Number(budget);
           numRoommates = Number(numRoommates);
@@ -76,7 +81,7 @@ router
           if (budget <= 0 || budget > 50000) throw 'The budget must be nonnegative and below 50k.';
 
           // numRoommates
-          if (numRoommates < 1 || numRoommates > 4) throw 'The numRoommates must be 1-4.';
+          if (numRoommates < 1 || numRoommates > 4) throw 'The number of roommates must be 1-4.';
 
           let coordinates = undefined; // will be in the form [latitude, longitude]
 
@@ -108,7 +113,7 @@ router
           // making it uppercase just to avoid cases where it's lowercase 
           genderPreference = genderPreference.toUpperCase();
           // if genderPreference is neither M, F, or O, throw error
-          if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The genderPreference must be either M, F, or O';
+          if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) throw 'The gender preference must be either M, F, or O';
 
 
           // trimming as necessary
@@ -118,10 +123,10 @@ router
           groupPassword = groupPassword.trim();
 
           // ensure groupName/groupDescription/groupUsername/groupPassword is nonempty
-          if (groupName.length === 0) throw 'The groupName field is empty.';
-          if (groupDescription.length === 0) throw 'The groupDescription field is empty.';
-          if (groupUsername.length === 0) throw 'The groupUsername field is empty.';
-          if (groupPassword.length === 0) throw 'The groupPassword field is empty.';
+          if (groupName.length === 0) throw 'The group name field is empty.';
+          if (groupDescription.length === 0) throw 'The group description field is empty.';
+          if (groupUsername.length === 0) throw 'The group username field is empty.';
+          if (groupPassword.length === 0) throw 'The group password field is empty.';
 
           const groupsCollection = await groups();
 
@@ -145,7 +150,7 @@ router
             }
 
           // ensuring the length of password follows protocol
-          if (groupPassword.length < 8 || groupPassword.length > 50) throw `${groupPassword} must be > 8 characters and < 50 characters long.`;
+          if (groupPassword.length < 8 || groupPassword.length > 50) throw `Group password must be > 8 characters and < 50 characters long.`;
 
           let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, radius, budget, numRoommates, genderPreference, [new ObjectId(req.session.user.id)], groupPassword);
 
@@ -160,7 +165,11 @@ router
 
       } catch (e) {
           console.log('----------\n', e);
-          return res.render('error', {error: e});
+          return res.render('createGroup', {
+            error: e,
+            hasErrors: true,
+            groupInfo: req.body
+          });
       }
 
 
@@ -211,7 +220,7 @@ router
         let groupId = await groupsData.getGroupByGroupUsername(groupUsername);
         let groupId2 = await groupsData.getGroupByGroupPassword(groupPassword);
 
-        if (groupId !== groupId2) throw 'Incorrect group username or group password.';
+        if (groupId !== groupId2) throw 'Invalid group username or group password.';
       
         group = await groupsData.get(groupId);
         if (group.users.length === 4) throw 'Cannot join group. Max amount of 4 users!';
@@ -236,7 +245,9 @@ router
           group.groupUsername,
           group.groupDescription,
           group.groupLocation.coordinates,
+          group.radius,
           group.budget,
+          group.numRoommates,
           group.genderPreference,
           group.users.concat( new ObjectId(req.session.user.id)),
           group.groupPassword,
@@ -248,7 +259,11 @@ router
 
       } catch (e) {
           // console.log(e);
-          return res.render('joinGroup', {error: e});
+          return res.render('joinGroup', {
+            error: e,
+            hasErrors: true,
+            groupInfo: req.body
+          });
         }
 
       req.session.user.group = group;
