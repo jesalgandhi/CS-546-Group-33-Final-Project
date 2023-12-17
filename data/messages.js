@@ -149,7 +149,27 @@ const exportedMethods = {
     ).toArray();
     if (conversationId.length !== 0) return conversationId[0]._id.toString();
     else return undefined;
+  }, 
+
+  async removeAllConversationsByGroup(groupId) {
+    const conversationsCollection = await conversations();
+    groupId = helpers.checkId(groupId, 'group ID');
+  
+    const conversationsToDelete = await conversationsCollection.find({
+      participants: new ObjectId(groupId)
+    }).toArray();
+  
+    // if (conversationsToDelete.length === 0) {
+    //   throw `No conversations found for group with ID ${groupId}`;
+    // }
+  
+    for (const conversation of conversationsToDelete) {
+      await conversationsCollection.deleteOne({ _id: conversation._id });
+    }
+  
+    return `All conversations removed for group with ID ${groupId}`;
   }
+  
 };
 
 export default exportedMethods;

@@ -5,6 +5,7 @@ import validation from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import {reviewsData} from '../data/index.js';
 import {matchesData} from '../data/index.js';
 import {phone} from 'phone';
 import { ObjectId } from 'mongodb';
@@ -343,8 +344,10 @@ router.route('/')
     await matchesData.deleteGroupIdFromMatches(groupId);
 
     //todo: delete convos associated with group
+    await messagesData.removeAllConversationsByGroup(groupId);
 
     //todo: delete reviews associated with group
+    await reviewsData.removeAllReviewsByGroup(groupId);
 
     //update user to not be an admin anymore
     let updatedUser;
