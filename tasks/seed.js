@@ -164,9 +164,9 @@ try {
     )
 
     /* Remove user9 */
-    const removedUser = await usersData.removeUser(user9._id.toString());
-    console.log("User removed:", removedUser);
-    console.log(group1);
+    // const removedUser = await usersData.removeUser(user9._id.toString());
+    // console.log("User removed:", removedUser);
+    // console.log(group1);
    //  console.log(group1);
 
     // console.log('HEREEEE');
