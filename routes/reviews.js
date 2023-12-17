@@ -5,6 +5,7 @@ import validation from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import {reviewsData} from '../data/index.js';
 
 
 router
@@ -15,164 +16,169 @@ router
       return res.redirect('/login');
     }
     const userId = req.session.user.id;
+
+    let groupId = req.params.groupId;
+    let groupInfo = undefined;
     
-    /* Check if user is part of a group - if not, prompt to create/join */
-    let groupId = undefined;
+    /* Get groupData using id from params */
     try {
-      groupId = await groupsData.getGroupByUserId(userId);
+      groupInfo = await groupsData.get(groupId);
     } catch (e) {
-      return res.render('messages', {error: "Please Create or Join a group first!"});
+      return res.status(400).render('reviews', {error: e});
     }
 
-    /* Get conversations from the group the user is a part of */
-    let conversations = undefined;
-    try {
-      conversations = await messagesData.getAllConversations(groupId);
-    } catch (e) {
-      return res.render('messages', {error: e});
+    let reviews = []
+    for (let eachReview of groupInfo.reviews) {
+      let reviewerGroup = undefined;
+      try {
+        reviewerGroup = await groupsData.get(eachReview._id.toString());
+      } catch (e) {
+        return res.status(500).render('reviews', {error: e});
+      }
+      let reviewObj = {
+        score: eachReview.score,
+        review: eachReview.review,
+        reviewer: reviewerGroup.groupName,
+        groupId: groupId
+      }
+      reviews.push(reviewObj);
     }
-    
-    /* Populate conversationsAndGroupNames with conversationId as key, groupName as val */
-    let conversationsAndGroupNames = {};
-    /* Create array of promises of conversations to be retrieved */
-    let fetchGroupNamesPromises = conversations.map(async convo => {
-      let participants = convo.participants.filter(p => p.toString() !== groupId);
-      let groupData = await groupsData.get(participants[0].toString());
-      conversationsAndGroupNames[convo._id.toString()] = groupData.groupName;
-    });
-    /* Attempt to fulfill all promises */
-    try {
-      await Promise.all(fetchGroupNamesPromises);
-    } catch (e) {
-      return res.status(500).render('messages', {error: e});
-    }    
-    
-    let noConversations = (conversations.length === 0) ? true : false;
-    return res.render('messages', {
-      // error: false, 
-      title: "Your Conversations", 
-      conversationsAndGroupNames: conversationsAndGroupNames,
-      noConversations: noConversations
-    });
-  })
-  .post(async (req, res) => {
-    
+
+    let noReviews = false;
+    if (reviews.length === 0) noReviews = true;
+
+    return res.render('reviews', {
+      title: `Reviews of ${groupInfo.groupName}`,
+      reviews: reviews,
+      noReviews: noReviews
+    })
   });
 
 router
   .route('/create/:groupId')
   .get(async (req, res) => {
-    let userId = req.session.user.id;
-    let otherGroupId = req.params.otherGroupId;
-    let thisGroupId = await groupsData.getGroupByUserId(userId);
-    let newConversationId = undefined;
-    try {
-      userId = validation.checkId(userId, "userId");
-    } catch (e) {
-      return res.status(400).render('error', {error: e});
-    }
-    try {
-      otherGroupId = validation.checkId(otherGroupId, "otherGroupId");
-    } catch (e) {
-      return res.status(400).render('error', {error: e});
-    }
-    try {
-      thisGroupId = validation.checkId(thisGroupId, "thisGroupId");
-    } catch (e) {
-      return res.status(400).render('error', {error: e});
-    }
-    try {
-      newConversationId = await messagesData.createNewConversation(thisGroupId, otherGroupId);
-    } catch (e) {
-      return res.status(400).render('error', {error: e});
-    }
-    
-    return res.redirect(`/messages/${newConversationId}`);
-  });
-
-router
-  .route('/:conversationId')
-  .get(async (req, res) => {
-    /* Retrieve userId from the session */
-    if (!(req.session.user && req.session.user.id)) {
-      return res.redirect('/login');
-    }
+    const receivingGroupId = req.params.groupId;
     const userId = req.session.user.id;
-    let conversationId = req.params.conversationId;
-
-    /* Ensure the conversationId is a valid id */
-    try {
-      conversationId = validation.checkId(conversationId, 'conversationId');
-    } catch (e) {
-      res.status(400).render('conversation', {error: e});
-    }
-
-    /* Create variables that represent this group and the other group's ids and names */
-    let thisGroupId = undefined;
-    let thisGroupName = undefined;
-    let otherGroupId = undefined;
-    let otherGroupName = undefined;
+    let thisGroupId;
     try {
       thisGroupId = await groupsData.getGroupByUserId(userId);
     } catch (e) {
-      return res.status(400).render('conversation', {error: e});
+      return res.status(400).render('error', {error: e});
+    }
+    let groupExists;
+    try {
+      groupExists = await groupsData.get(thisGroupId);
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
     }
     try {
-      thisGroupName = await groupsData.get(thisGroupId);
-      thisGroupName = thisGroupName.groupName;
+      await reviewsData.checkForDuplicateReview(thisGroupId, receivingGroupId)
     } catch (e) {
-      return res.status(400).render('conversation', {error: e});
-    }
-    try {
-      let participants = await messagesData.getParticipants(conversationId);
-      let participant = participants.filter(p => p.toString() !== thisGroupId);
-      otherGroupId = participant[0];
-    } catch (e) {
-      return res.status(400).render('conversation', {error: e});
-    }
-    try {
-      otherGroupName = await groupsData.get(otherGroupId.toString());
-      otherGroupName = otherGroupName.groupName;
-    } catch (e) {
-      return res.status(400).render('conversation', {error: e});
+      return res.status(400).render('error', {error: e});
     }
 
-    return res.render('conversation', {
-      conversationId: conversationId, 
-      thisGroupId: thisGroupId,
-      otherGroupId: otherGroupId,
-      thisGroupName: thisGroupName,
-      otherGroupName: otherGroupName
-    });
-
+    return res.render('addReview');
   })
   .post(async (req, res) => {
-    let conversationId = req.body.conversationId;
-    let message = req.body.text;
-    let senderId = req.body.senderId;
-    let attemptedMessageInsert = undefined;
+    let groupId = req.params.groupId;
     try {
-      attemptedMessageInsert = await messagesData.createMessage(conversationId, senderId, message);
+      groupId = validation.checkId(groupId, 'groupId');
     } catch (e) {
-      return res.status(500).render('conversation', {error: e});
+      return res.status(500).render('error', {error: e});
+    }
+    let groupInfo = undefined;
+    try {
+      groupInfo = await groupsData.get(groupId);
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
+    }
+    let {ratingInput, reviewInput} = req.body;
+    reviewInput = reviewInput.trim();
+    ratingInput = ratingInput.trim();
+    ratingInput = parseInt(ratingInput);
+    const userId = req.session.user.id;
+    let reviewerId;
+    let reviewerInfo;
+    try {
+      reviewerId = await groupsData.getGroupByUserId(userId);
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
+    }
+    try {
+      reviewerInfo = await groupsData.get(reviewerId);
+    } catch (e) {
+      return res.status(400).render('error', {error: e});
     }
 
-    return res.json({message: attemptedMessageInsert});
+    let createNewReview;
+    try {
+      createNewReview = await reviewsData.createReview(groupId, reviewerId, reviewerInfo.groupName, reviewInput, ratingInput)
+    } catch (e) {
+      return res.status(500).render('addReview', {
+        error: e,
+        reviewInput: reviewInput
+      })
+    }
+
+    return res.redirect('/matches');
 
   });
 
-/* Route from which the client-side JS will retrieve messages periodically */
-router
-  .route('/:conversationId/content')
-  .get(async (req, res) => {
-    const conversationId = req.params.conversationId;
-    try {
-      const messages = await messagesData.getAllMessages(conversationId);
-      return res.json(messages);
-    } catch (e) {
-      return res.status(500).json({error: e});
-    }
-  });
+// router
+//   .route('/:groupId')
+//   .get(async (req, res) => {
+//     /* Retrieve userId from the session */
+//     if (!(req.session.user && req.session.user.id)) {
+//       return res.redirect('/login');
+//     }
+//     const userId = req.session.user.id;
+//     let conversationId = req.params.conversationId;
 
+//     /* Ensure the conversationId is a valid id */
+//     try {
+//       conversationId = validation.checkId(conversationId, 'conversationId');
+//     } catch (e) {
+//       res.status(400).render('conversation', {error: e});
+//     }
+
+//     /* Create variables that represent this group and the other group's ids and names */
+//     let thisGroupId = undefined;
+//     let thisGroupName = undefined;
+//     let otherGroupId = undefined;
+//     let otherGroupName = undefined;
+//     try {
+//       thisGroupId = await groupsData.getGroupByUserId(userId);
+//     } catch (e) {
+//       return res.status(400).render('conversation', {error: e});
+//     }
+//     try {
+//       thisGroupName = await groupsData.get(thisGroupId);
+//       thisGroupName = thisGroupName.groupName;
+//     } catch (e) {
+//       return res.status(400).render('conversation', {error: e});
+//     }
+//     try {
+//       let participants = await messagesData.getParticipants(conversationId);
+//       let participant = participants.filter(p => p.toString() !== thisGroupId);
+//       otherGroupId = participant[0];
+//     } catch (e) {
+//       return res.status(400).render('conversation', {error: e});
+//     }
+//     try {
+//       otherGroupName = await groupsData.get(otherGroupId.toString());
+//       otherGroupName = otherGroupName.groupName;
+//     } catch (e) {
+//       return res.status(400).render('conversation', {error: e});
+//     }
+
+//     return res.render('conversation', {
+//       conversationId: conversationId, 
+//       thisGroupId: thisGroupId,
+//       otherGroupId: otherGroupId,
+//       thisGroupName: thisGroupName,
+//       otherGroupName: otherGroupName
+//     });
+
+//   })
 
 export default router;

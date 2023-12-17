@@ -390,6 +390,53 @@ const exportedMethods = {
     return pendingMatches;
   },
 
+  //Delete a groupid from all matches of all groups
+  async deleteGroupIdFromMatches(groupId) {
+
+    //validate group ID
+    groupId = helpers.checkId(groupId, 'groupId');
+
+    //retrieve all groups from db
+    const allGroups = await data.groupsData.getAll();
+
+    //iterate over each 
+    for(const group of allGroups){
+      //Check if the group's matches array includes the groupId
+      if(group.matches.includes(groupId.toString())){
+        // If it does, remove the groupId from the matches array
+        const index = group.matches.indexOf(groupId.toString());
+        if (index > -1) {
+          group.matches.splice(index, 1);
+        }
+
+      //Check if the group's suggestedMatches array includes the groupId
+      if(group.suggestedMatches.includes(groupId.toString())){
+        // If it does, remove the groupId from the suggestedMatches array
+        const index = group.suggestedMatches.indexOf(groupId.toString());
+        if (index > -1) {
+          group.suggestedMatches.splice(index, 1);
+        }
+      }
+        //update the group in database
+        await data.groupsData.update(group._id,
+          group.groupName,
+          group.groupUsername,
+          group.groupDescription,
+          group.groupLocation,
+          group.radius,
+          group.budget,
+          group.numRoommates,
+          group.genderPreference,
+          group.users,
+          group.groupPassword,
+          group.matches,
+          group.suggestedMatches,
+          group.reviews);
+      }
+    }
+
+  },
+
 
 
   /**

@@ -127,6 +127,43 @@ router.route('/')
         admin: admin 
       });
     }
+    
+  }
+  
+  )
+  .delete(async (req, res) => {
+    let userId = req.session.user.id;
+    userId = validation.checkId(userId, "userId");
+    let groupId;
+    
+    /* If the user is an admin, we delete the group then the user */
+    if (req.session.user.admin) {
+      try {
+        groupId = await groupsData.getGroupByUserId(userId);
+      } catch (e) {
+        return res.status(500).render('error', {error: e});
+      }
+      try {
+        await groupsData.remove(groupId);
+      } catch (e) {
+        return res.status(500).render('error', {error: e});
+      }
+    }
+
+    let deletedUser;
+    try {
+      deletedUser = await usersData.removeUser(userId);
+    } catch (e) {
+      return res.status(500).render('error', {error: e});
+    }
+    
+    if (deletedUser) {
+      // return res.redirect("/logout");
+      return res.json({ success: true, redirectTo: '/logout' });
+    } else {
+      // return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error" });
+      return res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
   });
 
   
@@ -148,6 +185,10 @@ router.route('/')
     let largerRadius = groupInfo.radius === 250;
     let evenLargerRadius = groupInfo.radius === 500;
     let largestRadius = groupInfo.radius === 1000;
+    let oneRoommate = groupInfo.numRoommates === 1;
+    let twoRoommates = groupInfo.numRoommates === 2;
+    let threeRoommates = groupInfo.numRoommates === 3;
+    let fourRoommates = groupInfo.numRoommates === 4;
 
     res.render("adminSettings", { 
       title: "Admin Settings",
@@ -163,8 +204,11 @@ router.route('/')
       largeRadius: largeRadius,
       largerRadius: largerRadius,
       evenLargerRadius: evenLargerRadius,
-      largestRadius: largestRadius
-
+      largestRadius: largestRadius,
+      oneRoommate: oneRoommate,
+      twoRoommates: twoRoommates,
+      threeRoommates: threeRoommates,
+      fourRoommates: fourRoommates
     });
   })
   .post(async (req, res) => {
@@ -174,6 +218,7 @@ router.route('/')
       groupDescriptionInput,
       radiusInput,
       budgetInput,
+      numRoommatesInput,
       genderPreferenceInput,
       groupPasswordInput,
       groupConfirmPasswordInput
@@ -188,6 +233,7 @@ router.route('/')
     const groupInfo = await groupsData.get(groupId);
     budgetInput = parseInt(budgetInput);
     radiusInput = parseInt(radiusInput);
+    numRoommatesInput = parseInt(numRoommatesInput);
 
     const errors = [];
     let newPassword = true;
@@ -230,6 +276,7 @@ router.route('/')
     genderPreferenceInput = genderPreferenceInput.toUpperCase();
     if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
     if (radiusInput <= 0 || radiusInput > 1000) errors.push('The radius must be nonnegative and below 1000.');
+    if (numRoommatesInput <= 0 || numRoommatesInput > 4) errors.push('The numRoommates must be nonnegative and below 10.');
 
     // // Check if the conversion was successful
     // if (isNaN(radiusValue)) {
@@ -263,6 +310,7 @@ router.route('/')
         groupInfo.groupLocation.coordinates,
         radiusInput,
         budgetInput,
+        numRoommatesInput,
         genderPreferenceInput,
         groupInfo.users,
         hashedPass,
@@ -279,6 +327,20 @@ router.route('/')
     }
     catch (e) {
       return res.status(500).render("adminSettings", { title: "Admin Settings", error: e.toString(), groupInfo: groupInfo });
+    }
+  }
+  
+  )
+  .delete(async (req, res) => {
+    let userId = req.session.user.id;
+    userId = validation.checkId(userId, "userId");
+    const groupId = await groupsData.getGroupByUserId(userId);
+    const groupInfo = await groupsData.get(groupId);
+    const deletedGroup = await groupsData.remove(groupId);
+    if (deletedGroup) {
+      return res.redirect("/logout");
+    } else {
+      return res.status(500).render("adminSettings", { title: "Admin Settings", error: "Internal Server Error", groupInfo: groupInfo });
     }
   }
   );

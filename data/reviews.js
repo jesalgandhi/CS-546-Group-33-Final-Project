@@ -4,40 +4,44 @@ import {ObjectId} from 'mongodb';
 
 import validation from '../helpers.js';
 
-const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 
 const exportedMethods = {
 
   /* ALL FUNCTIONS BELOW NEED TO BE DONE */
 
-  async createReview(groupId, firstName, lastName, review) {
+  async createReview(groupId, reviewerId, reviewer, review, score) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     // groupId is the group ID of the person they're leaving a review on
-    if ( (!groupId) || (!firstName) || (!lastName) || (!review) ) throw 'All the required inputs were not given';
-    groupId = validation.checkId(groupId, 'group ID');
+    if ( (!groupId) || (!reviewerId) || (!reviewer) || (!review) || (!score)) throw 'All the required inputs were not given';
 
-    if ( (typeof firstName !== 'string') || (typeof lastName !== 'string') || (typeof review !== 'string') ) throw 'Every input must be a string.';
-    firstName = firstName.trim();
-    lastName = lastName.trim();
+    if ( (typeof reviewer !== 'string') || (typeof review !== 'string') || (typeof reviewerId !== 'string') || (typeof groupId !== 'string') || (typeof score !== 'number')){
+      throw 'Every input must be a string.';
+    } 
+    reviewer = reviewer.trim();
     review = review.trim();
+    groupId = validation.checkId(groupId, 'group ID');
+    reviewerId = validation.checkId(reviewerId, 'reviewer ID');
 
-    if ( (firstName.length === 0) || (lastName.length === 0) || (review.length === 0) ) 'The inputs cannot be empty space strings';
+    if ( (reviewer.length === 0) || (review.length === 0) ) 'The inputs cannot be empty space strings';
 
     if (review.length > 1000) throw 'The review has exceeded the 1000 character limit';
 
-    // making sure there exists a group with the groupId
+    // making sure there exists a group with the groupId, reviewerId
     const group = await groupsCollection.findOne({_id: new ObjectId(groupId)});
+    const reviewerGroup = await groupsCollection.findOne({_id: new ObjectId(reviewerId)});
     if (!group) throw `No group with ${groupId} found`;
+    if (!reviewerGroup) throw `No group with ${reviewerGroup} found`;
+    
 
     // checking if this person has already left a review before
     let reviews = group.reviews || [];
-    const existingReview = reviews.find((review) => review.firstName + review.lastName === firstName + lastName);
-    if (existingReview) throw `${firstName} ${lastName} has already left a review on the group with groupId ${groupId}.`;
+    const existingReview = reviews.find((review) => review._id.toString() === reviewerId);
+    if (existingReview) throw `You have already left a review on this group`;
 
     // making the review object
     const new_review = {
-        _id: new ObjectId(),
-        firstName: firstName,
-        lastName: lastName,
+        _id: new ObjectId(reviewerId),
+        score: score,
         review: review
     };
     // pushing the review into the reviews array
@@ -53,7 +57,19 @@ const exportedMethods = {
     
   }, 
 
+  async checkForDuplicateReview(currentGroupId, receivingGroupId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
+    if (!currentGroupId || !receivingGroupId) throw 'Both parameters are required';
+    currentGroupId = validation.checkId(currentGroupId);
+    receivingGroupId  = validation.checkId(receivingGroupId);
+    const reviews = await this.getAllReviews(receivingGroupId);
+    for (let review of reviews) {
+      if (review._id.toString() === currentGroupId) throw "You have already left a review for this group!";
+    }
+  },
+
   async getAllReviews(groupId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     groupId = validation.checkId(groupId, 'group ID');
     const group = await groupsCollection.findOne({ _id: new ObjectId(groupId) }); 
     if (!group) { throw `No group with groupId ${groupId}`; }
@@ -65,6 +81,7 @@ const exportedMethods = {
   },
 
   async getReview(reviewId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     reviewId = validation.checkId(reviewId, 'review ID');
     // getting all the groups
     const allGroups = await groupsCollection.find({}).toArray();
@@ -81,6 +98,7 @@ const exportedMethods = {
   },
   
   async removeReview(reviewId) {
+    const groupsCollection = await groups(); // will be used a lot, so making it a global variable
     reviewId = validation.checkId(reviewId, 'review ID');
 
     // getting all the groups
