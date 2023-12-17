@@ -13,6 +13,7 @@ import { groups } from '../config/mongoCollections.js';
 import { users } from '../config/mongoCollections.js';
 const require = createRequire(import.meta.url);
 const cities = require('cities');
+const groupsCollection = await groups();
 
 
 router
@@ -31,9 +32,18 @@ router
     {
       if (!req.session.user.groupInfo)
       {
-        req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
+        try
+        {
+          req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
+        }
+
+        catch(e)
+        {
+          return res.render('login');
+        }
       }
 
+     
       //console.log("grah");
       //console.log(req.session.user);
       
@@ -55,98 +65,97 @@ router
 
       //PRIOR TO RENDERING HOMEPAGE
       //GET ALL MATCHES EXCLUDING CURRENT GROUP AND SUGGESTED_MATCHES OF CURRENT GROUP
-
-      if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
-      {
-       // console.log("Entered here");
-        let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
-        //console.log(allGroups);
-
-
-        let groupsDataCollection = await groups();
-
-        //let allGroups = await groupsData.getAll();
-
-
-  
-
-        //
-          try 
+          if (req.session.user.groupInfo.suggestedMatches.length == 0 && req.session.user.groupInfo.matches.length == 0)
           {
-            let groupIDs = [];
-
-            for (let i = 0; i < allGroups.length; i++)
-            {
-                if(req.session.user.groupID != allGroups[i]._id)
-                  groupIDs.push(allGroups[i].toString());
-            }
-                       
-            updatedInfo = await groupsDataCollection.updateMany(
-              {_id: new ObjectId(req.session.user.groupID)},
-              {$set: {suggestedMatches: groupIDs}},
-              {returnDocument: 'after'}
-            );
-          }
-
-          catch(e)
-          {
-            console.log(e);
-          }
-      }
-
-
-
-      let currentGroup = await groupsData.get(req.session.user.groupID);
-      //console.log(currentGroup);
-
-      //With suggested matches group IDs, get their info before rendering homepage
-      let suggestedMatchInfo = [];
-
-      for (let i = 0; i < currentGroup.suggestedMatches.length; i++)
-      {
-          try
-          {
-            let groupData = await groupsData.get(currentGroup.suggestedMatches[i].toString());
-            //console.log(groupData);
-            suggestedMatchInfo.push(groupData);
-          }
-
-          catch(e)
-          {
-            console.log(e);
-          }
-         
-      }
-
-      //console.log(suggestedMatchInfo);
+           // console.log("Entered here");
+            let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
+            //console.log(allGroups);
+    
+    
+            let groupsDataCollection = await groups();
+    
+            //let allGroups = await groupsData.getAll();
+    
+    
       
-      for (let i = 0; i < suggestedMatchInfo.length; i++)
-      {
-          suggestedMatchInfo[i].this_userID = req.session.user.groupID;
-          suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
-          //console.log(suggestedMatchInfo[i].city);
-
-          for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)
-          {
-            try
-            {
-              let userData = await usersData.getUser(suggestedMatchInfo[i].users[x].toString());
-              suggestedMatchInfo[i].users[x] = userData;
-              suggestedMatchInfo[i].users[x].lastName = suggestedMatchInfo[i].users[x].lastName[0] + ".";
-            }
-
-            catch(e)
-            {
-              console.log(e);
-              suggestedMatchInfo[i].users.splice(x, 1);
-            }
-            
+    
+            //
+              try 
+              {
+                let groupIDs = [];
+    
+                for (let i = 0; i < allGroups.length; i++)
+                {
+                    if(req.session.user.groupID != allGroups[i]._id)
+                      groupIDs.push(allGroups[i].toString());
+                }
+                           
+                updatedInfo = await groupsDataCollection.updateMany(
+                  {_id: new ObjectId(req.session.user.groupID)},
+                  {$set: {suggestedMatches: groupIDs}},
+                  {returnDocument: 'after'}
+                );
+              }
+    
+              catch(e)
+              {
+                console.log(e);
+              }
           }
-      }
-      //console.log(suggestedMatchInfo);
-      return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatchInfo});
-    }
-  })
+    
+    
+    
+          let currentGroup = await groupsData.get(req.session.user.groupID);
+          //console.log(currentGroup);
+    
+          //With suggested matches group IDs, get their info before rendering homepage
+          let suggestedMatchInfo = [];
+    
+          for (let i = 0; i < currentGroup.suggestedMatches.length; i++)
+          {
+              try
+              {
+                let groupData = await groupsData.get(currentGroup.suggestedMatches[i].toString());
+                //console.log(groupData);
+                suggestedMatchInfo.push(groupData);
+              }
+    
+              catch(e)
+              {
+                console.log(e);
+              }
+             
+          }
+    
+          //console.log(suggestedMatchInfo);
+          
+          for (let i = 0; i < suggestedMatchInfo.length; i++)
+          {
+              suggestedMatchInfo[i].this_userID = req.session.user.groupID;
+              suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
+              //console.log(suggestedMatchInfo[i].city);
+    
+              for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)
+              {
+                try
+                {
+                  let userData = await usersData.getUser(suggestedMatchInfo[i].users[x].toString());
+                  suggestedMatchInfo[i].users[x] = userData;
+                  suggestedMatchInfo[i].users[x].lastName = suggestedMatchInfo[i].users[x].lastName[0] + ".";
+                }
+    
+                catch(e)
+                {
+                  console.log(e);
+                  suggestedMatchInfo[i].users.splice(x, 1);
+                }
+                
+              }
+          }
+          //console.log(suggestedMatchInfo);
+          return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatchInfo});
+        }
+      })
   .post(async (req, res) => 
   {
     //TODO
@@ -155,6 +164,10 @@ router
     //console.log(filter);
 
     let filteredUsers = [];
+
+    console.log("Suggested Matches Length: " + req.session.user.groupInfo.suggestedMatches.length);
+    console.log("Filter Applied: " + filter);
+
     if (!req.session.user)
       return res.redirect('/login');
 
@@ -357,6 +370,7 @@ router
       }
 
       //console.log(excludedValues);
+      
 
 
       let groups = await groupsData.getAll();
@@ -377,13 +391,18 @@ router
       }).sort((a, b) => a.distance - b.distance);
 
       filteredUsers = allGroups;
-    }
+
+   
+
+
+   }
 
     else if (filter == "radius")
     {
       let excludedValues = [];
       
     }
+
 
     if (filteredUsers.length == 0)
     {
@@ -392,6 +411,7 @@ router
     }
 
 
+    
 
     else
     {
@@ -432,11 +452,28 @@ router
         }
       }
       
+      try 
+      {
+        const filteredGroupIds = filteredUsers.map(user => user._id.toString());
     
+        await groupsCollection.findOneAndUpdate(
+            { _id: new ObjectId(req.session.user.groupInfo._id) },
+            { $set: { suggestedMatches: filteredGroupIds } });
+   
+       } 
+       catch (e) 
+       {
+        console.error(e);
+        }
+    
+
     
     
     let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
-     return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
+    
+    console.log("Hit this statement");
+    
+    return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
      
     }
      

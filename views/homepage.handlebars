@@ -39,11 +39,13 @@
         <h2>Welcome {{user.firstName}} {{user.lastName}}</h2>
         <img src="{{user.picture}}" alt="{{user.firstName}}" width="300" height="300">
         <h4>Age: {{user.age}}</h4>
-                <h4>Biography: {{user.biography}}</h4>
-                <h4>Interests:
-                    {{#each user.interests}}
-                        {{this}}, 
-                    {{/each}}
+        <h4>Biography: {{user.biography}}</h4>
+        <h4>Interests:
+        {{#each user.interests}}
+            {{this}}{{#unless @last}}, {{/unless}}
+        {{/each}}
+</h4>
+
 
         {{#if groupMembers.length}}
         <br>
@@ -55,9 +57,9 @@
                 <h4>Age: {{age}}</h4>
                 <h4>Biography: {{biography}}</h4>
                 <h4>Interests:
-                    {{#each interests}}
-                        {{this}}, 
-                    {{/each}}
+                {{#each interests}}
+                    {{this}}{{#unless @last}}, {{/unless}}
+                {{/each}}
                 </h4>
                 <br>
             {{/each}}
@@ -91,9 +93,9 @@
                                     <h4>Age: {{age}}</h4>
                                     <h4>Biography: {{biography}}</h4>
                                     <h4>Interests:
-                                        {{#each interests}}
-                                            {{this}}, 
-                                        {{/each}}
+                                    {{#each interests}}
+                                    {{this}}{{#unless @last}}, {{/unless}}
+                                    {{/each}}
                                     </h4>
                                 </div>
                             {{/each}}

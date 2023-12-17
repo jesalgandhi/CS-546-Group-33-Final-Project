@@ -49,7 +49,7 @@ router
 
     try
     {
-      console.log(user._id);
+      //console.log(user._id);
       groupID = await groupsData.getGroupByUserId(user._id.toString());
     } 
     catch(e)
@@ -73,7 +73,7 @@ router
       group = undefined;
     }
 
-    console.log(group);
+    //(group);
       
     let groupMembers = [];
 
