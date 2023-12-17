@@ -53,13 +53,10 @@ router.route('/')
       let age = typeof ageInput === 'number' ? ageInput : parseInt(ageInput);
       if (!Number.isInteger(age) || age < 18 || age > 120) errors.push("Invalid Age");
     }
-    if (interestsInput) {
-      if (typeof interestsInput === 'string') {
-        interestsInput = interestsInput.split(',').map(interest => interest.trim());
-      }
-      if (!Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string')) {
-        errors.push("Interests must be a list of strings");
-      }
+    if (interestsInput && interestsInput.length === 0) {
+      // Do nothing if the length is 0
+    } else if (interestsInput && (interestsInput.length !== 5 || !Array.isArray(interestsInput) || !interestsInput.every(interest => typeof interest === 'string'))) {
+      errors.push("Interests must be a list of exactly 5 strings");
     }
     if (phonenumberInput) {
       phonenumberInput = phone(phonenumberInput);
