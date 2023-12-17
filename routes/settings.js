@@ -136,9 +136,11 @@ router.route('/')
     userId = validation.checkId(userId, "userId");
     const deletedUser = await usersData.removeUser(userId);
     if (deletedUser) {
-      return res.redirect("/logout");
+      // return res.redirect("/logout");
+      return res.json({ success: true, redirectTo: '/logout' });
     } else {
-      return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error" });
+      // return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error" });
+      return res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   });
 
