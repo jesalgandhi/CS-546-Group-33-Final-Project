@@ -297,7 +297,7 @@ router.route('/')
 
     let hashedPass = groupInfo.groupPassword;
     if (newPassword) {
-      saltRounds = await bcrypt.genSalt(8);
+      const saltRounds = await bcrypt.genSalt(8);
       hashedPass = await bcrypt.hash(groupPasswordInput, saltRounds);
     }
     
