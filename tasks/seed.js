@@ -190,8 +190,8 @@ try {
     // groups remove() - Removing group5 instead
     const removed_group2 = await groupsData.remove(group5._id.toString());
     // console.log('Result of trying to remove group2: ', removed_group2);
-    const removedUser = await usersData.removeUser(user9._id);
-     console.log("User removed:", removedUser);
+    // const removedUser = await usersData.removeUser(user9._id);
+    //  console.log("User removed:", removedUser);
      console.log(group1);
 
     // groups getAll()
