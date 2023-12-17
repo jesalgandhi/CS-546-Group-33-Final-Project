@@ -10,6 +10,7 @@ import {matchesData} from '../data/index.js';
 import {phone} from 'phone';
 import { ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
+import xss from 'xss';
 
 
 router.route('/')
@@ -37,6 +38,17 @@ router.route('/')
       phonenumberInput, passwordInput, confirmPasswordInput, 
       biographyInput, ageInput, interestsInput, pictureInput
     } = req.body;
+    firstNameInput = xss(firstNameInput);
+    lastNameInput = xss(lastNameInput);
+    emailAddressInput = xss(emailAddressInput);
+    phonenumberInput = xss(phonenumberInput);
+    passwordInput = xss(passwordInput);
+    confirmPasswordInput = xss(confirmPasswordInput);
+    biographyInput = xss(biographyInput);
+    ageInput = xss(ageInput);
+    interestsInput = xss(interestsInput);
+    pictureInput = xss(pictureInput);
+
 
     const id = req.session.user.id;
     let userId = new ObjectId(id);
@@ -235,8 +247,16 @@ router.route('/')
       groupConfirmPasswordInput
     }
     = req.body;
+    groupNameInput = xss(groupNameInput);
+    groupUsernameInput = xss(groupUsernameInput);
+    groupDescriptionInput = xss(groupDescriptionInput);
+    radiusInput = xss(radiusInput);
+    budgetInput = xss(budgetInput);
+    numRoommatesInput = xss(numRoommatesInput);
+    genderPreferenceInput = xss(genderPreferenceInput);
+    groupPasswordInput = xss(groupPasswordInput);
+    groupConfirmPasswordInput = xss(groupConfirmPasswordInput);
 
-    console.log(req.body)
     
     let userId = req.session.user.id;
     userId = validation.checkId(userId, "userId");
@@ -351,10 +371,10 @@ router.route('/')
     // delete matches associated with group
     await matchesData.deleteGroupIdFromMatches(groupId);
 
-    //todo: delete convos associated with group
+    // delete convos associated with group
     await messagesData.removeAllConversationsByGroup(groupId);
 
-    //todo: delete reviews associated with group
+    // delete reviews associated with group
     await reviewsData.removeAllReviewsByGroup(groupId);
 
     //update user to not be an admin anymore

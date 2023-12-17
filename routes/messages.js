@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import validation from '../helpers.js';
+import xss from 'xss';
 
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
@@ -56,9 +57,9 @@ router
       noConversations: noConversations
     });
   })
-  .post(async (req, res) => {
+  // .post(async (req, res) => {
     
-  });
+  // });
 
 router
   .route('/create/:otherGroupId')
@@ -149,7 +150,7 @@ router
   })
   .post(async (req, res) => {
     let conversationId = req.body.conversationId;
-    let message = req.body.text;
+    let message = xss(req.body.text);
     let senderId = req.body.senderId;
     let attemptedMessageInsert = undefined;
     try {

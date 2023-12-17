@@ -21,6 +21,7 @@
     "geojson-places": "^1.0.8",
     "mongodb": "^6.3.0",
     "node-fetch": "^3.3.2",
-    "phone": "^3.1.41"
+    "phone": "^3.1.41",
+    "xss": "^1.0.14"
   }
 }
