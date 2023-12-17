@@ -659,44 +659,56 @@ p {
 } */
 
 /* View all reviews styling */
-#reviewForm {
-    width: 50%;
-    margin: auto;
-    padding: 20px;
+#error {
+    background-color: #ffdddd;
+    border-left: 6px solid #f44336;
+    margin: 10px 0;
+    padding: 15px;
+    text-align: center;
+}
+
+#success {
+    background-color: #ddffdd;
+    border-left: 6px solid #4CAF50;
+    margin: 10px 0;
+    padding: 15px;
+    text-align: center;
+}
+
+#reviewsContainer {
+    margin: 20px auto;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-#ratingInput {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    background-color: #f8f8f8;
-}
-#reviewInput {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    background-color: #f8f8f8;
-    margin-top: 10px;
-}
-/* button[type="submit"] {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    margin-top: 20px;
-} */
 
-/* button[type="submit"]:hover {
-    background-color: #0056b3;
-} */
+.individualReview {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+}
+
+.reviewScore, .reviewDescription, .reviewer {
+    margin-bottom: 10px;
+}
+
+#noReviews, #beFirstReviewer {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+#matchesHref a, #homeHref a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+#matchesHref a:hover, #homeHref a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
 
 
 /* STYLING THE CREATE/JOIN/LOGOUT SCREEN */
