@@ -14,22 +14,22 @@ try {
     /* Create 12 users - user1 will be deleted for demonstration */
     const user1 = await usersData.createUser(
         "John", "Smith", "johnsmith@example.com", "Test123$", "2015554516", "I am eager to make and meet new roommates", 23, 
-        ["Biking", "Movies", "Painting"], "picture url with be here i guess"
+        ["Biking", "Movies", "Painting"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user2 = await usersData.createUser(
         "Emily", "Johnson", "emilyjohnson@example.com", "Test123$", "2015557845", "Love hiking and outdoor adventures", 27, 
-        ["Hiking", "Photography", "Cooking"], "picture url goes here"
+        ["Hiking", "Photography", "Cooking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user3 = await usersData.createUser(
         "Miguel", "Hernandez", "miguelhernandez@example.com", "Test123$", "2015558964", "A tech enthusiast and bookworm", 30, 
-        ["Technology", "Reading", "Chess"], "picture url will be inserted here"
+        ["Technology", "Reading", "Chess"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user4 = await usersData.createUser(
         "Sara", "Khan", "sarakhan@example.com", "Test123$", "2015556732", "Passionate about music and traveling", 25, 
-        ["Music", "Traveling", "Yoga"], "image url will be here"
+        ["Music", "Traveling", "Yoga"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user5 = await usersData.createUser(
@@ -39,37 +39,37 @@ try {
 
     const user6 = await usersData.createUser(
         "Miguel", "Garcia", "miguelgarcia@example.com", "Test123$", "2015557890", "Avid reader and history buff", 28,
-        ["Reading", "History", "Hiking"], "URL for the picture here"
+        ["Reading", "History", "Hiking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user7 = await usersData.createUser(
         "Aisha", "Patel", "aishapatel@example.com", "Test123$", "2015551234", "Tech enthusiast and amateur photographer", 24,
-        ["Technology", "Photography", "Blogging"], "URL for the picture here"
+        ["Technology", "Photography", "Blogging"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
     const user8 = await usersData.createUser(
         "Elena", "Rodriguez", "elenarodriguez@example.com", "Test123$", "2015552468", "Fitness lover and outdoor enthusiast", 26,
-        ["Fitness", "Hiking", "Kayaking"], "URL for the picture here"
+        ["Fitness", "Hiking", "Kayaking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user9 = await usersData.createUser(
         "Liam", "Nguyen", "liamnguyen@example.com", "Test123$", "2015551357", "Movie fanatic and amateur playwright", 30,
-        ["Movies", "Theater", "Writing"], "URL for the picture here"
+        ["Movies", "Theater", "Writing"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user10 = await usersData.createUser(
         "Zoe", "Smith", "zoesmith@example.com", "Test123$", "2015558642", "Passionate about sustainable living and gardening", 27,
-        ["Sustainability", "Gardening", "Cooking"], "URL for the picture here"
+        ["Sustainability", "Gardening", "Cooking"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
     const user11 = await usersData.createUser(
         "Noah", "Lee", "noahlee@example.com", "Test123$", "2015559473", "Enthusiastic about digital art and animation", 23,
-        ["Digital Art", "Animation", "Video Games"], "URL for the picture here"
+        ["Digital Art", "Animation", "Video Games"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
     
     const user12 = await usersData.createUser(
         "Emma", "Johnson", "emmajohnson@example.com", "Test123$", "2015557621", "Lover of classical music and playing the violin", 29,
-        ["Classical Music", "Violin", "Reading"], "URL for the picture here"
+        ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
     

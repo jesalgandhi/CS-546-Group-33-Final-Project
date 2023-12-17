@@ -16,15 +16,16 @@ router
   .post(async (req, res) => {
     // const selectedOptions = req.body.options;
     // console.log(selectedOptions);
+    
+    let { firstNameInput, lastNameInput, emailAddressInput, phonenumberInput, passwordInput, confirmPasswordInput, biographyInput, ageInput, interestsInput, pictureInput} = req.body;
     const requiredFields = ['firstNameInput', 'lastNameInput', 'emailAddressInput','phonenumberInput', 'passwordInput', 'confirmPasswordInput', 'biographyInput', 'ageInput', 'interestsInput'];
     const missingFields = requiredFields.filter(field => !req.body[field]);
 
     if (missingFields.length > 0) {
-      return res.status(400).render("register", { title: "User Registration", error: missingFields.map(field => `${field.replace('Input', '')} is required`) });
+      return res.status(400).render("register", { title: "User Registration", error: missingFields.map(field => `${field.replace('Input', '')} is required`), formData: req.body });
     }
-
-    let { firstNameInput, lastNameInput, emailAddressInput, phonenumberInput, passwordInput, confirmPasswordInput, biographyInput, ageInput, interestsInput, pictureInput} = req.body;
-
+    
+    
     // console.log(ageInput)
     // console.log(biographyInput)
 
@@ -66,7 +67,11 @@ router
 
     // console.log(phonenumberInput);
     if (errors.length > 0) {
-      return res.status(400).render("register", { title: "Registration Form", error: errors });
+      return res.status(400).render("register", { 
+        title: "Registration Form", 
+        error: errors,
+        formData: req.body
+      });
     }
 
     try {
@@ -74,10 +79,10 @@ router
       if (newUser) {
         return res.redirect("/login");
       } else {
-        return res.status(500).render("register", { title: "Registration Form", error: "Internal Server Error" });
+        return res.status(500).render("register", { title: "Registration Form", error: "Internal Server Error", formData: req.body });
       }
     } catch (e) {
-      return res.status(400).render("register", { title: "Registration Form", error: e.toString() });
+      return res.status(400).render("register", { title: "Registration Form", error: e.toString(), formData: req.body });
     }
   });
 

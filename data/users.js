@@ -187,7 +187,6 @@ async removeUser(userId) {
     if (!ObjectId.isValid(userId)) { 
         throw 'Invalid user ID'; 
     }
-
     const usersCollection = await users();
     const userToUpdate = await usersCollection.findOne({ _id: new ObjectId(userId) });
     if (!userToUpdate) {
@@ -196,11 +195,26 @@ async removeUser(userId) {
     if (updatedFields.emailAddress && !validate(updatedFields.emailAddress)) {
         throw 'You must provide a valid contact email';
     }
+    
     if (updatedFields.phoneNumber) {
         let phoneNumber = phone(updatedFields.phoneNumber);
         if (!phoneNumber.isValid) throw 'Invalid phone number!';
         updatedFields.phoneNumber = phoneNumber.phoneNumber;
     }
+    
+    // Check if a user with the same email or phone number already exists
+    const existingUser = await usersCollection.findOne({
+        $or: [
+            { emailAddress: updatedFields.emailAddress },
+            { phoneNumber: updatedFields.phoneNumber }
+        ]
+    });
+    
+    if (existingUser) {
+        throw 'A user with this email or phone number already exists';
+    }
+   
+
     const updateData = {};
     for (const [key, value] of Object.entries(updatedFields)) {
         if (value !== undefined && value !== null) {
