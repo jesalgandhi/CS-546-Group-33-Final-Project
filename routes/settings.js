@@ -5,6 +5,7 @@ import validation from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
 import {messagesData} from '../data/index.js';
+import {matchesData} from '../data/index.js';
 import {phone} from 'phone';
 import { ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
@@ -162,7 +163,7 @@ router.route('/')
       return res.json({ success: true, redirectTo: '/logout' });
     } else {
       // return res.status(500).render("settings", { title: "Settings", error: "Internal Server Error" });
-      return res.status(500).json({ success: false, error: "Internal Server Error" });
+      return res.status(500).json({ success: false, redirectTo: '/error' });
     }
   });
 
@@ -336,11 +337,32 @@ router.route('/')
     userId = validation.checkId(userId, "userId");
     const groupId = await groupsData.getGroupByUserId(userId);
     const groupInfo = await groupsData.get(groupId);
-    const deletedGroup = await groupsData.remove(groupId);
+    
+    // delete matches associated with group
+    await matchesData.deleteGroupIdFromMatches(groupId);
+
+    //todo: delete convos associated with group
+
+    //todo: delete reviews associated with group
+
+    //update user to not be an admin anymore
+    let updatedUser;
+    try {
+      updatedUser = await usersData.updateUser(userId, {admin: false});
+    } catch (e) {
+      return res.status(500).render('error', {error: e});
+    }
+
+    let deletedGroup;
+    try {
+      deletedGroup = await groupsData.remove(groupId);
+    } catch (e) {
+      return res.status(500).render('error', {error: e});
+    }
     if (deletedGroup) {
-      return res.redirect("/logout");
+      return res.json({ success: true, redirectTo: '/logout' });
     } else {
-      return res.status(500).render("adminSettings", { title: "Admin Settings", error: "Internal Server Error", groupInfo: groupInfo });
+      return res.status(500).json({ success: false, redirectTo: '/error' });
     }
   }
   );
