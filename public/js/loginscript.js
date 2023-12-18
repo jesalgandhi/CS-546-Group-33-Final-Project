@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let registrationForm = document.getElementById('register-form');
+    let loginForm = document.getElementById('login-form');
 
     function isValidEmail(email) {
         return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password);
     }
 
-    registrationForm.addEventListener('submit', function(event) {
+    loginForm.addEventListener('submit', function(event) {
         let errors = [];
 
         if (!isValidEmail(document.getElementById('emailAddressInput').value)) {
