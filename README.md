@@ -42,12 +42,18 @@ Roommate Roulette is an application designed to help you find the perfect roomma
    ```bash
    $ npm i
    ```
-
-3. **Start the Application:**
+   
+3. **Seed the database:**
 
    ```bash
+   $ npm run seed
+   ``` 
+
+4. **Start the Application:**
+
+```bash
    $ npm start
-   ```
+```
 
 ## Contributors
 This project was a collaborative effort by: 
