@@ -262,13 +262,25 @@ section {
     display: flex;
 }
 
-.button-container{
-    text-decoration: none;
-    color: white;
-    padding: 15px;
+.button-container {
+    display: inline-block;
+    text-decoration: none; /* Removes underline */
+    color: blue; /* Keeps text blue */
+    padding: 15px 30px;
     margin: 0 0.5em;
-    background-color:black;
+    background-color: #FFFFE0; /* Pale yellow background */
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
+
+.button-container:hover, .button-container:focus {
+    background-color: #FDFD96; /* Slightly darker yellow on hover/focus */
+    text-decoration: none;
+    color: blue; /* Keeps text blue */
+    cursor: pointer;
+}
+
 
 
 .corner_border
