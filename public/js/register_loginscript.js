@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let password = document.getElementById('passwordInput');
     let interestsInput = document.getElementById('interestsInput');
     let selectedInterestsDiv = document.getElementById('selectedInterests');
-    let errorCheck = document.getElementById('error');
+    let errorCheck = document.getElementById('client-error');
     let formLabel = document.getElementById('formLabel');
 
     // Client-side validation functions
