@@ -190,7 +190,8 @@ router
           return res.render('createGroup', {
             error: e,
             hasErrors: true,
-            groupInfo: req.body
+            groupInfo: req.body,
+            title: 'Create a Group'
           });
       }
 
@@ -288,7 +289,8 @@ router
           return res.render('joinGroup', {
             error: e,
             hasErrors: true,
-            groupInfo: req.body
+            groupInfo: req.body,
+            title: 'Join a Group'
           });
         }
 

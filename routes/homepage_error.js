@@ -26,7 +26,7 @@ router
       return res.render('login');
       
     else if (req.session.user.groupID == undefined)
-      return res.render('addGroup');
+      return res.render('addGroup', {title: 'Create/Join Group'});
 
     else
     {
