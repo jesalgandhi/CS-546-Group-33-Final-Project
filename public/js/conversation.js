@@ -77,8 +77,8 @@ $(document).ready(function() {
         
     });
 
-    // fetch messages every 10 seconds
-    setInterval(fetchMessages, 10000);
+    // fetch messages every 5 seconds
+    setInterval(fetchMessages, 5000);
 
     fetchMessages();
 });
