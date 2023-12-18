@@ -33,7 +33,7 @@ router
     return res.render("createGroup", {title: 'Create a Group'});
   })
   .post(async (req, res) => {
-      console.log('we in /create post mayne');
+      // console.log('we in /create post mayne');
       
       // all the input fields
       const groupInfo = req.body;
@@ -48,17 +48,17 @@ router
       let groupPassword = xss(groupInfo.groupPassword);
       let groupPicture = xss(groupInfo.groupPicture);
 
-      console.log('printing stuff');
-      console.log(groupName)
-      console.log(groupUsername)
-      console.log(groupDescription)
-      console.log(zipCode)
-      console.log(radius)
-      console.log(budget)
-      console.log(numRoommates)
-      console.log(genderPreference)
-      console.log(groupPassword);
-      console.log(groupPicture);
+      // console.log('printing stuff');
+      // console.log(groupName)
+      // console.log(groupUsername)
+      // console.log(groupDescription)
+      // console.log(zipCode)
+      // console.log(radius)
+      // console.log(budget)
+      // console.log(numRoommates)
+      // console.log(genderPreference)
+      // console.log(groupPassword);
+      // console.log(groupPicture);
 
 
       try {
@@ -217,14 +217,14 @@ router
       return res.render("joinGroup", {title: 'Join a Group'});
   })
   .post(async (req, res) => {
-      console.log('we in /join post mayne');
+      // console.log('we in /join post mayne');
 
       const groupInfo = req.body;
       let groupUsername = xss(groupInfo.groupUsername);
-      console.log(groupUsername);
+      // console.log(groupUsername);
 
       let groupPassword = xss(groupInfo.groupPassword);
-      console.log(groupPassword);
+      // console.log(groupPassword);
       // // let errors = [];
 
       let group = undefined;
@@ -248,21 +248,21 @@ router
         group = await groupsData.get(groupId);
         if (group.users.length === 4) throw 'Cannot join group. Max amount of 4 users!';
 
-        console.log('-----');
-        console.log(group.groupName);
-        console.log(groupUsername);
-        console.log(group.groupDescription);
-        console.log(group.groupLocation.coordinates);
-        console.log(group.radius);
-        console.log(group.budget);
-        console.log(group.numRoommates);
-        console.log(group.genderPreference);
-        console.log(group.users.concat(new ObjectId(req.session.user.id)));
-        console.log(groupPassword);
-        console.log(group.groupPicture);
-        console.log(group.matches);
-        console.log(group.reviews);
-        console.log('-----');
+        // console.log('-----');
+        // console.log(group.groupName);
+        // console.log(groupUsername);
+        // console.log(group.groupDescription);
+        // console.log(group.groupLocation.coordinates);
+        // console.log(group.radius);
+        // console.log(group.budget);
+        // console.log(group.numRoommates);
+        // console.log(group.genderPreference);
+        // console.log(group.users.concat(new ObjectId(req.session.user.id)));
+        // console.log(groupPassword);
+        // console.log(group.groupPicture);
+        // console.log(group.matches);
+        // console.log(group.reviews);
+        // console.log('-----');
 
 
         let addedGroup = await groupsData.update(
@@ -297,7 +297,7 @@ router
       req.session.user.group = group;
       req.session.user.groupID = group._id;
 
-      return res.redirect('/');
+      return res.redirect('/logout');
       // return res.render('homepage', {title: "Home", user: req.session.user, group: req.session.user.group});
 
   });
