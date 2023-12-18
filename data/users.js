@@ -11,7 +11,6 @@ import {messagesData} from './index.js';
 import bcrypt from 'bcrypt';
 import validation from '../helpers.js';
 import fetch from 'node-fetch';
-import * as helpers from '../helpers.js';
 
 // const groupsCollection = await groups(); // will be used a lot, so making it a global variable
 // const usersCollection = await users();
