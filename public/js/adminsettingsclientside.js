@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return numRoommates === '' || (!isNaN(parseInt(numRoommates)) && parseInt(numRoommates) >= 1 && parseInt(numRoommates) <= 4);
     }
     
-    function isValidPicture(picture) {
-        return picture === '' || /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)*[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i.test(picture);
-    }
+    // function isValidPicture(picture) {
+    //     return picture === '' || /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)*[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i.test(picture);
+    // }
     
 
     adminSettingsForm.addEventListener('submit', function(event) {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let groupConfirmPasswordInput = document.getElementById('groupConfirmPasswordInput').value;
         let radiusInput = document.getElementById('radiusInput').value;
         let numRoommatesInput = document.getElementById('numRoommatesInput').value;
-        let groupPictureInput = document.getElementById('groupPictureInput').value;
+        // let groupPictureInput = document.getElementById('groupPictureInput').value;
 
         if (!isValidGroupName(groupNameInput)) errors.push("Invalid Group Name");
         if (!isValidGroupDescription(groupDescriptionInput)) errors.push("Invalid Group Description");
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (newPassword && (groupConfirmPasswordInput !== groupPasswordInput)) errors.push("Passwords do not Match");
         if (!isValidRadius(radiusInput)) errors.push("Invalid Radius");
         if (!isValidRoommates(numRoommatesInput)) errors.push("Invalid Number of Roommates");
-        if (!isValidPicture(groupPictureInput)) errors.push("Invalid Picture URL");
+        // if (!isValidPicture(groupPictureInput)) errors.push("Invalid Picture URL");
         let clientSideErrorsDiv = document.getElementById('client-side-errors');
 
         if (errors.length > 0) {
