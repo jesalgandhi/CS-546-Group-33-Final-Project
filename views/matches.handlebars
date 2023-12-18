@@ -1,0 +1,110 @@
+
+    <div class="Matches-header">    
+        <h1>Matches</h1>
+    </div>
+
+<div class="matches-container"> 
+    {{#each matchesWithConversations}}  
+        <div class="match-card">
+            {{#if this.match.groupName}}
+                <div class="group-name-box">
+                    <img src="{{match.groupPicture}}" width="100" height="100">  
+                    <h2>Group Name: {{this.match.groupName}}</h2>
+                </div>
+            {{/if}}
+            
+            {{#if this.match.groupName}}
+                <h3><strong>Group Description: {{this.match.groupDescription}}</strong></h3>
+            {{/if}}
+            
+            {{#if this.city}}
+                <div class="location-info">
+                    <h3>Location:</h3>
+                    <p>City: {{this.city.city}}</p>
+                    <p>State: {{this.city.state}}</p>
+                    <p>Zipcode: {{this.city.zipcode}}</p>
+                </div>
+            {{/if}}
+            
+            
+
+            
+            {{#if this.users}}
+            <h3>Members:</h3>
+                <ul class="members-list">
+                    {{#each this.users}}
+                        <img src="{{picture}}" alt="{{firstName}}" width="75" height="75">
+                        <li>
+                            <div class="user-info">
+                            <p class="user-name">{{this.firstName}} {{this.lastName}}</p>
+                            <p class="user-contact">{{this.emailAddress}}</p>
+                            <p class="user-contact">{{this.phoneNumber}}</p>
+                            </div>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+
+           {{#if this.match.reviews}}
+            <h3>Reviews:</h3>
+            <div class="review-button">
+                <form action="/reviews/{{this.match._id}}" method="get">
+                    <button type="submit">See Reviews</button>
+                </form>
+            </div>            
+            {{/if}}
+            <div class="review-button">
+                <form action="/reviews/create/{{this.match._id}}" method="get">
+                    <button type="submit">Create Review</button>
+                </form>
+            </div>
+
+            {{#if this.conversationId}}
+                <div class="message-button"><a href="/messages/{{this.conversationId}}">Message Group</a></div>
+            {{else}}
+                <div class="message-button"><a href="/messages/create/{{this.otherGroupId}}">Create New Conversation</a></div>
+            {{/if}}
+            <div class="unmatch-button">
+                <form action="/matches/unmatch/{{this.match._id}}" method="post">
+                    <button type="submit">Unmatch Group</button>
+                </form>
+            </div>
+        </div>
+    {{/each}}
+
+    {{#unless matchesWithConversations}}
+        <p class="no-matches-message">No Matches Yet!</p>
+    {{/unless}}
+
+    
+</div>
+
+<div class="PendingMatches-header">
+    <h1>Pending Matches</h1>
+</div>
+
+<div class="pending-matches-container">
+    {{#each pendingMatches}}
+        <div class="pending-match-card">
+            {{#if this.groupName}}
+                <div class="group-name-box">
+                    <h2>Group Name: {{this.groupName}}</h2>
+                </div>
+            {{/if}}
+        </div>
+    {{/each}}
+
+    {{#unless pendingMatches}}
+        <p class="no-pending-matches-message">No Pending Matches Yet!</p>
+    {{/unless}}
+</div>
+
+
+
+
+
+<div class="home-button-container">
+    <a href="/" class="home-button">Go Home</a>
+</div>
+
+

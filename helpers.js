@@ -1,5 +1,6 @@
 import {ObjectId} from 'mongodb';
 import {validate} from 'email-validator';
+import fetch from 'node-fetch';
 
 const exportedMethods = {
   checkId(id, varName) {
@@ -135,7 +136,55 @@ const exportedMethods = {
 
     /* eventLocation validation checks */
     this.checkEventLocation(eventData.eventLocation);
+  }, 
+
+  /* Checks if a password is 8+ characters, no spaces, contains at least one uppercase char, number, and special char */
+  checkPassword (password) {
+    if (password.length < 8) throw "Error: password should be at least 8 characters long";
+    /* This regex will reject if a character is a space */
+    const passwordRegex = /^[^\s]*$/;
+    if (!(passwordRegex.test(password))) throw "Error: password cannot contain any spaces";
+
+    /* Lists retrieved from here: https://gist.github.com/bendc/1e6af8f2d8027f2965da#file-alphabet-js */
+    const nums = ["0", "1", "2", "3", "4", "5", "6,", "7", "8", "9"];
+    const uppercaseLetters = [ "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    const specials = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "+", "-", ".", "`", "~", "|", "<", ">", "=", "-", "_"];
+
+    let uppercaseChar = false;
+    let numberChar = false;
+    let specialChar = false;
+    for (let c of password) {
+        if ((!uppercaseChar) && (uppercaseLetters.includes(c))) uppercaseChar = true;
+        else if ((!numberChar) && (nums.includes(c))) numberChar = true;
+        else if ((!specialChar) && (specials.includes(c))) specialChar = true;
+    }
+    if (uppercaseChar && numberChar && specialChar) return true;
+    else throw "Error: password must contain at least one uppercase letter, number, and special character";
+  },
+
+
+//Calculate distance between two locations in km using the Haversine formula 
+ calculateDistance(location1, location2) {
+  function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
   }
+
+  const earthRadiusKm = 6371;
+
+  const dLat = toRadians(location2.coordinates[1] - location1.coordinates[1]);
+  const dLon = toRadians(location2.coordinates[0] - location1.coordinates[0]);
+
+  const lat1 = toRadians(location1.coordinates[1]);
+  const lat2 = toRadians(location2.coordinates[1]);
+
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  console.log(earthRadiusKm * c);
+
+  return earthRadiusKm * c;
+},
+
 
 };
 

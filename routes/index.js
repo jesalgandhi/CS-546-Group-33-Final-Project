@@ -1,23 +1,53 @@
-// This file will import both route files and export the constructor method as shown in the lecture code
-
-/*
-    - When the route is /events use the routes defined in the events.js routing file
-    - When the route is /attendees use the routes defined in attendee.js routing file
-    - All other enpoints should respond with a 404 as shown in the lecture code
-*/
-
+import homepageAndErrorRoutes from './homepage_error.js';
+import registerRoutes from './register.js';
+import loginAndLogoutRoutes from './login_logout.js';
+import matchesRoutes from './matches.js';
+import settingsRoutes from './settings.js';
 import groupsRoutes from './groups.js';
-import usersRoutes from './users.js';
 import messagesRoutes from './messages.js';
+import reviewsRoutes from './reviews.js';
+
+
+/* DELETE BEFORE SUBMISSION */
+import {usersData} from '../data/index.js';
+
 
 const constructorMethod = (app) => {
-  app.use('/groups', groupsRoutes);
-  app.use('/users', usersRoutes);
-  app.use('/messages', messagesRoutes);
-  /* PROBABLY NEED TO ADD MORE ROUTES FOR SIGNUP, LOGIN, HOMEPAGE, ETC. */
 
+  /* DELETE BEFORE SUBMISSION */
+  /* THIS ROUTE IS FOR TESTING PURPOSES (TO LOGIN WITHOUT CREDENTIALS) DELETE BEFORE SUBMITTING */
+  app.use('/logintest', async (req, res) => {
+    const users = await usersData.getAllUsers();
+    req.session.user = {
+      /* Feel free to add key/values here if needed */
+      firstName: "Test", 
+      lastName: "User", 
+      emailAddress: "test@example.com",
+      phoneNumber: "2015554516", 
+      biography: "This is for testing purposes", 
+      age: 23, 
+      interests: ["Biking", "Sports", "Movies"],
+      picture: "URL Will be here(?)", 
+      admin: true,
+      id: users[0]._id.toString()
+    }
+    return res.redirect('/');
+  });
+
+  /* ALL ROUTES BELOW ARE NOT YET COMPLETED */
+  app.use('/', homepageAndErrorRoutes); // error route is done 
+  app.use('/register', registerRoutes);
+  app.use('/', loginAndLogoutRoutes); // logout route is done
+  app.use('/matches', matchesRoutes);
+  app.use('/settings', settingsRoutes); 
+  app.use('/groups', groupsRoutes); 
+  app.use('/messages', messagesRoutes); 
+  app.use('/reviews', reviewsRoutes); 
+  
+  /* All other routes not above are redirected to /error - make sure to set errorCode and errorMessage (as shown below) 
+    EVERY TIME YOU REDIRECT TO /error */
   app.use('*', (req, res) => {
-    res.status(404).json({error: 'Route Not found'});
+    res.status(404).render('error', {title: "Error", error: "Page Not Found"});
   });
 };
 

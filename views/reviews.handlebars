@@ -1,0 +1,24 @@
+<h1>{{title}}</h1>
+{{#if error}}
+    <div id="error"><p>{{error}}</p></div>
+{{else}}
+{{#if success}}
+    <div id="success">Review successfully added!</div>
+{{/if}}
+    <div id="reviewsContainer">
+        {{#if noReviews}}
+            <div id="noReviews">No one has reviewed this group yet!</div>
+            <div id="beFirstReviewer">Be the first to review this group by clicking <a href="/reviews/create/{{groupId}}">here!</a></div>
+        {{else}}
+            {{#each reviews}}
+            <div class="individualReview">
+                <div class="reviewScore"><p>{{this.score}}</p></div>
+                <div class="reviewDescription"><p>{{this.review}}</p></div>
+                <div class="reviewer"><p>Review Left By: {{this.reviewer}}</p></div>
+            </div>
+            {{/each}}
+        {{/if}}
+    </div>
+{{/if}}
+<div id="matchesHref"><a href="/matches">Go back to your matches</a></div>
+<div id="homeHref"><a href="/">Go Home</a></div>

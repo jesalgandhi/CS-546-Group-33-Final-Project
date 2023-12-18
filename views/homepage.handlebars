@@ -1,0 +1,133 @@
+<header>
+    <h1>{{group.groupName}}</h1>
+    <h4>Description: {{group.groupDescription}}</h4>
+    <h4>Gender Preference: {{group.genderPreference}}</h4>
+    <h4>Group Budget: ${{group.budget}}</h4>
+    <h4>Location: {{location.city}}, {{location.state}} {{location.zipcode}}</h4>
+    <H4>Radius: {{group.radius}}</H4>
+    <H4>Number of Desired Roommates: {{group.numRoommates}}</H4>
+</header>
+
+<nav id="homepage">
+    <a href="/">Home</a>
+    <a href="/matches">Matches</a>
+    <a href="/messages">Messages</a>
+    <a href="/settings">Settings</a>
+    <a href="/logout">Log Out</a>
+    <br>
+    <br>
+     <div class="dropdown">
+    <button class="dropbtn">Filters</button>
+    <div class="homepage-dropdown-content" id="homepage-dropdown-content">
+        <form action="/" method="POST">
+            <button type="submit" name="filter" value="genderPreference">Gender Preference</button>
+            <button type="submit" name="filter" value="budget">Budget(+/- $500)</button>
+            <button type="submit" name="filter" value="interests">Interests (3+ Common Interests)</button>
+            <button type="submit" name="filter" value="location">Location (Closest → Furthest)</button>
+            <button type="submit" name="filter" value="radius">Location (Within Group Radius)</button>
+              <button type="submit" name="filter" value="all">Show All Groups</button>
+            <button type="submit" name="filter" value="reset">Reset Page</button>
+        </form>
+    </div>
+    </div>
+</nav>
+
+
+
+<div class="homepage-container">
+    <div class="homepage-section1">
+        <h2>Welcome {{user.firstName}} {{user.lastName}}</h2>
+        <img src="{{user.picture}}" alt="{{user.firstName}}" width="300" height="300" class="group-image">
+        <h4>Age: {{user.age}}</h4>
+        <h4>Biography: {{user.biography}}</h4>
+        <h4>Interests:
+        {{#each user.interests}}
+            {{this}}{{#unless @last}}, {{/unless}}
+        {{/each}}
+        </h4>
+
+
+        {{#if groupMembers.length}}
+        <br>
+        <br>
+            <h2>Other Group Members:</h2>
+            {{#each groupMembers}}
+                <h3>{{firstName}} {{lastName}} </h3>
+                <img src="{{picture}}" alt="{{firstName}}" width="200" height="200">
+                <h4>Age: {{age}}</h4>
+                <h4>Biography: {{biography}}</h4>
+                <h4>Interests:
+                {{#each interests}}
+                    {{this}}{{#unless @last}}, {{/unless}}
+                {{/each}}
+                </h4>
+                <br>
+            {{/each}}
+        {{else}}
+        {{/if}}
+    </div>
+
+    <div class="homepage-section2">
+        
+        {{#if suggestedMatches.length}}
+        <h1>List of Suggested Groups:</h1>
+        <br>
+            {{#each suggestedMatches}}
+                <div class="corner_border">
+                    <h2>{{groupName}}</h2>
+                     <img src="{{groupPicture}}" alt="{{groupName}}" width="200" height="125" class="group-image">
+                    <h4>Description: {{groupDescription}}</h4>
+                    <h4>Group Location: {{groupLocation.city.city}}, {{groupLocation.city.state}} {{groupLocation.city.zipcode}}</h4>
+                    <h4>Group Budget: ${{budget}}</h4>
+                    <h4>Gender Preference: {{genderPreference}}</h4>
+                    <h4>Number of Desired Roommates: {{numRoommates}}</h4>
+                     {{#if distance}}
+                        <h4>Distance: {{distance}} miles</h4>
+                     {{/if}}
+                    <h4>Group Members:</h4>
+                        <div class="container">
+                            {{#each users}}
+                                <div class="group-user">
+                                    <img src="{{picture}}" alt="{{firstName}}" width="125" height="125">
+                                    <h2>{{firstName}} {{lastName}}</h2>
+                                    <h4>Age: {{age}}</h4>
+                                    <h4>Biography: {{biography}}</h4>
+                                    <h4>Interests:
+                                    {{#each interests}}
+                                    {{this}}{{#unless @last}}, {{/unless}}
+                                    {{/each}}
+                                    </h4>
+                                </div>
+                            {{/each}}
+                        </div>
+                        <br>
+
+                    {{#if reviews.length}}
+                    <br>
+                    <h2>Group Reviews: </h2>
+                    {{#each reviews}}
+                        {{!-- <h4>Group ID: {{_id}}</h4> --}}
+                        <h4>Rating: {{score}}/5</h4>
+                        <h4>Review: {{review}}</h4>
+                        <br>
+                    {{/each}}
+                    {{/if}}
+
+                    <form action="/matches" method="post">
+                        <input type="hidden" class="suggested_id" name="suggested_id" value={{_id}}>
+                        <button type="submit">Add Match</button>
+                    </form>
+                    <div class="button-container">
+                        <a href="/groups/{{_id}}" class="button-link"> View Profile on a new tab</a>
+                        </div>
+
+                </div>
+                <br>
+
+            {{/each}}
+        {{else}}
+            <h1>No Suggested Groups for you at the moment. Either use the Show All groups filter
+                or check your matches page to message all your current matches.</h1>
+        {{/if}}
+    </div>
+</div>

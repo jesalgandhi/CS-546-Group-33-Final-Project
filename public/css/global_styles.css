@@ -1,0 +1,1035 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+body {
+    font-family: 'Roboto', sans-serif;
+    
+}
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+a {
+    color: #007bff; 
+    text-decoration: none; 
+}
+a:hover {
+    color: #0056b3; 
+}
+
+
+/* Conversations/Messages Styles */
+.sender {
+    text-align: right;
+    padding-right: 2%;
+    background-color: #218aff;
+    border-radius: 20px;
+    box-shadow: 3px 3px;
+}
+.receiver {
+    text-align: left;
+    padding-left: 2%;
+    background-color: #aeb9cc;
+    border-radius: 15px;
+    box-shadow: 3px 3px;
+}
+.groupName {
+    font-weight: bold;
+    padding-top: 1%;
+}
+.message {
+    padding-bottom: 1%;
+}
+#messageContainer {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+/* #messageForm {
+    margin-top: 2%;
+    padding: 1%;
+    margin-bottom: 2%;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+} */
+
+#messageForm {
+    text-align: center;
+}
+#messageForm textarea {
+    width: 80%;
+    padding: 1%;
+    margin-bottom: 1%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 60px;
+    resize: none;
+}
+#sendMessageButton button {
+    width: 20%;
+    padding: 0.5% 2%;
+    background-color: #218aff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+#sendMessageButton button:hover {
+    background-color: #1a6fca;
+}
+#messageSendError {
+    color: red;
+    margin-top: 1%;
+}
+#otherConversationsHref {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: center;
+    font-size: large;
+}
+#homeHref {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: center;
+    font-size: large;
+}
+
+/* Create Conversation Styles */
+/* Some styles Retrieved from here: https://stackoverflow.com/questions/3915917/make-a-link-use-post-instead-of-get */
+.inline {
+    display: inline-block; 
+}
+.link-button {
+    border-radius: 20px; 
+    cursor: pointer;
+    font-size: 16px; 
+    padding: 10px 15px; 
+    text-align: center; 
+    text-decoration: none; 
+    color: #333; 
+}
+
+.link-button:hover {
+    background-color: #e7e7e7; 
+    color: #0056b3; 
+}
+.newConversationsList {
+    list-style-type: none;
+    padding: 0;  
+    margin-top: 20px;  
+}
+.newConversationListElements {
+    margin-bottom: 10px; 
+    padding: 5px; 
+}
+.newConversationsContainer {
+    text-align: center;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .user-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    /*background-color: #f4f4f4;*/
+}
+
+/*Some GroupbyID User CSS Styles*/
+.user-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    display: flex;
+    border: 5px solid black;
+}
+
+.container {
+    position: relative; 
+}
+
+.review-container {
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); 
+    border-style: solid;
+    text-align: center;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    font-family: arial;
+    width: 300px; 
+    height: 350px; 
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    display: flex;
+    border: 5px solid black;
+
+}
+
+
+.user-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
+    border: 5px solid black;
+}
+
+.user-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
+}
+
+.user-info {
+    flex-grow: 5;
+}
+
+.user-info h2 {
+    margin-top: 0;
+}
+
+.user-info p {
+    margin-bottom: 10px;
+}
+
+/*Some Homepage CSS Styles*/
+body 
+{
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color:deepskyblue;
+    color: #fff;
+    padding: 1em;
+    text-align: center;
+}
+
+nav#homepage {
+    background-color: deepskyblue;
+    padding: 1em;
+    text-align: center;
+}
+
+nav#homepage a {
+    text-decoration: none;
+    color: white;
+    padding: 0.5em 1em;
+    margin: 0 0.5em;
+    background-color:blue;
+}
+
+section {
+    padding: 2em;
+}
+
+.homepage-section1 {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 300px;
+    float: left;
+    overflow: hidden;
+    width: 300px;
+}
+
+.homepage-section2 {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    /*width: 500px;*/
+    float:right;
+    max-height: 500vh;
+    overflow-y: auto;
+}
+
+.homepage-container {
+    display: flex;
+}
+
+.button-container {
+    display: inline-block;
+    text-decoration: none; /* Removes underline */
+    color: blue; /* Keeps text blue */
+    padding: 15px 30px;
+    margin: 0 0.5em;
+    background-color: #FFFFE0; /* Pale yellow background */
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button-container:hover, .button-container:focus {
+    background-color: #FDFD96; /* Slightly darker yellow on hover/focus */
+    text-decoration: none;
+    color: blue; /* Keeps text blue */
+    cursor: pointer;
+}
+
+
+
+.corner_border
+{
+border: 2px solid #0299eb;
+border-radius: 25px;
+padding: 20px; 
+}
+
+.group-user {
+    
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5); 
+    border-style: solid;
+    text-align: center;
+    font-family: arial;
+    display:table-cell;
+    width: 300px; 
+    height: 350px; 
+      
+      
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    text-decoration: none;
+    color: white;
+    padding: 15px;
+    margin: 0 0.5em;
+    background-color:blue;
+}
+
+.homepage-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.homepage-dropdown-content label,
+.homepage-dropdown-content input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.homepage-dropdown-content button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dropdown:hover .homepage-dropdown-content {
+    display: block;
+}
+  
+
+/* Matches CSS*/
+
+.Matches-header {
+    text-align: center;
+    background-color: #0299eb;
+    color: white;
+    padding: 20px 0;
+}
+
+.Matches-header h1 {
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.matches-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; 
+  }
+  .no-matches-message {
+    font-size: 2em; 
+    font-weight: bold;
+}
+
+.PendingMatches-header {
+    text-align: center;
+    background-color: #0299eb;
+    color: white;
+    padding: 20px 0;
+}
+
+.PendingMatches-header h1 {
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.pending-matches-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; 
+}
+
+
+.no-pending-matches-message {
+    font-size: 2em; 
+    font-weight: bold;
+}
+
+.review-button button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-button button:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+  .unmatch-button button {
+    background-color: #f44336; 
+    color: white; 
+    border: none; 
+    padding: 15px 32px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); 
+    transition-duration: 0.4s; 
+  }
+  
+  .unmatch-button button:hover {
+    background-color: #d32f2f; 
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+
+
+
+  .match-card {
+      border: 2px solid #0299eb;
+      border-radius: 25px;
+      padding: 20px;
+      box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      font-family: arial;
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-around; 
+      width: calc(33% - 40px); 
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      background-color: rgb(54, 200, 249); 
+  }
+  .location-info {
+    border: 1px solid #0299eb;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e0f7fa;
+}
+
+  .group-name-box {
+    border: 1px solid #0299eb;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #e0f7fa;
+  }
+  
+  .members-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .members-list li {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  .user-info {
+    margin-left: 10px;
+  }
+  
+  .user-name {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  .user-contact {
+    font-size: 1em;
+    color: #666;
+  }
+  
+  
+  .members-list li:last-child {
+    border-bottom: none;
+  }
+
+  .message-button {
+    display: inline-block;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: rgb(11, 193, 11);
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .group-image
+  {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+
+  }
+  
+  .message-button:hover {
+    background-color: rgb(7, 145, 7);
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+  
+  .message-button a {
+    color: white;
+    text-decoration: none;
+  }
+
+
+
+
+  .home-button-container {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .home-button {
+    display: inline-block;
+    padding: 20px 35px;
+    font-size: 22px;
+    background-color: #0299eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    margin-top: 20px;
+    font-weight: bold;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .home-button:hover {
+    background-color: #0279b2;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+
+  
+/* Style for register/settings */
+#register-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.input-group input[type='text'],
+.input-group input[type='email'],
+.input-group input[type='number'],
+.input-group input[type='password'] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+}
+
+.input-group input[type='submit'] {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.input-group input[type='submit']:hover {
+    background-color: #2980b9;
+}
+
+@media (max-width: 768px) {
+    .container, #register-form {
+        width: 95%;
+    }
+}
+
+p {
+    margin-top: 20px;
+}
+#deleteButton {
+    background-color: rgb(245, 96, 96);
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+#deleteButton:hover {
+    background-color: rgb(241, 76, 76); 
+}
+#adminSettings {
+    display: inline-block; 
+}
+#adminSettings a {
+    display: inline-block; 
+    background-color: #43bd76; /* Green background */
+    color: white; /* White text for contrast */
+    padding: 10px 20px; /* Padding around the text */
+    text-align: center; /* Center the text inside the button */
+    text-decoration: none; /* Remove underline from the link */
+    font-weight: bold; /* Bold text */
+    border-radius: 5px; /* Rounded corners */
+}
+#adminSettings a:hover {
+    background-color: rgb(63, 136, 80); 
+}
+
+/* Add review styling */
+#reviewForm {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#ratingInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#reviewInput {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    margin-top: 10px;
+}
+
+/* button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+} */
+
+/* button[type="submit"]:hover {
+    background-color: #0056b3;
+} */
+
+/* View all reviews styling */
+#error {
+    background-color: #ffdddd;
+    border-left: 6px solid #f44336;
+    margin: 10px 0;
+    padding: 15px;
+    text-align: center;
+}
+
+#success {
+    background-color: #ddffdd;
+    border-left: 6px solid #4CAF50;
+    margin: 10px 0;
+    padding: 15px;
+    text-align: center;
+}
+
+#reviewsContainer {
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.individualReview {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+}
+
+.reviewScore, .reviewDescription, .reviewer {
+    margin-bottom: 10px;
+}
+
+#noReviews, #beFirstReviewer {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+#matchesHref a, #homeHref a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+#matchesHref a:hover, #homeHref a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+/* STYLING THE CREATE/JOIN/LOGOUT SCREEN */
+
+.add-group {
+    display: block;
+    margin: 50px auto; 
+    padding: 10px 15px; 
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 200px;
+}
+
+.add-group:hover {
+    background-color: #45a049;
+}
+
+
+/* GROUP CREATE AND JOIN STYLING !!! */
+
+
+#create-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* input labels */
+#create-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* input fields */
+#create-form input,
+#create-form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* submit button */
+#create-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#create-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* "Go Back" link */
+#create-a {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px; 
+    padding: 10px 20px; 
+    text-align: center;
+    text-decoration: none;
+    color: #a22a2a; 
+    background-color: #ffffff; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#create-a:hover {
+    color: #812121; 
+}
+
+/* error messages */
+#create-join-error {
+    color: #e74c3c;
+    text-align: center;
+    font-weight: bold;
+}
+
+#create-h1 {
+    color: #333;
+}
+
+#create-p {
+    color: #555;
+    text-align: center;
+}
+
+
+#join-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* input labels (again, but for join this time) */
+#join-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* input fields (again, but for join this time) */
+#join-form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* submit button */
+#join-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#join-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* "Go Back" link */
+#join-a {
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px; 
+    padding: 10px 20px; 
+    text-align: center;
+    text-decoration: none;
+    color: #a22a2a; 
+    background-color: #ffffff; 
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#join-a:hover {
+    color: #812121; 
+}
+
+#join-h1 {
+    color: #333;
+}
+
+#join-p {
+    color: #555;
+    text-align: center;
+}
+/* END OF GROUP CREATE AND JOIN STYLING !!! */
+
+.login-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 350px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #007bff;
+    color: white !important; 
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error-msg, .error {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+
+
+/* Style for log in */
+/* Center the login form vertically and horizontally */
+/* .user-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.user-login {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #fff;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+}
+
+button[type="submit"] {
+    background-color: #2980b9;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #1389d7;
+}
+
+.error {
+    color: #ff0000;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+} */

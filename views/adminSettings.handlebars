@@ -1,0 +1,195 @@
+<h1>{{title}}</h1>
+{{#if error}}
+    <p class="error-message">{{error}}</p>
+{{/if}}
+
+{{!-- <div class="notice"><p>You will be logged out after making any changes</p></div> --}}
+<form method="POST" action="/settings/admin" id="register-form">
+    <div id="client-side-errors" class="error-message" hidden></div>
+    <div class="input-group">
+        <label for="groupNameInput">Group Name</label>
+        <input type="text" id="groupNameInput" name="groupNameInput" value="{{groupInfo.groupName}}">
+    </div>
+    <div class="input-group">
+        <label for="groupUsernameInput">Group Username</label>
+        <input type="text" id="groupUsernameInput" name="groupUsernameInput" value="{{groupInfo.groupUsername}}">
+    </div>
+    <div class="input-group">
+        <label for="groupDescriptionInput">Group Description</label>
+        <input type="text" id="groupDescriptionInput" name="groupDescriptionInput" value="{{groupInfo.groupDescription}}">
+    </div>
+    <div class="input-group">
+        <label for="radiusInput"><b>Radius</b></label>
+        <select id="radiusInput" name="radiusInput" class="full-width-input">
+            {{#if smallestRadius}}
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if smallRadius}}
+                <option value="5">5</option>
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if mediumRadius}}
+                <option value="10">10</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if moremediumRadius}}
+                <option value="25">25</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if evenMoremediumRadius}}
+                <option value="50">50</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if largeRadius}}
+                <option value="100">100</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if largerRadius}}
+                <option value="250">250</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            {{else if evenlargerRadius}}
+                <option value="500">500</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="1000">1000</option>
+            {{else}}
+                <option value="1000">1000</option>
+                <option value="1">1</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="250">250</option>
+                <option value="500">500</option>
+            {{/if}}
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="budgetInput">Group Budget</label>
+        <input type="number" id="budgetInput" name="budgetInput" value="{{groupInfo.budget}}">
+    </div>
+     <div class="input-group">
+        <label for="numRoommatesInput"><b>Number of Roomates</b></label>
+        <select id="numRoommatesInput" name="numRoommatesInput" class="full-width-input">
+            {{#if oneRoommate}}
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            {{else if twoRoommates}}
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            {{else if threeRoommates}}
+                <option value="3">3</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="4">4</option>
+            {{else}}
+                <option value="4">4</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            {{/if}}
+        </select>
+    </div>
+
+
+    <div class="input-group">
+        <label for="genderPreferenceInput"><b>Gender</b></label>
+        <select id="genderPreferenceInput" name="genderPreferenceInput" class="full-width-input">
+            {{#if malePref}}
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+            {{else if femalePref}}
+                <option value="F">Female</option>
+                <option value="M">Male</option>
+                <option value="O">Other</option>
+            {{else}}
+                <option value="O">Other</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            {{/if}}
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="groupPasswordInput">Group Password</label>
+        <input type="password" id="groupPasswordInput" name="groupPasswordInput">
+    </div>
+    <div class="input-group">
+        <label for="groupConfirmPasswordInput">Confirm Password</label>
+        <input type="password" id="groupConfirmPasswordInput" name="groupConfirmPasswordInput">
+    </div>
+    <div class="input-group">
+        <label for="groupPictureInput">Group Picture</label>
+        <input type="text" id="groupPictureInput" name="groupPictureInput" value="{{groupInfo.groupPicture}}">
+    </div>
+
+    <div class="input-group">
+        <input type="submit" value="Make Changes">
+    </div>
+
+     <div class="input-group">
+        <input id="deleteButton" value="Delete Group">
+    </div>
+   
+    <a href="/settings">Go back to user settings</a>
+    <br>
+    <a href="/">Go Home</a>
+    <br>
+</form>
+
+
+<script src="../public/js/adminsettingsclientside.js"></script>
