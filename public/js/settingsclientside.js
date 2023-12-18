@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function isValidPicture(picture) {
-        return picture === '' || /^(http(s)?:\/\/)?([w|W]{3}\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/.*)?$/.test(picture);
+        return picture === '' || /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)*[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i.test(picture);
     }
 
     registrationForm.addEventListener('submit', function(event) {
