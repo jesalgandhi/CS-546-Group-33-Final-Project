@@ -1,6 +1,5 @@
 import express from 'express';
 const router = express.Router();
-import validation from '../helpers.js';
 import helpers from '../helpers.js';
 import {groupsData} from '../data/index.js';
 import {usersData} from '../data/index.js';
@@ -13,7 +12,6 @@ import { groups } from '../config/mongoCollections.js';
 import { users } from '../config/mongoCollections.js';
 const require = createRequire(import.meta.url);
 const cities = require('cities');
-const groupsCollection = await groups();
 
 
 router
@@ -125,7 +123,7 @@ router
               let curLocation = req.session.user.groupInfo.groupLocation;
               suggestedMatchInfo[i] = {
                   ...suggestedMatchInfo[i],
-                  distance: Number((validation.calculateDistance(curLocation, suggestedMatchInfo[i].groupLocation) * 0.621371).toFixed(2))
+                  distance: Number((helpers.calculateDistance(curLocation, suggestedMatchInfo[i].groupLocation) * 0.621371).toFixed(2))
               };
     
               for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)
@@ -516,6 +514,7 @@ router
       
       try 
       {
+        const groupsCollection = await groups();
         const filteredGroupIds = filteredUsers.map(user => user._id.toString());
     
         await groupsCollection.findOneAndUpdate(
