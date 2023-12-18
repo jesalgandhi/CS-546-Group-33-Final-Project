@@ -1,8 +1,9 @@
 <h1>{{title}}</h1>
-<form method="POST" action="/settings" id="register-form">
     {{#if error}}
         <p class="error-message">{{error}}</p>
     {{/if}}
+<form method="POST" action="/settings" id="register-form">
+    <div id="client-side-errors" class="error-message" hidden></div>
     <div class="notice"><p>You will be logged out after making any changes</p></div>
     <div class="notice"><p>Phone Number, Password, and Interests will remain the same unless changed below</p></div>
     <div class="input-group">
@@ -83,4 +84,4 @@
 {{/if}}
 <br>
 <a href="/">Go Home</a>
-<script src="../public/js/register_loginscript.js"></script>
+<script src="../public/js/settingsclientside.js"></script>

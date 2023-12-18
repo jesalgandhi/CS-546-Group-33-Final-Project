@@ -5,6 +5,7 @@
 
 {{!-- <div class="notice"><p>You will be logged out after making any changes</p></div> --}}
 <form method="POST" action="/settings/admin" id="register-form">
+    <div id="client-side-errors" class="error-message" hidden></div>
     <div class="input-group">
         <label for="groupNameInput">Group Name</label>
         <input type="text" id="groupNameInput" name="groupNameInput" value="{{groupInfo.groupName}}">
@@ -191,4 +192,4 @@
 </form>
 
 
-<script src="../public/js/admin_delete.js"></script>
+<script src="../public/js/adminsettingsclientside.js"></script>

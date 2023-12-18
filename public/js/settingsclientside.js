@@ -1,37 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
     let registrationForm = document.getElementById('register-form');
-    let errorCheck = document.getElementById('error');
 
     function isValidName(name) {
-        return /^[a-zA-Z]{2,25}$/.test(name);
+        return name === '' || /^[a-zA-Z]{2,25}$/.test(name);
     }
-
+    
     function isValidEmail(email) {
-        return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+        return email === '' || /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     }
-
+    
     function isValidPassword(password) {
-        return /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password);
+        return password === '' || /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password);
     }
-
+    
     function isValidPhoneNumber(phoneNumber) {
-        return /^[0-9]{10}$/.test(phoneNumber);
+        return phoneNumber === '' || /^[0-9]{10}$/.test(phoneNumber);
     }
-
+    
     function isValidBiography(biography) {
-        return typeof biography === 'string' && biography.trim().length > 0 && biography.trim().length <= 200;
+        return biography === '' || (typeof biography === 'string' && biography.trim().length > 0 && biography.trim().length <= 200);
     }
-
+    
     function isValidAge(age) {
-        let parsedAge = parseInt(age);
-        return !isNaN(parsedAge) && parsedAge >= 18 && parsedAge <= 120;
+        return age === '' || (!isNaN(parseInt(age)) && parseInt(age) >= 18 && parseInt(age) <= 120);
     }
-
+    
     function isValidInterests() {
         let checkboxes = document.querySelectorAll('input[name="interestsInput"]:checked');
-        return checkboxes.length === 5;
+        return checkboxes.length === 5 || checkboxes.length === 0;
     }
-
+    
     function isValidPicture(picture) {
         return picture === '' || /^(http(s)?:\/\/)?([w|W]{3}\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/.*)?$/.test(picture);
     }
