@@ -2,40 +2,41 @@ document.addEventListener('DOMContentLoaded', function() {
     let adminSettingsForm = document.getElementById('register-form');
 
     function isValidGroupName(name) {
-        return /^[a-zA-Z0-9 ]{1,50}$/.test(name) && !name.includes('  ');
+        return name === '' || (/^[a-zA-Z0-9 ]{1,50}$/.test(name) && !name.includes('  '));
     }
-
+    
     function isValidGroupDescription(description) {
-        return typeof description === 'string' && description.trim().length > 0 && description.trim().length <= 1000;
+        return description === '' || (typeof description === 'string' && description.trim().length > 0 && description.trim().length <= 1000);
     }
-
+    
     function isValidGroupUsername(username) {
-        return /^[a-zA-Z0-9]{1,50}$/.test(username);
+        return username === '' || /^[a-zA-Z0-9]{1,50}$/.test(username);
     }
-
+    
     function isValidBudget(budget) {
-        return !isNaN(parseInt(budget)) && parseInt(budget) > 0 && parseInt(budget) <= 50000;
+        return budget === '' || (!isNaN(parseInt(budget)) && parseInt(budget) > 0 && parseInt(budget) <= 50000);
     }
-
+    
     function isValidGenderPreference(gender) {
-        return ['M', 'F', 'O'].includes(gender.toUpperCase());
+        return gender === '' || ['M', 'F', 'O'].includes(gender.toUpperCase());
     }
-
+    
     function isValidPassword(password) {
-        return /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,50}$/.test(password);
+        return password === '' || /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,50}$/.test(password);
     }
-
+    
     function isValidRadius(radius) {
-        return !isNaN(parseInt(radius)) && parseInt(radius) > 0 && parseInt(radius) <= 1000;
+        return radius === '' || (!isNaN(parseInt(radius)) && parseInt(radius) > 0 && parseInt(radius) <= 1000);
     }
-
+    
     function isValidRoommates(numRoommates) {
-        return !isNaN(parseInt(numRoommates)) && parseInt(numRoommates) >= 1 && parseInt(numRoommates) <= 4;
+        return numRoommates === '' || (!isNaN(parseInt(numRoommates)) && parseInt(numRoommates) >= 1 && parseInt(numRoommates) <= 4);
     }
-
+    
     function isValidPicture(picture) {
-        return /^(http(s)?:\/\/)?([w|W]{3}\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/.*)?$/.test(picture);
+        return picture === '' || /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)*[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i.test(picture);
     }
+    
 
     adminSettingsForm.addEventListener('submit', function(event) {
         let errors = [];
