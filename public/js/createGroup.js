@@ -1,43 +1,3 @@
-// THIS FILE IS NOT DOING WHAT ITS SUPPOSED TO ALL RN, DOESNT ASK FOR LOCATION UPON PAGE LOADING, DK HOW TO FIX
-
-let latitude = undefined;
-let longitude = undefined;
-
-// https://www.w3schools.com/html/html5_geolocation.asp
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(setLocation(), function (err) {
-            console.log(err.message);
-        });
-    }
-};
-
-function setLocation(position) {
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
-}
-
-
-function sendCoordinatesToServer(latitude, longitude) {
-    
-    $.ajax({
-        url: `/groups/create/coords`,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ latitude: latitude, longitude: longitude }),
-    
-        success: function(coords) {
-            console.log(coords);
-        },
-        error: function() {
-            console.error("Error getting location");
-        }
-    });
-
-};
-
-
-
 // CLIENT SIDE VALIDATION
 $(document).ready(function() {
     $('#create-form').submit(function(event) {
@@ -55,96 +15,75 @@ $(document).ready(function() {
         let genderPreference = $('#genderPreference').val().trim().toUpperCase();
         let groupPassword = $('#groupPassword').val().trim();
 
-        // console.log(groupName);
-        // console.log(groupUsername);
-        // console.log(groupDescription);
-        // console.log(zipCode);
-        // console.log(radius);
-        // console.log(budget);
-        // console.log(numRoommates);
-        // console.log(genderPreference);
-        // console.log(groupPassword);
+        console.log(groupName);
+        console.log(groupUsername);
+        console.log(groupDescription);
+        console.log(zipCode);
+        console.log(radius);
+        console.log(budget);
+        console.log(numRoommates);
+        console.log(genderPreference);
+        console.log(groupPassword);
 
 
         let valid_radii = [1, 5, 10, 25, 50, 100, 250, 500, 1000];
 
-        let isValid = true; // will decide if there are NO errors or not
+        $('.create-join-error').hide().text('');
 
-        $('#alert').hide().text('');
-
-        while(isValid) {
-
-            // ensuring inputs are there and are strings
-            if ( (!groupName) || (!groupUsername) || (!groupDescription) || (!zipCode) || (!radius) || (!budget) || (!numRoommates) || (!genderPreference) || (!groupPassword) ) {
-                $('#alert').text('Please provide all of the required inputs.').show(); isValid = false; continue;
-            } 
-
-            if (!Number(zipCode)) {
-                $('#alert').text('Zipcode must be a number.').show(); isValid = false; continue;
-            }
-
-            if (!Number(radius))  {
-                $('#alert').text('Radius must be a number').show(); isValid = false; continue;
-            } 
-
-            if (!Number(budget)) {
-                $('#alert').text('Budget must be a number.').show(); isValid = false; continue;
-            }  
-
-            if (!Number(numRoommates)) {
-                $('#alert').text('Number of roommates must be a number.').show(); isValid = false; continue;
-            } 
-
-            if ( !valid_radii.includes(radius) ) {
-                $('#alert').text('Invalid radius.').show(); isValid = false; continue;
-            } 
-
-            if (budget <= 0 || budget > 50000) {
-                console.log('bro');
-                $('#alert').text('The budget must be nonnegative and below 50k.').show(); isValid = false; continue;
-            } 
-
-            if (numRoommates < 1 || numRoommates > 4) {
-                $('#alert').text('The number of roommates must be 1-4.').show(); isValid = false; continue;
-            } 
-
-            if ( (genderPreference !== 'M') && (genderPreference !== 'F') && (genderPreference !== 'O') ) {
-                $('#alert').text('The gender preference must be either M, F, or O').show(); isValid = false; continue;
-            } 
-
-            if (groupName.length === 0) {
-                $('#alert').text('The group name field is empty.').show(); isValid = false; continue;
-            } 
-
-            if (groupDescription.length === 0) {
-                $('#alert').text('The group description field is empty.').show(); isValid = false; continue;
-            } 
-
-            if (groupUsername.length === 0) {
-                $('#alert').text('The group username field is empty.').show(); isValid = false; continue;
-            } 
-
-            if (groupPassword.length === 0) {
-                $('#alert').text('The group password field is empty.').show(); isValid = false; continue;
-            } 
-
-            if (groupDescription.length > 1000) {
-                $('#alert').text('The description exceeds the 1000 character limit.').show(); isValid = false; continue;
-            } 
-
-            if (groupUsername.split(" ").length > 1) {
-                $('#alert').text(`${groupUsername} contains spaces, invalid!`).show(); isValid = false; continue;
-            } 
-
-            if (groupPassword.length < 8 || groupPassword.length > 50) {
-                $('#alert').text(`Group password must be > 8 characters and < 50 characters long.`).show(); isValid = false; continue;
-            } 
-
-            isValid = false;
-        
+        if (!groupName) {
+            showError('The group name field is empty.');
+            return;
         }
-        // console.log('bro');
+        if (!groupUsername) {
+            showError('The group username field is empty.');
+            return;
+        }
+        if (!groupDescription) {
+            showError('The group description field is empty.');
+            return;
+        }
+        if (!zipCode || !isNumeric(zipCode) || zipCode.length < 5) {
+            showError('Zipcode must be a 5-digit number.');
+            return;
+        }
+        if (!radius || !isNumeric(radius) || !valid_radii.includes(Number(radius))) {
+            showError('Invalid radius.');
+            return;
+        }
+        if (!budget || !isNumeric(budget) || budget <= 0 || budget > 50000) {
+            showError('The budget must be nonnegative and below 50k.');
+            return;
+        }
+        if (!numRoommates || !isNumeric(numRoommates) || numRoommates < 1 || numRoommates > 4) {
+            showError('The number of roommates must be 1-4.');
+            return;
+        }
+        if (!['M', 'F', 'O'].includes(genderPreference)) {
+            showError('The gender preference must be either M, F, or O.');
+            return;
+        }
+        if (groupDescription.length > 1000) {
+            showError('The description exceeds the 1000 character limit.');
+            return;
+        }
+        if (groupUsername.includes(" ")) {
+            showError(`${groupUsername} contains spaces, invalid!`);
+            return;
+        }
+        if (groupPassword.length < 8 || groupPassword.length > 50) {
+            showError('Group password must be between 8 and 50 characters long.');
+            return;
+        }
+
         this.submit();
+
+        function showError(message) {
+            $('.create-join-error').text(message).show();
+        }
+
+        function isNumeric(value) {
+            return !isNaN(parseFloat(value)) && isFinite(value);
+        }
         
     });
 });

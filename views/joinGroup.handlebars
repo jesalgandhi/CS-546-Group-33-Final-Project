@@ -1,8 +1,9 @@
 <h1 id="join-h1">Join a Group!</h1>
 
 {{!-- if the user has entered anything wrong, itll show the error they had --}}
+<p class="create-join-error"></p>
 {{#if hasErrors}}
-    <p id="create-join-error">{{error}}</p>
+    <p class="create-join-error">{{error}}</p>
 {{/if}}
 
 <p id="join-p">Please enter a group username and group password that you know of in order to join that group!</p>
