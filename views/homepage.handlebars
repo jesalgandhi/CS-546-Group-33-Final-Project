@@ -36,7 +36,7 @@
 <div class="homepage-container">
     <div class="homepage-section1">
         <h2>Welcome {{user.firstName}} {{user.lastName}}</h2>
-        <img src="{{user.picture}}" alt="{{user.firstName}}" width="300" height="300">
+        <img src="{{user.picture}}" alt="{{user.firstName}}" width="300" height="300" class="group-image">
         <h4>Age: {{user.age}}</h4>
         <h4>Biography: {{user.biography}}</h4>
         <h4>Interests:
@@ -74,10 +74,12 @@
             {{#each suggestedMatches}}
                 <div class="corner_border">
                     <h2>{{groupName}}</h2>
+                     <img src="{{groupPicture}}" alt="{{groupName}}" width="200" height="125" class="group-image">
                     <h4>Description: {{groupDescription}}</h4>
                     <h4>Group Location: {{groupLocation.city.city}}, {{groupLocation.city.state}} {{groupLocation.city.zipcode}}</h4>
                     <h4>Group Budget: ${{budget}}</h4>
                     <h4>Gender Preference: {{genderPreference}}</h4>
+                    <h4>Number of Desired Roommates: {{numRoommates}}</h4>
                      {{#if distance}}
                         <h4>Distance: {{distance}} miles</h4>
                      {{/if}}
