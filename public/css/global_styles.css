@@ -262,8 +262,16 @@ section {
     display: flex;
 }
 
+.button-container{
+    text-decoration: none;
+    color: white;
+    padding: 15px;
+    margin: 0 0.5em;
+    background-color:black;
+}
 
-div#corner_border
+
+.corner_border
 {
 border: 2px solid #0299eb;
 border-radius: 25px;

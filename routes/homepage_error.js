@@ -77,7 +77,7 @@ router
                       groupIDs.push(allGroups[i].toString());
                 }
                            
-                updatedInfo = await groupsDataCollection.updateMany(
+                let updatedInfo = await groupsDataCollection.updateMany(
                   {_id: new ObjectId(req.session.user.groupID)},
                   {$set: {suggestedMatches: groupIDs}},
                   {returnDocument: 'after'}

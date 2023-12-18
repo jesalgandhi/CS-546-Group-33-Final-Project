@@ -156,7 +156,8 @@ router
 {
   console.log("In matches post route");
   //console.log(req.body);
-  let user_id = req.body.user_id;
+  let user_id = req.session.user.groupID.toString();
+  console.log(user_id);
   let suggested_id = req.body.suggested_id;
 
 
