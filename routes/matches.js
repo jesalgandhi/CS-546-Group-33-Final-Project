@@ -118,8 +118,8 @@ router
 
         //Get location data for each match
         // Get the latitude and longitude
-        let latitude = matchedgroups[i].groupLocation.coordinates[1];
-        let longitude = matchedgroups[i].groupLocation.coordinates[0];
+        let latitude = matchedgroups[i].groupLocation.coordinates[0];
+        let longitude = matchedgroups[i].groupLocation.coordinates[1];
 
         // Use cities.gpsLookup to get the city
         let city = cities.gps_lookup(latitude, longitude);

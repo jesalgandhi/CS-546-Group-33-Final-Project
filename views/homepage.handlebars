@@ -103,7 +103,7 @@
                     <br>
                     <h2>Group Reviews: </h2>
                     {{#each reviews}}
-                        <h4>Group ID: {{_id}}</h4>
+                        {{!-- <h4>Group ID: {{_id}}</h4> --}}
                         <h4>Rating: {{score}}/5</h4>
                         <h4>Review: {{review}}</h4>
                         <br>
@@ -123,7 +123,7 @@
 
             {{/each}}
         {{else}}
-            <h1>No Suggested Groups for you at the moment. Either use the Show All groups filter 
+            <h1>No Suggested Groups for you at the moment. Either use the Show All groups filter
                 or check your matches page to message all your current matches.</h1>
         {{/if}}
     </div>

@@ -244,7 +244,8 @@ router.route('/')
       numRoommatesInput,
       genderPreferenceInput,
       groupPasswordInput,
-      groupConfirmPasswordInput
+      groupConfirmPasswordInput,
+      groupPictureInput
     }
     = req.body;
     groupNameInput = xss(groupNameInput);
@@ -256,6 +257,7 @@ router.route('/')
     genderPreferenceInput = xss(genderPreferenceInput);
     groupPasswordInput = xss(groupPasswordInput);
     groupConfirmPasswordInput = xss(groupConfirmPasswordInput);
+    groupPictureInput = xss(groupPictureInput);
 
     
     let userId = req.session.user.id;
@@ -308,6 +310,10 @@ router.route('/')
     if ( (genderPreferenceInput !== 'M') && (genderPreferenceInput !== 'F') && (genderPreferenceInput !== 'O') ) errors.push('The genderPreference must be either M, F, or O');
     if (radiusInput <= 0 || radiusInput > 1000) errors.push('The radius must be nonnegative and below 1000.');
     if (numRoommatesInput <= 0 || numRoommatesInput > 4) errors.push('The numRoommates must be nonnegative and below 10.');
+    const pictureUrlIsValid = await usersData.isImageUrl(groupPictureInput);
+    if (!pictureUrlIsValid) {
+        errors.push('Picture must be a valid image URL');
+    }
 
     // // Check if the conversion was successful
     // if (isNaN(radiusValue)) {
@@ -345,6 +351,7 @@ router.route('/')
         genderPreferenceInput,
         groupInfo.users,
         hashedPass,
+        groupPictureInput,
         groupInfo.matches,
         groupInfo.suggestedMatches,
         groupInfo.reviews,

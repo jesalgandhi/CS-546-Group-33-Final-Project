@@ -46,6 +46,7 @@ router
       let numRoommates = xss(groupInfo.numRoommates);
       let genderPreference = xss(groupInfo.genderPreference);
       let groupPassword = xss(groupInfo.groupPassword);
+      let groupPicture = xss(groupInfo.groupPicture);
 
       console.log('printing stuff');
       console.log(groupName)
@@ -57,6 +58,7 @@ router
       console.log(numRoommates)
       console.log(genderPreference)
       console.log(groupPassword);
+      console.log(groupPicture);
 
 
       try {
@@ -153,7 +155,26 @@ router
           // ensuring the length of password follows protocol
           if (groupPassword.length < 8 || groupPassword.length > 50) throw `Group password must be > 8 characters and < 50 characters long.`;
 
-          let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, radius, budget, numRoommates, genderPreference, [new ObjectId(req.session.user.id)], groupPassword);
+
+          const defaultImages = [
+            'https://cdn.ecommercedns.uk/files/0/251420/6/27315606/c6241w2.jpg',
+            'https://lookintonature.files.wordpress.com/2016/07/landscape-1456483171-pokemon2.jpg',
+            'https://pbs.twimg.com/media/Ewky_WZVgAEFVlM.jpg:large', 
+            'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/388555c9-52a2-4541-857a-27a37bc2a83d/dba5qjk-dc2f0c5e-7f59-4e19-ac47-357d60be8d0f.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzM4ODU1NWM5LTUyYTItNDU0MS04NTdhLTI3YTM3YmMyYTgzZFwvZGJhNXFqay1kYzJmMGM1ZS03ZjU5LTRlMTktYWM0Ny0zNTdkNjBiZThkMGYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.qmcuIIivi9p3WFZ9UDCXDRHngxRxNaga10IMpFh-0SM',
+            'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/cefe8db8-531a-4c46-94d9-181b154d4d87/dedgrkf-cc6d1506-d984-41cc-9053-f22b8581d46c.png/v1/fill/w_1280,h_830,q_80,strp/pokemon_25__my_gen_4_team_by_1meengreenie_dedgrkf-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODMwIiwicGF0aCI6IlwvZlwvY2VmZThkYjgtNTMxYS00YzQ2LTk0ZDktMTgxYjE1NGQ0ZDg3XC9kZWRncmtmLWNjNmQxNTA2LWQ5ODQtNDFjYy05MDUzLWYyMmI4NTgxZDQ2Yy5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.GlXW2Xzr2LH0dN3ASUe_R6e-cWRCtRloGAJbN8eK87Q'
+            // ... more image URLs ...
+          ];
+    
+          // Validate or assign default picture URL
+          let pictureUrl = groupPicture;
+          const pictureUrlIsValid = groupPicture && await usersData.isImageUrl(groupPicture);
+          if (!pictureUrlIsValid) {
+              // If no valid picture is provided, select a random one from the default list
+              const randomIndex = Math.floor(Math.random() * defaultImages.length);
+              pictureUrl = defaultImages[randomIndex];
+          }
+
+          let group = await groupsData.create(groupName, groupUsername, groupDescription, coordinates, radius, budget, numRoommates, genderPreference, [new ObjectId(req.session.user.id)], groupPassword, pictureUrl.trim());
 
           req.session.user.groupInfo = group;
           req.session.user.groupID = group._id.toString();
@@ -237,6 +258,7 @@ router
         console.log(group.genderPreference);
         console.log(group.users.concat(new ObjectId(req.session.user.id)));
         console.log(groupPassword);
+        console.log(group.groupPicture);
         console.log(group.matches);
         console.log(group.reviews);
         console.log('-----');
@@ -254,6 +276,7 @@ router
           group.genderPreference,
           group.users.concat( new ObjectId(req.session.user.id)),
           groupPassword,
+          group.groupPicture,
           group.matches,
           group.suggestedMatches,
           group.reviews
