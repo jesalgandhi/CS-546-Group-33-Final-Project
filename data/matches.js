@@ -271,8 +271,9 @@ async unmatchGroups(firstGroupId, secondGroupId) {
     //Get all groups
     let allGroups = await data.groupsData.getAll();
 
-    let excludedValues = currentGroup.matches;
-    allGroups = allGroups.filter(group => !excludedValues.includes(group._id));
+    let excludedValues = currentGroup.matches.map(match => match.toString()); 
+    allGroups = allGroups.filter(group => !excludedValues.includes(group._id.toString())); 
+
 
 
     //console.log(currentGroup);
@@ -287,73 +288,77 @@ async unmatchGroups(firstGroupId, secondGroupId) {
       {
         //Get groupData for other group
         let otherGroup = await data.groupsData.get(allGroups[i]._id.toString());
+
+        if (currentGroup.numRoommates === otherGroup.users.length) {
+          console.log("Num Roommates Match");
+          
+
+          //Gender Preference Check
+          if (currentGroup.genderPreference == otherGroup.genderPreference)
+          {
+            console.log("Gender Match");
+            suggestedMatches.push(allGroups[i]._id);
+          }
         
 
-        //Gender Preference Check
-        if (currentGroup.genderPreference == otherGroup.genderPreference)
-        {
-          console.log("Gender Match");
-          suggestedMatches.push(allGroups[i]._id);
-        }
-      
-
-        //Budget Check (+/- $500 for now)
-        else if (Math.abs(currentGroup.budget - otherGroup.budget) <= 500) 
-        {
-          console.log("Budget Match");
-          suggestedMatches.push(allGroups[i]._id);
-        }
-
-        else 
-        {
-          // Interest Check
-          let users1 = [];
-          let users2 = [];
-
-        // Assuming currentGroup.users is an array of user IDs
-        for (let userId of currentGroup.users) 
-        {
-          try 
+          //Budget Check (+/- $500 for now)
+          else if (Math.abs(currentGroup.budget - otherGroup.budget) <= 500) 
           {
-            let this_user = await data.usersData.getUser(userId);
-            console.log(this_user);
-            users1.push(this_user);
+            console.log("Budget Match");
+            suggestedMatches.push(allGroups[i]._id);
+          }
+
+          else 
+          {
+            // Interest Check
+            let users1 = [];
+            let users2 = [];
+
+          // Assuming currentGroup.users is an array of user IDs
+          for (let userId of currentGroup.users) 
+          {
+            try 
+            {
+              let this_user = await data.usersData.getUser(userId);
+              console.log(this_user);
+              users1.push(this_user);
+            } 
+            catch (e) 
+            {
+              console.log(e);
+            }
           } 
-          catch (e) 
+          console.log(otherGroup);
+          for (let userObj of otherGroup.users) 
           {
-            console.log(e);
+            try 
+            {
+              let this_user = await data.usersData.getUser(userObj._id);
+              users2.push(this_user);
+            } 
+            catch (e) 
+            {
+              console.log(e);
+            }
           }
-        } 
-        console.log(otherGroup);
-        for (let userObj of otherGroup.users) 
-        {
-          try 
-          {
-            let this_user = await data.usersData.getUser(userObj._id);
-            users2.push(this_user);
-          } 
-           catch (e) 
-          {
-            console.log(e);
+                
+            console.log(users1);
+            console.log(users2);
+          
+            // Create two sets to track unique interests
+            let interests1 = new Set(users1.flatMap(user => user.interests));
+            let interests2 = new Set(users2.flatMap(user => user.interests));
+          
+            // Find the intersection of the two sets (common interests)
+            let commonInterests = [...interests1].filter(interest => interests2.has(interest));
+          
+            // If there are common interests and they are not matched, create the match
+            // If there are common interests and the groups are not already suggested or matched, suggest the match        
+            if (commonInterests.length >= 3) {
+              suggestedMatches.push(otherGroup._id);
+            }
           }
-        }
-               
-          console.log(users1);
-          console.log(users2);
-        
-          // Create two sets to track unique interests
-          let interests1 = new Set(users1.flatMap(user => user.interests));
-          let interests2 = new Set(users2.flatMap(user => user.interests));
-        
-          // Find the intersection of the two sets (common interests)
-          let commonInterests = [...interests1].filter(interest => interests2.has(interest));
-        
-          // If there are common interests and they are not matched, create the match
-          // If there are common interests and the groups are not already suggested or matched, suggest the match        
-          if (commonInterests.length >= 3) {
-            suggestedMatches.push(otherGroup._id);
-          }
-        }
+      }
       }   
     }
 

@@ -43,19 +43,10 @@ router
         }
       }
 
-     
-      //console.log("grah");
-      //console.log(req.session.user);
-      
-
       //Gets location data for USER GROUPS
       let city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
-      
-      //Empty suggestedMatches array
-      var updatedInfo;
-
-    
-      
+  
+      //Gets INFO of current user group
       req.session.user.groupInfo = await groupsData.get(req.session.user.groupID);
 
 
@@ -71,17 +62,13 @@ router
             let allGroups =  await matchesData.suggestAllMatches(req.session.user.groupID);
             //console.log(allGroups);
     
-    
+         
+
             let groupsDataCollection = await groups();
-    
-            //let allGroups = await groupsData.getAll();
-    
-    
-      
-    
-            //
+
               try 
               {
+                 //Gets groupIDs of arrays that met suggestAllMatches function criteria
                 let groupIDs = [];
     
                 for (let i = 0; i < allGroups.length; i++)
@@ -90,7 +77,7 @@ router
                       groupIDs.push(allGroups[i].toString());
                 }
                            
-                updatedInfo = await groupsDataCollection.updateMany(
+                let updatedInfo = await groupsDataCollection.updateMany(
                   {_id: new ObjectId(req.session.user.groupID)},
                   {$set: {suggestedMatches: groupIDs}},
                   {returnDocument: 'after'}
@@ -134,6 +121,12 @@ router
               suggestedMatchInfo[i].this_userID = req.session.user.groupID;
               suggestedMatchInfo[i].groupLocation.city = cities.gps_lookup(suggestedMatchInfo[i].groupLocation.coordinates[0],suggestedMatchInfo[i].groupLocation.coordinates[1]);
               //console.log(suggestedMatchInfo[i].city);
+              // Calculate distance for each suggestedMatchInfo from the current group location
+              let curLocation = req.session.user.groupInfo.groupLocation;
+              suggestedMatchInfo[i] = {
+                  ...suggestedMatchInfo[i],
+                  distance: Number((validation.calculateDistance(curLocation, suggestedMatchInfo[i].groupLocation) * 0.621371).toFixed(2))
+              };
     
               for (let x = 0; x < suggestedMatchInfo[i].users.length; x++)
               {
@@ -168,9 +161,6 @@ router
     if (!req.session.user)
       return res.redirect('/login');
 
-    if (req.session.user.groupInfo.suggestedMatches.length == 0)
-      return res.redirect('/');
-
       //For each filter:
       //1. Get all users 
       //2. Filter users based on user dropdown menu value
@@ -183,22 +173,32 @@ router
 
       let allGroups = await matchesData.suggestAllMatches(req.session.user.groupID);
 
+      let excludedValues = [];
+      let cursuggestedMatches = req.session.user.groupInfo.suggestedMatches;
+      let curMatches = req.session.user.groupInfo.matches;
 
-      let suggestedMatches = [];
-      try 
-      {    
-        for (let i = 0; i < allGroups.length; i++)
+      // Concatenate the arrays to create a single array of excluded values
+      excludedValues = excludedValues.concat(cursuggestedMatches, curMatches);
+
+        let suggestedMatches = [];
+        try 
         {
-          let this_group = await groupsData.get(allGroups[i].toString());
-          suggestedMatches.push(this_group);
-        }
-      }                   
-       catch(e)
-       {
+          for (let i = 0; i < allGroups.length; i++) 
+          {
+            if (!excludedValues.includes(allGroups[i])) 
+            {
+              let this_group = await groupsData.get(allGroups[i].toString());
+              suggestedMatches.push(this_group);
+            }
+          }
+        } 
+  
+    catch (e) 
+    {
         console.log(e);
-      }     
+    }
 
-      filteredUsers = suggestedMatches;
+        filteredUsers = suggestedMatches;
 
 
     } 
@@ -395,7 +395,7 @@ router
 
       let groupLocation = req.session.user.groupInfo.groupLocation;
 
-      let allGroups = []
+      let allGroups = [];
       for (let group in filteredGroups)
       {
         let curGroup = await groupsData.get(filteredGroups[group]._id.toString());
@@ -475,7 +475,6 @@ router
     }
 
 
-
     else
     {
       //Gets
@@ -535,8 +534,10 @@ router
     let this_city = cities.gps_lookup(req.session.user.groupInfo.groupLocation.coordinates[0], req.session.user.groupInfo.groupLocation.coordinates[1]);
     
     console.log("Hit this statement");
+
+    return res.redirect('/');
     
-    return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
+    //return res.render('homepage', {title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: filteredUsers});
      
     }
      

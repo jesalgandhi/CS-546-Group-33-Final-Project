@@ -19,7 +19,6 @@
     <button class="dropbtn">Filters</button>
     <div class="homepage-dropdown-content" id="homepage-dropdown-content">
         <form action="/" method="POST">
-        <label for="filter">Filters:</label>
             <button type="submit" name="filter" value="genderPreference">Gender Preference</button>
             <button type="submit" name="filter" value="budget">Budget(+/- $500)</button>
             <button type="submit" name="filter" value="interests">Interests (3+ Common Interests)</button>
@@ -29,7 +28,7 @@
             <button type="submit" name="filter" value="reset">Reset Page</button>
         </form>
     </div>
-</div>
+    </div>
 </nav>
 
 
@@ -44,7 +43,7 @@
         {{#each user.interests}}
             {{this}}{{#unless @last}}, {{/unless}}
         {{/each}}
-</h4>
+        </h4>
 
 
         {{#if groupMembers.length}}
@@ -64,7 +63,6 @@
                 <br>
             {{/each}}
         {{else}}
-            
         {{/if}}
     </div>
 
@@ -74,7 +72,7 @@
         <h1>List of Suggested Groups:</h1>
         <br>
             {{#each suggestedMatches}}
-                <div id="corner_border">
+                <div class="corner_border">
                     <h2>{{groupName}}</h2>
                     <h4>Description: {{groupDescription}}</h4>
                     <h4>Group Location: {{groupLocation.city.city}}, {{groupLocation.city.state}} {{groupLocation.city.zipcode}}</h4>
@@ -84,7 +82,6 @@
                         <h4>Distance: {{distance}} miles</h4>
                      {{/if}}
                     <h4>Group Members:</h4>
-                    <ol>
                         <div class="container">
                             {{#each users}}
                                 <div class="group-user">
@@ -100,7 +97,7 @@
                                 </div>
                             {{/each}}
                         </div>
-                    </ol>
+                        <br>
 
                     {{#if reviews.length}}
                     <br>
@@ -114,13 +111,13 @@
                     {{/if}}
 
                     <form action="/matches" method="post">
-                        <input type="hidden" id="user_id" name="user_id" value={{this_userID}}>
-                        <input type="hidden" id="suggested_id" name="suggested_id" value={{_id}}>
+                        <input type="hidden" class="suggested_id" name="suggested_id" value={{_id}}>
                         <button type="submit">Add Match</button>
                     </form>
-                    <button>
-                    <a href="/groups/{{_id}}" style="color: white;"> View Profile on a new tab</a>
-                    </button>
+                    <div class="button-container">
+                        <a href="/groups/{{_id}}" class="button-link"> View Profile on a new tab</a>
+                        </div>
+
                 </div>
                 <br>
 
