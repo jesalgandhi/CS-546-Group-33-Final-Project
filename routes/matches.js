@@ -164,11 +164,15 @@ router
   //console.log(req.session.user);
   let groupsCollection = await groups();
 
+
+
   let this_group = await groupsData.get(user_id);
   let suggestedGroup = await groupsData.get(suggested_id);
 
-  //console.log(this_group._id);
-  //console.log(suggestedGroup._id);
+  console.log("Current length: " + this_group.suggestedMatches.length);
+  console.log(suggestedGroup._id);
+
+
 
 
 
@@ -191,16 +195,17 @@ try
 
     let suggestedMatches = [];
     let groupIDs = [];
+    let currentGroup = await groupsData.get(req.session.user.groupID);
 
     // Gets all filtered match info WITHOUT RE-RENDERING HOMEPAGE
-    for (let x = 0; x < req.session.user.groupInfo.suggestedMatches.length; x++) 
+    for (let x = 0; x < currentGroup.suggestedMatches.length; x++) 
     {
-        let thisGroup = req.session.user.groupInfo.suggestedMatches[x];
+        let thisGroup = currentGroup.suggestedMatches[x];
         if (thisGroup != suggested_id) 
         {
             try 
             {
-                let this_group = await groupsData.get(req.session.user.groupInfo.suggestedMatches[x]);
+                let this_group = await groupsData.get(currentGroup.suggestedMatches[x]);
                 suggestedMatches.push(this_group);
             } 
             
@@ -264,7 +269,9 @@ try
         console.error(e);
         }
 
+    let group2 = await groupsData.get(user_id);
 
+    console.log("Current length: " + group2.suggestedMatches.length);
     console.log("Hit end of matches post route");
     //return res.render('homepage', { title: "Home", currentUser: req.session.user, user: req.session.user, group: req.session.user.groupInfo, location: this_city, groupMembers: req.session.user.groupMembers, suggestedMatches: suggestedMatches });
         return res.redirect('/');
