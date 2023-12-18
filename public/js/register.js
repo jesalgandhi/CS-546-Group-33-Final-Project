@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
     let registrationForm = document.getElementById('register-form');
-    let errorCheck = document.getElementById('error');
 
     function isValidName(name) {
         return /^[a-zA-Z]{2,25}$/.test(name);
