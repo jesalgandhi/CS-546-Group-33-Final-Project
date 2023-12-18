@@ -142,11 +142,11 @@ router
 
 
   } catch (e) {
-    return res.render('matches', {error: e});
+    return res.render('matches', {title: 'Matches',error: e});
   }
 
   
-  return res.render('matches', {matchesWithConversations, pendingMatches: filteredPendingMatchesData});
+  return res.render('matches', {title: 'Matches',matchesWithConversations, pendingMatches: filteredPendingMatchesData});
   // *************************************************************************
 
   //return res.render('matches', { matches });
