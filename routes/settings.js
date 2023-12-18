@@ -46,7 +46,7 @@ router.route('/')
     confirmPasswordInput = xss(confirmPasswordInput);
     biographyInput = xss(biographyInput);
     ageInput = xss(ageInput);
-    interestsInput = xss(interestsInput);
+    // interestsInput = xss(interestsInput);
     pictureInput = xss(pictureInput);
 
 

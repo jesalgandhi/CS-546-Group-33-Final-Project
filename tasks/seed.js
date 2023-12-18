@@ -68,7 +68,23 @@ try {
     );
     
     const user12 = await usersData.createUser(
-        "Emma", "Johnson", "emmajohnson@example.com", "Test123$", "2015557621", "Lover of classical music and playing the violin", 29,
+        "Emma", "Johnson", "emma2johnson@example.com", "Test123$", "2015557621", "Lover of classical music and playing the violin", 29,
+        ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
+    );
+    const user13 = await usersData.createUser(
+        "Emma", "Johnson", "emma3johnson@example.com", "Test123$", "2015657621", "Lover of classical music and playing the violin", 29,
+        ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
+    );
+    const user14 = await usersData.createUser(
+        "Emma", "Johnson", "emmaj4ohnson@example.com", "Test123$", "2015757621", "Lover of classical music and playing the violin", 29,
+        ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
+    );
+    const user15 = await usersData.createUser(
+        "Emma", "Johnson", "emma5johnson@example.com", "Test123$", "2015857621", "Lover of classical music and playing the violin", 29,
+        ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
+    );
+    const user16 = await usersData.createUser(
+        "Emma", "Johnson", "emma6johnson@example.com", "Test123$", "2015597621", "Lover of classical music and playing the violin", 29,
         ["Classical Music", "Violin", "Reading"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
 
@@ -112,6 +128,55 @@ try {
         { $set: { admin: true } }
     );
      
+    const group12 = await groupsData.create(
+        "The Cool2 Kids",
+        "Username12", 
+        "We're the coolest kids on the block!", 
+        //[-73.971623, 40.850708], // 1615-1593 Gerome Ave, Fort Lee, NJ 07024
+        [40.850708, -73.971623 ],
+        25,
+        1500,
+        2,
+        "M",
+        [user12._id, user13._id],
+        "Password1",
+        "https://cdn.vox-cdn.com/thumbor/eedDQFqtRSUQhAZlNxTE10aS-7o=/1400x788/filters:format(png)/cdn.vox-cdn.com/uploads/chorus_asset/file/22882538/Pokemon_UNITE___Team_Up._Take_Down.___Screenshot_1.png"
+    )
+
+    await usersCollection.updateOne(
+        { _id: user12._id },
+        { $set: { admin: true } }
+    );
+     
+    const group13 = await groupsData.create(
+        "The Coo3l Kids",
+        "Username13", 
+        "We're the coolest kids on the block!", 
+        //[-73.971623, 40.850708], // 1615-1593 Gerome Ave, Fort Lee, NJ 07024
+        [40.850708, -73.971623 ],
+        25,
+        1500,
+        2,
+        "M",
+        [user14._id, user15._id],
+        "Password1",
+        "https://cdn.vox-cdn.com/thumbor/eedDQFqtRSUQhAZlNxTE10aS-7o=/1400x788/filters:format(png)/cdn.vox-cdn.com/uploads/chorus_asset/file/22882538/Pokemon_UNITE___Team_Up._Take_Down.___Screenshot_1.png"
+    )
+
+    await usersCollection.updateOne(
+        { _id: user14._id },
+        { $set: { admin: true } }
+    );
+     
+    
+
+
+
+
+
+
+
+
 
     // create group2 with user5 in it
     const group2 = await groupsData.create(
