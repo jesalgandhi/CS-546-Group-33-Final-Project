@@ -40,9 +40,9 @@ Roommate Roulette is an application designed to help you find the perfect roomma
 
 3. **Start the Application:**
 
-```bash
+   ```bash
    $ npm start
-```
+   ```
 
 ## Contributors
 This project was a collaborative effort by: 
