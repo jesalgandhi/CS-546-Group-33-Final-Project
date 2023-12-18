@@ -51,9 +51,9 @@ Roommate Roulette is an application designed to help you find the perfect roomma
 
 4. **Start the Application:**
 
-   ```bash
+```bash
    $ npm start
-   ```
+```
 
 ## Notes
 - Before starting the server, please ensure you are deauthenticated. If you are still authenticated from a previous server session, go to `/logout` before starting.
