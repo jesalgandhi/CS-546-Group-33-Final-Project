@@ -331,8 +331,27 @@ const generateUniquePhoneNumber = () => {
 // Function to generate random user data
 const generateRandomUserData = () => {
     const firstNames = ["Alice", "Bob", "Charlie", "David", "Emma", "Frank", "Grace", "Henry", "Ivy", "Jack", "Kate", "Liam", "Mia", "Noah", "Olivia", "Paul", "Quinn", "Ryan", "Sophia", "Thomas", "Uma", "Victor", "Willow", "Xander", "Yara", "Zach", "Amelia", "Ben", "Cora", "Dylan", "Eva", "Finn", "Georgia", "Harrison", "Isabel", "Jasper", "Kylie", "Lucas", "Nora", "Owen", "Penelope", "Quentin", "Rose", "Sebastian", "Tessa", "Ulysses", "Violet", "Wesley", "Xena", "Yasmine", "Zane", "Ava", "Braden", "Chloe", "Daniel", "Eliza", "Felix", "Giselle", "Hudson", "Isla", "Jace", "Katherine", "Leo", "Madison", "Nathan", "Oliver", "Paige", "Quincy", "Riley", "Savannah", "Theodore", "Ursula", "Vincent", "Willa", "Xavi", "Yasmin", "Zara", "Aaron", "Bella", "Connor", "Delilah", "Elijah", "Freya", "Gabriel", "Harper", "Isaac", "Julia", "Emily", "Alex", "Sophie", "David", "Zoe", "Leo", "Eva", "Logan", "Mila", "Andrew", "Luna", "Ethan", "Aria", "Mason", "Aurora", "Emma", "Nathan", "Avery", "Wyatt", "Zoey", "Jackson", "Grace", "Grace", "Oliver", "Lily", "Sophia", "Leo", "Ella", "Mia", "Lucas", "Liam", "Scarlett", "Elijah", "Chloe", "Benjamin", "Aiden", "Isabella", "Amelia", "Carter", "Maddison", "Gabriel", "Emily", "Olivia", "Zachary", "Ava", "Ella", "Samuel", "Abigail", "Hannah", "Jackson", "Logan", "Natalie", "Isaac", "Evelyn", "Grace", "Zoe", "Aiden", "Addison", "Harper", "Brooklyn", "Charlotte", "Lily", "Madison", "Ella", "Ethan", "Aria", "Aurora", "Wyatt", "Nora", "Liam", "Sophia", "Henry", "Emma", "Mia", "Olivia", "Chloe", "Amelia", "Isabella", "Ella", "Lily", "Grace", "Ava", "Emily", "Scarlett", "Sophie", "Zoe", "Charlotte", "Liam", "Oliver", "Mia", "Emma", "Isabella", "Sophia", "Ella", "Amelia", "Harper", "Lily", "Ava", "Aria", "Evelyn", "Nora", "Zoe", "Addison", "Scarlett", "Grace", "Chloe", "Liam", "Noah", "Ethan", "Oliver", "Jackson", "Lucas", "Aiden", "Mia", "Sophia", "Olivia", "Emma", "Isabella", "Ava", "Lily", "Zoe", "Chloe", "Ella", "Grace", "Liam", "Noah", "Oliver", "Ethan", "Jackson", "Lucas", "Aiden", "Mia", "Sophia", "Olivia", "Emma", "Isabella", "Ava", "Lily", "Zoe", "Chloe", "Ella", "Grace"];
+    const additionalNames = [
+        "Xavier", "Yasmine", "Zelda", "Alistair", "Bianca", "Caspian", "Dahlia", "Ezekiel", "Fiona", "Gideon",
+        "Helena", "Ignatius", "Jocelyn", "Kai", "Lorelei", "Maximus", "Nadia", "Orion", "Phoebe", "Quincy",
+        "Raphael", "Seraphina", "Thaddeus", "Ursula", "Valentin", "Wren", "Xanthe", "Yannick", "Zephyr",
+        "Adelaide", "Bastian", "Catalina", "Dante", "Eulalia", "Fergus", "Gemma", "Hugo", "Isolde", "Juniper",
+        "Kieran", "Lavinia", "Matthias", "Nyx", "Oberon", "Persephone", "Quentin", "Rosamund", "Sylvester",
+        "Tatiana", "Ulysses", "Vivienne", "Wolfgang", "Xiomara", "Yvette", "Zephyra", "Aloysius", "Briar",
+        "Clementine", "Dorian", "Elowen", "Felicity", "Gideon", "Harlow", "Ingrid", "Jupiter", "Kalliope",
+        "Leander", "Magnolia", "Nola", "Octavian", "Perseus", "Quinlan", "Rosalind", "Soren", "Tamsin",
+        "Umberto", "Verity", "Winslow", "Xandra", "Yara", "Zephyrine", "Achilles", "Beatrix", "Caius",
+        "Demetria", "Ezra", "Fleur", "Gareth", "Hermione", "Icarus", "Juno", "Kaius", "Lyra", "Marius",
+        "Nehemiah", "Ophelia", "Peregrine", "Quillon", "Rhiannon", "Sable", "Theron", "Umbra", "Vesper",
+        "Waverly", "Xylon", "Ysabella", "Zephyr"
+      ];
+      
+      const allNames = [...new Set([...firstNames, ...additionalNames])];
+      
+      ///console.log(allNames.length); 
+      
     const lastNames = ["Johnson", "Smith", "Lee", "Wang", "Garcia", "Taylor", "Brown", "Lopez", "Chen", "Clark", "Anderson", "Jackson", "Harris", "Davis", "Martinez", "White", "Hall", "Miller", "Walker", "Turner", "Allen", "Hill", "Moore", "Wright", "Evans", "Perez", "Hall", "Cooper", "Bailey", "Rogers", "Reed", "Bennett", "Cruz", "Fisher", "Diaz", "Bell", "Collins", "Wood", "Howard", "Watson", "Parker", "Stewart", "Cooper", "Morgan", "Carter", "Gomez", "Murphy", "Fletcher", "Gray", "Simmons", "Russell", "Barnes", "Duncan", "Kelly", "Gordon", "Bishop", "Frazier", "Harrison", "Fields", "Porter", "Ward", "Hudson", "Dixon", "Spencer", "Riley", "Fleming", "Black", "Hansen", "Nichols", "Tucker", "Ortega", "Vargas", "Frost", "Mendez", "Duffy", "Hogan", "Erickson", "Lambert", "Mathews", "Hobbs", "Huffman", "Hayes", "McLaughlin", "Ramirez", "Gill", "Dickson", "Barker", "Nelson", "Hammond", "Hicks", "Fleming", "Harper", "Abbott", "Carter", "Fischer", "Lindsey", "Mendez", "Owens", "Roach", "Sharp", "Torres", "Weber", "Gardner", "Mann", "Quinn", "Brewer", "Hess", "Keller", "Newton", "Pope", "Saunders", "Vaughn", "Ward", "Hudson", "Dixon", "Spencer", "Riley", "Fleming", "Black", "Hansen", "Nichols", "Tucker", "Ortega", "Vargas", "Frost", "Mendez", "Duffy", "Hogan", "Erickson", "Lambert", "Mathews", "Hobbs", "Huffman", "Hayes", "McLaughlin", "Ramirez", "Gill", "Dickson", "Barker", "Nelson", "Hammond", "Hicks"];
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const firstName = allNames[Math.floor(Math.random() * allNames.length)];
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
 
 
@@ -477,7 +496,7 @@ const generateRandomGroupData = () => {
 
     
     // numRoommates - the number of roommates they are searching for
-    const valid_numRoommates = [3];
+    const valid_numRoommates = [1,2,3,4];
 
     // random index out of the valid_numRoommates
     const randomIndex2 = Math.floor(Math.random() * valid_numRoommates.length);
@@ -520,93 +539,91 @@ const usedPhoneNumbers = [];
 let user_ids = [];
 // Create 120 more users
 console.log("Generating user data");
-for (let i = 1; i <= 120; i++) {
-    let userData = generateRandomUserData();
-    let phone = generateUniquePhoneNumber();
-    generatedPhoneNumbers.add(phone);
-    
-    let admin = (i - 1) % 3 === 0;
-  
-    try {
-        const user = await usersData.createUser(
-            userData.firstName,
-            userData.lastName,
-            userData.email,
-            userData.password,
-            phone,
-            userData.biography,
-            userData.age,
-            userData.interests,
-            userData.picture,
-            admin
-        );
-        user_ids.push(user._id);
+const numberOfGroups = 100;
 
-    } catch (e) {
-        console.log(e);
-    }
-}
+async function generateRandomGroups() {
+    const generatedPhoneNumbers = new Set();
+    const user_ids = [];
 
-console.log("Generating group data");
-const groupSize = 3;
+    for (let i = 1; i <= numberOfGroups * 3; i++) {
+        let userData = generateRandomUserData();
+        let phone = generateUniquePhoneNumber();
+        generatedPhoneNumbers.add(phone);
 
-for (let i = 0; i < user_ids.length; i += groupSize) {
+        let admin = (i - 1) % 3 === 0;
 
-    // Extract user IDs for the current group
-    let userIds = user_ids.slice(i, i + groupSize);
-
-    
-    // Fetch user data for the current group
-    let users = await Promise.all(userIds.map(async (userId) => {
         try {
-            const user = await usersData.getUser(userId);
-            return user;  // No need for toString() if getUser returns a user object
+            const user = await usersData.createUser(
+                userData.firstName,
+                userData.lastName,
+                userData.email,
+                userData.password,
+                phone,
+                userData.biography,
+                userData.age,
+                userData.interests,
+                userData.picture,
+                admin
+            );
+            user_ids.push(user._id);
         } catch (e) {
-            console.log(`Error fetching user with ID ${userId}: ${e}`);
-            return null;
+            console.log(e);
         }
-    }));
+    }
 
+    console.log("Generating group data");
 
-    let groupData = generateRandomGroupData();
+    for (let i = 0; i < numberOfGroups; i++) {
+        // Randomly set the group size (1-4 people per group)
+        const groupSize = Math.floor(Math.random() * 4) + 1;
 
+        // Extract user IDs for the current group
+        let userIds = user_ids.slice(i * groupSize, (i + 1) * groupSize);
 
-    let getUser = await usersData.getUser(userIds[0]);
-   
+        // Fetch user data for the current group
+        let users = await Promise.all(userIds.map(async (userId) => {
+            try {
+                const user = await usersData.getUser(userId);
+                return user;
+            } catch (e) {
+                console.log(`Error fetching user with ID ${userId}: ${e}`);
+                return null;
+            }
+        }));
 
-    const updateResult = await usersCollection.updateOne(
-        { _id: userIds[0] },
-        { $set: { admin: true } }
-    );
-    
-    //console.log('Update Result:', updateResult);
-    
-    
-    try
-    {
-        let group = await groupsData.create(
-            groupData.groupName,
-            groupData.groupUsername,
-            groupData.groupDescription,
-            groupData.groupLocation.coordinates,
-            groupData.radius,
-            groupData.budget, // Update to use groupBudget property
-            groupData.numRoommates,
-            groupData.genderPreference, // Update to use groupGender property
-            userIds,
-            groupData.groupPassword,
-            groupData.groupPicture
+        let groupData = generateRandomGroupData();
+
+        // Set the admin flag for the first user in each group
+        await usersCollection.updateOne(
+            { _id: userIds[0] },
+            { $set: { admin: true } }
         );
+
+        try {
+            let group = await groupsData.create(
+                groupData.groupName,
+                groupData.groupUsername,
+                groupData.groupDescription,
+                groupData.groupLocation.coordinates,
+                groupData.radius,
+                groupData.budget,
+                groupData.numRoommates,
+                groupData.genderPreference,
+                userIds,
+                groupData.groupPassword,
+                groupData.groupPicture
+            );
+
+            //console.log(`Group created: ${group._id}`);
+        } catch (e) {
+            console.log(e);
+        }
     }
-    catch(e)
-    {
-        console.log(e);
-    }
-    
-    
-    //console.log(`Group created: ${group._id}`);
-    
 }
+
+// Call the function to generate random groups
+await generateRandomGroups();
+
 
 
 
