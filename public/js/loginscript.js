@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let registrationForm = document.getElementById('register-form');
+    let registrationForm = document.getElementById('login-form');
 
     function isValidEmail(email) {
         return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
