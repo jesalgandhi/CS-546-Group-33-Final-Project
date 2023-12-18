@@ -67,21 +67,21 @@ router
     try {
       thisGroupId = await groupsData.getGroupByUserId(userId);
     } catch (e) {
-      return res.status(400).render('error', {error: e});
+      return res.status(400).render('error', {error: e, title: "Add a review"});
     }
     let groupExists;
     try {
       groupExists = await groupsData.get(thisGroupId);
     } catch (e) {
-      return res.status(400).render('error', {error: e});
+      return res.status(400).render('error', {error: e, title: "Add a review"});
     }
     try {
       await reviewsData.checkForDuplicateReview(thisGroupId, receivingGroupId)
     } catch (e) {
-      return res.status(400).render('error', {error: e});
+      return res.status(400).render('error', {error: e, title: "Add a review"});
     }
 
-    return res.render('addReview');
+    return res.render('addReview', {title: "Add a review"});
   })
   .post(async (req, res) => {
     let groupId = req.params.groupId;
