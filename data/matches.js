@@ -289,13 +289,15 @@ async unmatchGroups(firstGroupId, secondGroupId) {
         //Get groupData for other group
         let otherGroup = await data.groupsData.get(allGroups[i]._id.toString());
 
-        if (currentGroup.numRoommates === otherGroup.users.length) 
+
+        if (currentGroup.numRoommates == otherGroup.users.length) 
         {
           suggestedMatches.push(allGroups[i]._id);
-        }
+          //console.log(otherGroup.users.length);
+        
 
           //Gender Preference Check
-          else if (currentGroup.genderPreference == otherGroup.genderPreference)
+          if (currentGroup.genderPreference == otherGroup.genderPreference)
           {
             console.log("Gender Match");
             suggestedMatches.push(allGroups[i]._id);
@@ -359,7 +361,8 @@ async unmatchGroups(firstGroupId, secondGroupId) {
               suggestedMatches.push(otherGroup._id);
             }
           }
-      
+        }
+           
       }   
     }
 

@@ -476,7 +476,7 @@ const generateRandomGroupData = () => {
 
     
     // numRoommates - the number of roommates they are searching for
-    const valid_numRoommates = [1, 2, 3, 4]
+    const valid_numRoommates = [3];
 
     // random index out of the valid_numRoommates
     const randomIndex2 = Math.floor(Math.random() * valid_numRoommates.length);
