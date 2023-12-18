@@ -1,5 +1,3 @@
-<title> {{title}} </title>
-
 <h1 id="create-h1">Create a Group!</h1>
 
 {{!-- if the user has entered anything wrong, itll show the error they had --}}
@@ -16,38 +14,39 @@
     <label for="groupName">
         Group Name:
         <input type="text" name="groupName" id="groupName" value="{{groupInfo.groupName}}">
-        <p>Name your group!</p>
     </label>
+    <p>Name your group!</p>
+
 
     <br> {{!-- need these between them to have them show up on separate lines, can probably be removed and handled with CSS later anyway --}}
 
     <label for="groupUsername">
         Group Username:
         <input type="text" name="groupUsername" id="groupUsername" value="{{groupInfo.groupUsername}}">
-        <p>This will be the username for your group. Required for people to join it.</p>
     </label>
+     <p>This will be the username for your group. Required for people to join it.</p>
 
     <br>
 
     <label for="groupDescription">
         Group Description:
         <input type="text" name="groupDescription" id="groupDescription" value="{{groupInfo.groupDescription}}">
-        <p>Describe your group!</p>
     </label>
+    <p>Describe your group!</p>
 
     <br>
 
     <label for="zipCode">
         Zip Code:
         <input type="text" name="zipCode" id="zipCode" value="{{groupInfo.zipCode}}">
-        <p>Enter your zipcode.</p>
     </label>
+    <p>Enter your zipcode.</p>
 
     <br>
 
     <label for="radius">
         Radius:
-        <select name="radius" id="radius" value="{{groupInfo.radius}}">
+        <select name="radius" id="radius">
             <option value="1">1</option>
             <option value="5">5</option>
             <option value="10">10</option>
@@ -58,53 +57,53 @@
             <option value="500">500</option>
             <option value="1000">1000</option>
         </select>
-        <p>Choose your radius (in miles) on how far you're willing to search for roommates.</p>
     </label>
+    <p>Choose your radius (in miles) on how far you're willing to search for roommates.</p>
 
     <br>
 
     <label for="budget">
         Budget:
         <input type="text" name="budget" id="budget" value="{{groupInfo.budget}}">
-        <p>Enter any number from 0-50000.</p>
     </label>
+    <p>Enter any number from 0-50000.</p>
 
     <br>
 
     <label for="numRoommates">
         Number of Roommates:
-        <select name="numRoommates" id="numRoommates" value="{{groupInfo.numRoommates}}">
+        <select name="numRoommates" id="numRoommates">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
         </select>
-        <p>Choose the number of roommates you're looking for.</p>
     </label>
+     <p>Choose the number of roommates you're looking for.</p>
 
     <br>
 
     <label for="genderPreference">
         Gender Preference:
         <input type="text" name="genderPreference" id="genderPreference" value="{{groupInfo.genderPreference}}">
-        <p>Enter M, F, or O (other).</p>
     </label>
+    <p>Enter M, F, or O (other).</p>
 
     <br>
 
     <label for="groupPassword">
         Group Password:
         <input type="password" name="groupPassword" id="groupPassword" value="{{groupInfo.groupPassword}}">
-        <p>This will be the password for your group. Required for people to join it.</p>
     </label>
+    <p>This will be the password for your group. Required for people to join it.</p>
 
     <br>
 
     <label for="groupPicture">
         Group Picture:
         <input type="text" id="groupPicture" name="groupPicture" placeholder="Optional: Provide a valid picture link here">
-        <p>Provide a valid link to a photo you want as your group picture. An invalid picture link will result in a randomized group picture for you.</p>
     </label>
+    <p>Provide a valid link to a photo you want as your group picture. An invalid picture link will result in a randomized group picture for you.</p>
     
     <br>
     
