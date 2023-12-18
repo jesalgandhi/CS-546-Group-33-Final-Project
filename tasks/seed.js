@@ -12,7 +12,7 @@ await db.dropDatabase();
 try {
     /* USERS */
     /* Create 12 users - user1 will be deleted for demonstration */
-    const user1 = await usersData.createUser(
+    /*const user1 = await usersData.createUser(
         "John", "Smith", "johnsmith@example.com", "Test123$", "2015554516", "I am eager to make and meet new roommates", 23, 
         ["Biking", "Movies", "Painting"], "https://esi.si.com/.image/t_share/MjAxNzM0MTAzODY1NzYzNDcx/gengar.jpg"
     );
@@ -90,7 +90,7 @@ try {
 
     
     /* Update user2's bio and number */
-    const updatedFields = {
+    /*const updatedFields = {
         age: 32,
         phoneNumber: "2025559876", 
     };
@@ -108,7 +108,7 @@ try {
 
     /* GROUPS */
     /* Create group1 with users 2-4 */
-    const group1 = await groupsData.create(
+    /*const group1 = await groupsData.create(
         "The Cool Kids",
         "Username1", 
         "We're the coolest kids on the block!", 
@@ -266,7 +266,7 @@ try {
 
     // console.log('HEREEEE');
     // groups getGroupByUserId()
-    const found = await groupsData.getGroupByUserId(user3._id.toString());
+    /*const found = await groupsData.getGroupByUserId(user3._id.toString());
     // console.log(`The group that has userId ${user3._id} is groupId ${found}`);
 
     // groups getAll()
@@ -306,7 +306,8 @@ try {
     
     // Reviews
     const review1 = await reviewsData.createReview(group3._id.toString(), group4._id.toString(), group4.groupName, "Great rooommate experience", 5);
-    const review2 = await reviewsData.createReview(group3._id.toString(), group2._id.toString(), group2.groupName, "Terrible roommate experience", 1);
+    const review2 = await reviewsData.createReview(group3._id.toString(), group2._id.toString(), group2.groupName, "Terrible roommate experience", 1);*/
+    
 
 let generatedPhoneNumbers = new Set();
 
@@ -476,7 +477,7 @@ const generateRandomGroupData = () => {
 
     
     // numRoommates - the number of roommates they are searching for
-    const valid_numRoommates = [1, 2, 3, 4]
+    const valid_numRoommates = [3];
 
     // random index out of the valid_numRoommates
     const randomIndex2 = Math.floor(Math.random() * valid_numRoommates.length);
