@@ -2,17 +2,11 @@
 {{#if error}}
     <div id="error"><p>{{error}}</p></div>
 {{else}}
-    <div id="conversationHeader"><h1>Conversation with {{otherGroupName}}</h1></div>
-    <div id="conversationId" data-conversation-id="{{conversationId}}">
-        {{!-- <p>Conversation ID: {{conversationId}}</p> --}}
-    </div>
-    <div id="senderId" data-sender-id="{{thisGroupId}}">
-        {{!-- <p>This group: {{thisGroupName}}: {{thisGroupId}}</p> --}}
-    </div>
+    {{!-- <div id="conversationHeader"><h1>Conversation with {{otherGroupName}}</h1></div> --}}
+    <div id="conversationId" data-conversation-id="{{conversationId}}"></div>
+    <div id="senderId" data-sender-id="{{thisGroupId}}"></div>
     <div id="thisGroupName" data-this-group-name="{{thisGroupName}}"></div>
     <div id="otherGroupName" data-other-group-name="{{otherGroupName}}"></div>
-
-    {{!-- <p>Other Group: {{otherGroupName}}: {{otherGroupId}}</p> --}}
 
     <div id="messageContainer"></div>
 
@@ -27,4 +21,4 @@
     <div id="homeHref"><a href="/">Go Home</a></div>
 
 {{/if}}
-<script src="../public/js/conversation.js"></script>
+<script src="/public/js/conversation.js"></script>

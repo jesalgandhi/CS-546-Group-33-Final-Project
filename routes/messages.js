@@ -140,6 +140,7 @@ router
     }
 
     return res.render('conversation', {
+      title:`Conversation with ${otherGroupName}`,
       conversationId: conversationId, 
       thisGroupId: thisGroupId,
       otherGroupId: otherGroupId,

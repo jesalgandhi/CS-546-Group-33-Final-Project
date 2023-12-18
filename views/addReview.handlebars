@@ -1,8 +1,10 @@
 <h1>{{title}}</h1>
 <form id="reviewForm" method="POST">
+        <div id="alert"></div>
         <label for="ratingInput">Rating (1-5):</label>
         {{!-- <input type="number" id="ratingInput" name="ratingInput" min="1" max="5" required> --}}
-        <select type="number" id='ratingInput' name='ratingInput' required>
+        <select id='ratingInput' name='ratingInput' required>
+            <option value=''>Select a rating</option>
             <option value='1'>1</option>
             <option value='2'>2</option>
             <option value='3'>3</option>
@@ -15,3 +17,4 @@
 
         <button type="submit">Submit Review</button>
 </form>
+<script src="/public/js/reviews.js"></script>
