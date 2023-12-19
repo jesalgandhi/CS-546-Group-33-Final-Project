@@ -16,6 +16,7 @@ const cities = require('cities');
 
 import { ObjectId } from 'mongodb';
 import xss from 'xss';
+import bcrypt from 'bcrypt';
 
 
 router
@@ -241,11 +242,15 @@ router
 
 
         let groupId = await groupsData.getGroupByGroupUsername(groupUsername);
-        let groupId2 = await groupsData.getGroupByGroupPassword(groupPassword);
+        // let groupId2 = await groupsData.getGroupByGroupPassword(groupPassword);
 
-        if (groupId !== groupId2) throw 'Invalid group username or group password.';
+        // if (groupId !== groupId2) throw 'Invalid group username or group password.';
       
         group = await groupsData.get(groupId);
+        let same_pass = await bcrypt.compare(groupPassword, group.groupPassword);
+        if (!same_pass) throw 'Invalid group username or password';
+
+        
         if (group.users.length === 4) throw 'Cannot join group. Max amount of 4 users!';
 
         // console.log('-----');
