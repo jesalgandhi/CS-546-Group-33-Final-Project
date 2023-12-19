@@ -52,6 +52,7 @@ Roommate Roulette is an application designed to help you find the perfect roomma
    ```bash
    $ npm run seed
    ```
+- The <u>password</u> for all the users from the seed file is **Test123$**. The <u>groupPassword</u> for all of the groups from the seed file is **RandomPassword**.
 
 4. **Start the Application:**
 
