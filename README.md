@@ -20,7 +20,11 @@ Roommate Roulette is an application designed to help you find the perfect roomma
 8. In Matches you can message groups in a group message system, create reviews for the group, and unmatch the group
 9. The settings page is where users can change crucial information about their account, and the admin of the group can also access the group settings page to change group information.
 
-
+## Extra Features
+ 1. The ability to **filter** the groups you see based on numerous fields, such as: similar budgets, common group interests, etc.
+ 2. For security purposes:
+      -  the option to **unmatch** a group that you no longer wish to share contact info with, deleting your match from both groups' matches.
+ 3. **Pending matches**, groups that you are waiting to match back with.
 
 ## Technologies Used
 
@@ -42,18 +46,24 @@ Roommate Roulette is an application designed to help you find the perfect roomma
    ```bash
    $ npm i
    ```
-   
-3. **Seed the database:**
+
+3. **Seed the Database:**
 
    ```bash
    $ npm run seed
-   ``` 
+   ```
+- The <u>password</u> for all the users from the seed file is **Test123$**. The <u>groupPassword</u> for all of the groups from the seed file is **RandomPassword**.
 
 4. **Start the Application:**
 
-```bash
+   ```bash
    $ npm start
-```
+   ```
+
+## Notes
+- Before starting the server, please ensure you are deauthenticated. If you are still authenticated from a previous server session (e.g. you were logged in and Ctrl+C on the server while logged in), go to `/logout` after starting the server again.
+- For your leisure, we used saltRounds of 8 for the passwords so the seed file finishes in a timely manner. Had we used the intended (more secure) 16 saltRounds, the seed file takes significantly longer to hash the passwords of all ~300 of our users.
+
 
 ## Contributors
 This project was a collaborative effort by: 
