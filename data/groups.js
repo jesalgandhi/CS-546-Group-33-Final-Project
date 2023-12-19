@@ -430,10 +430,10 @@ const exportedMethods = {
 
       // running get(match) on each groupId in matches. if there's no group with that groupId, get() will throw the appropriate not found error
       for (const match of matches) {
-          let valid_group = await this.get(match);
+          let valid_group = await this.get(match.toString());
       }
       for (const match of suggestedMatches) {
-        let valid_group = await this.get(match);
+        let valid_group = await this.get(match.toString());
       }
 
       // checking the _id, score, and description of each review

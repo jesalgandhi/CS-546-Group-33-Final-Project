@@ -1,8 +1,9 @@
 <h1 id="create-h1">Create a Group!</h1>
 
 {{!-- if the user has entered anything wrong, itll show the error they had --}}
+<p class="create-join-error">{{error}}</p>
 {{#if hasErrors}}
-    <p id="create-join-error">{{error}}</p>
+    <p class="create-join-error">{{error}}</p>
 {{/if}}
 
 
@@ -114,6 +115,4 @@
 
 {{!-- upon successful group creation, implicitly add the user to the group they just made, aka they dont enter any kind of userId themselves obv --}}
 
-<script src="../public/js/createGroup.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js"
-    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="/public/js/createGroup.js"></script>

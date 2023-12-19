@@ -105,7 +105,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         $.ajax({
-            url: '/settings', 
+            url: '/settings/admin', 
             type: 'DELETE',
             success: function(response) {
                 if (response.success) window.location.href = response.redirectTo;

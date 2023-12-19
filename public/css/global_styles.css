@@ -820,7 +820,7 @@ p {
 }
 
 /* error messages */
-#create-join-error {
+.create-join-error {
     color: #e74c3c;
     text-align: center;
     font-weight: bold;
